@@ -12,6 +12,7 @@ import {
     Typography
 } from "@material-ui/core";
 
+import {DatePicker, TimePicker} from '@material-ui/pickers';
 
 const CreateBookingPage = () => {
 
@@ -30,7 +31,6 @@ const CreateBookingPage = () => {
                 marginBottom: 8
             },
             textField: {
-                background: "#efefefef",
                 marginBottom: 8,
                 marginTop: 8
             },
@@ -40,14 +40,14 @@ const CreateBookingPage = () => {
                 marginTop: 16
             },
             title: {
-            textTransform: "uppercase"
-        }
+                textTransform: "uppercase"
+            }
         }
     });
 
     const classes = useStyles();
 
-    const [booking, setBooking] = useState({});
+    const [booking, setBooking] = useState({date: Date.now()});
     const [error, setError] = useState({});
     const {car, contact, name, container, company, time, date, product} = booking;
 
@@ -59,21 +59,24 @@ const CreateBookingPage = () => {
         e.preventDefault();
     }
 
+    const handleDateChange = date => {
+        setBooking({...booking, date});
+    }
+
+    const handleTimeChange = time => {
+        setBooking({...booking, time});
+    }
+
+
     return (
         <Layout>
             <Container className={classes.container}>
-                <Typography variant="h1" align="center">Create Booking</Typography>
+                <Typography  color="textSecondary"  variant="h1" align="center">Create Booking</Typography>
 
                 <Divider variant="fullWidth" className={classes.divider}/>
 
                 <Grid container={true} justify="center">
                     <Grid item={true} xs={12} md={6}>
-                        <Typography  className={classes.title}  variant="h5" align="center">
-                            New Arrival
-                        </Typography>
-
-                        <Divider variant="fullWidth" className={classes.subDivider} light={true} />
-
                         <Card variant="elevation" elevation={1}>
                             <CardContent>
                                 <TextField
@@ -175,11 +178,44 @@ const CreateBookingPage = () => {
                                     helperText={error.contact}
                                 />
 
+                                <DatePicker
+                                    variant="dialog"
+                                    value={date}
+                                    fullWidth={true}
+                                    label="Booking Date"
+                                    onChange={handleDateChange}
+                                    inputVariant="outlined"
+                                    disablePast={true}
+                                    autoOk={true}
+                                    required={true}
+                                    InputAdornmentProps={{ position: "start" }}
+                                    format="MM-DD-YYYY"
+                                    error={Boolean(error.date)}
+                                    helperText={error.date}
+                                    className={classes.textField}
+                                />
+
+                                <TimePicker
+                                    variant="dialog"
+                                    value={time}
+                                    InputAdornmentProps={{ position: "start" }}
+                                    fullWidth={true}
+                                    label="Booking Time"
+                                    onChange={handleTimeChange}
+                                    inputVariant="outlined"
+                                    disablePast={true}
+                                    autoOk={true}
+                                    required={true}
+                                    ampm={true}
+                                    error={Boolean(error.time)}
+                                    helperText={error.time}
+                                    className={classes.textField}
+                                />
 
                                 <Button
                                     className={classes.button}
                                     onClick={handleBookingSubmit}
-                                    variant="contained"
+                                    variant="outlined"
                                     fullWidth={true}
                                     size="large"
                                     disableElevation={true}>

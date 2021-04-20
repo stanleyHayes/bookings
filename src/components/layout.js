@@ -8,7 +8,7 @@ const Layout = ({children}) => {
     const useStyles = makeStyles(theme => {
         return {
             container: {
-                background: "#f0f1f2",
+                background: "#0b0c10",
                 minHeight: '100vh'
             },
             divider: {

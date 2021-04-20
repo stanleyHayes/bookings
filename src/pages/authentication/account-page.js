@@ -44,6 +44,9 @@ const AccountPage = () => {
             },
             link: {
                 textDecoration: "none"
+            },
+            gridContainer: {
+                marginTop: 32
             }
         }
     });
@@ -53,7 +56,7 @@ const AccountPage = () => {
     return (
         <Layout>
             <Container className={classes.container}>
-                <Typography variant="h1" align="center">
+                <Typography  color="textSecondary"  variant="h1" align="center">
                     Account Information
                 </Typography>
 
@@ -66,23 +69,31 @@ const AccountPage = () => {
 
                                 <Typography align="center" gutterBottom={true} variant="h4">Stanley Hayford</Typography>
 
-                                <Divider variant="fullWidth" className={classes.subDivider} light={true} />
+                                <Divider variant="fullWidth" className={classes.subDivider} light={true}/>
 
                                 <Typography align="center" variant="h6">Assistant Director</Typography>
 
-                                <Divider variant="fullWidth" className={classes.subDivider} light={true} />
+                                <Divider variant="fullWidth" className={classes.subDivider} light={true}/>
 
                                 <Typography align="center" variant="body2">IT Department</Typography>
 
-                                <Divider variant="fullWidth" className={classes.divider} light={true} />
 
+                            </CardContent>
+                        </Card>
+                    </Grid>
+                </Grid>
+
+                <Grid container={true} justify="center" className={classes.gridContainer}>
+                    <Grid item={true} xs={12} md={6}>
+                        <Card variant="elevation" elevation={1}>
+                            <CardContent>
                                 <Link to="/auth/change-password" className={classes.link}>
                                     <Button variant="outlined" size="large" fullWidth={true}>
                                         Change Password
                                     </Button>
                                 </Link>
 
-                                <Divider variant="fullWidth" className={classes.subDivider} light={true} />
+                                <Divider variant="fullWidth" className={classes.subDivider} light={true}/>
 
                                 <Button variant="outlined" size="large" fullWidth={true}>
                                     Logout

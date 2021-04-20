@@ -1,5 +1,5 @@
 import React from "react";
-import {Button, Fab, Grid, makeStyles, Toolbar} from "@material-ui/core";
+import {Button, Grid, makeStyles, Toolbar, Typography} from "@material-ui/core";
 import {Link} from "react-router-dom";
 
 const DesktopHeader = () => {
@@ -30,7 +30,12 @@ const DesktopHeader = () => {
             <Grid container={true} justify="space-around" alignItems="center">
                 <Grid item={true}>
                     <Link to="/" className={classes.link}>
-                        <Button className={classes.brand} variant="text">Zeus</Button>
+                        <Button className={classes.brand} variant="text">
+                            Streamline Resources Ghana
+                        </Button>
+                        <Button variant="text">
+                            GRA Affixing Facility
+                        </Button>
                     </Link>
                 </Grid>
 

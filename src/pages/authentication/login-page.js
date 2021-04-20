@@ -31,7 +31,6 @@ const LoginPage = () => {
                 marginBottom: 8
             },
             textField: {
-                background: "#efefefef",
                 marginBottom: 8,
                 marginTop: 8
             },
@@ -69,7 +68,7 @@ const LoginPage = () => {
     return (
         <Layout>
             <Container className={classes.container}>
-                <Typography variant="h1" align="center">Sign In</Typography>
+                <Typography  color="textSecondary"  variant="h1" align="center">Sign In</Typography>
 
                 <Divider variant="fullWidth" className={classes.divider}/>
 
@@ -127,7 +126,7 @@ const LoginPage = () => {
                                 <Button
                                     className={classes.button}
                                     onClick={handleUserSubmit}
-                                    variant="contained"
+                                    variant="outlined"
                                     fullWidth={true}
                                     size="large"
                                     disableElevation={true}>

@@ -71,7 +71,7 @@ const ChangePasswordPage = () => {
     return (
         <Layout>
             <Container className={classes.container}>
-                <Typography variant="h1" align="center">Change Password</Typography>
+                <Typography  color="textSecondary"  variant="h1" align="center">Change Password</Typography>
 
                 <Divider variant="fullWidth" className={classes.divider}/>
 
