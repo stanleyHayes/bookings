@@ -57,6 +57,63 @@ const CreateBookingPage = () => {
 
     const handleBookingSubmit = e => {
         e.preventDefault();
+
+        if (!container) {
+            setError({...error, container: "Field required"});
+            return;
+        } else {
+            setError({...error, container: null});
+        }
+
+        if (!company) {
+            setError({...error, company: "Field required"});
+            return;
+        } else {
+            setError({...error, company: null});
+        }
+        if (!product) {
+            setError({...error, product: "Field required"});
+            return;
+        } else {
+            setError({...error, product: null});
+        }
+
+        if (!car) {
+            setError({...error, car: "Field required"});
+            return;
+        } else {
+            setError({...error, car: null});
+        }
+
+        if (!name) {
+            setError({...error, name: "Field required"});
+            return;
+        } else {
+            setError({...error, name: null});
+        }
+
+
+        if (!contact) {
+            setError({...error, contact: "Field required"});
+            return;
+        } else {
+            setError({...error, contact: null});
+        }
+
+        if (!date) {
+            setError({...error, date: "Field required"});
+            return;
+        } else {
+            setError({...error, date: null});
+        }
+
+        if (!time) {
+            setError({...error, time: "Field required"});
+            return;
+        } else {
+            setError({...error, time: null});
+        }
+        console.log(booking);
     }
 
     const handleDateChange = date => {

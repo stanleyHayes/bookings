@@ -59,6 +59,21 @@ const LoginPage = () => {
     const handleUserSubmit = e => {
         e.preventDefault();
 
+        if(!email){
+            setError({...error, email: "Field required"});
+            return;
+        }else {
+            setError({...error, email: null});
+        }
+
+        if(!password){
+            setError({...error, password: "Field required"});
+            return;
+        }else {
+            setError({...error, password: null});
+        }
+        console.log(user);
+
     }
 
     const handlePasswordVisibility = () => {

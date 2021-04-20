@@ -59,6 +59,35 @@ const ChangePasswordPage = () => {
 
     const handleChangePasswordSubmit = e => {
         e.preventDefault();
+
+        if(!currentPassword){
+            setError({...error, currentPassword: "Field required"});
+            return;
+        }else {
+            setError({...error, currentPassword: null});
+        }
+
+        if(!newPassword){
+            setError({...error, newPassword: "Field required"});
+            return;
+        }else {
+            setError({...error, newPassword: null});
+        }
+
+        if(!confirmPassword){
+            setError({...error, confirmPassword: "Field required"});
+            return;
+        }else {
+            setError({...error, confirmPassword: null});
+        }
+
+        if(confirmPassword !== newPassword){
+            setError({...error, confirmPassword: "Password Mismatch", newPassword: "Password Mismatch"});
+            return;
+        }else {
+            setError({...error, confirmPassword: null, newPassword: null});
+        }
+        console.log(passwords);
     }
 
     const handleConfirmPasswordChange = e => {
@@ -68,6 +97,7 @@ const ChangePasswordPage = () => {
     const handlePasswordVisibility = () => {
         setVisible(!visible);
     }
+
     return (
         <Layout>
             <Container className={classes.container}>

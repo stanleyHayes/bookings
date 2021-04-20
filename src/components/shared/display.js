@@ -1,6 +1,5 @@
 import React from "react";
 import {Card, CardContent, Divider, Grid, makeStyles, Typography} from "@material-ui/core";
-import {Grade} from "@material-ui/icons";
 
 
 const Display = ({booking}) => {

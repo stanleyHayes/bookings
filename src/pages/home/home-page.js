@@ -1,9 +1,8 @@
 import React from "react";
 import Layout from "../../components/layout";
-import {Container, Divider, Grid, makeStyles, Typography} from "@material-ui/core";
+import {Container, Divider, makeStyles, Typography} from "@material-ui/core";
 import Carousel from "react-multi-carousel";
 import {useSelector} from "react-redux";
-import Booking from "../../components/shared/booking";
 import Display from "../../components/shared/display";
 
 
