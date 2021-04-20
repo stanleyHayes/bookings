@@ -1,7 +1,7 @@
 import React from "react";
 import {Avatar, Button, Container, Divider, Grid, makeStyles, Typography} from "@material-ui/core";
 import {Link} from "react-router-dom";
-import {Close, ContactMail, Home, Info, School, Work} from "@material-ui/icons";
+import {Close} from "@material-ui/icons";
 
 
 const DrawerContent = ({handleDrawerClose}) => {
