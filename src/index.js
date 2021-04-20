@@ -3,10 +3,29 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import {BrowserRouter} from "react-router-dom";
+import {createMuiTheme, ThemeProvider} from "@material-ui/core";
+import {Provider} from "react-redux";
+import store from "./app/store";
+
+
+const theme = createMuiTheme({
+    typography: {
+        fontFamily: 'Quicksand, sans-serif'
+    }
+});
+
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+      <BrowserRouter>
+          <ThemeProvider theme={theme}>
+              <Provider store={store}>
+                  <App />
+              </Provider>
+          </ThemeProvider>
+      </BrowserRouter>
+
   </React.StrictMode>,
   document.getElementById('root')
 );
