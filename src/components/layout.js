@@ -1,6 +1,7 @@
-import React from "react";
-import {Box, makeStyles} from "@material-ui/core";
+import React, {useState} from "react";
+import {Box, makeStyles, SwipeableDrawer} from "@material-ui/core";
 import Header from "./header/header";
+import DrawerContent from "./drawer/drawer-content";
 
 
 const Layout = ({children}) => {
@@ -20,12 +21,28 @@ const Layout = ({children}) => {
 
     const classes = useStyles();
 
+    const [open, setOpen] = useState(false);
+
+    const handleDrawerOpen = () => {
+        setOpen(true);
+    }
+
+    const handleDrawerClose = () => {
+        setOpen(false);
+    }
+
     return (
         <Box>
-            <Header/>
+            <Header handleDrawerOpen={handleDrawerOpen}/>
             <Box className={classes.container}>
                 {children}
             </Box>
+            <SwipeableDrawer
+                onClose={handleDrawerClose}
+                onOpen={handleDrawerOpen}
+                open={open}>
+                <DrawerContent handleDrawerClose={handleDrawerClose}/>
+            </SwipeableDrawer>
         </Box>
     )
 }

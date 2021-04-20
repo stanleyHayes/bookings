@@ -1,6 +1,7 @@
 import {Button, Grid, makeStyles, Toolbar} from "@material-ui/core";
 import React from "react";
 import {Link} from "react-router-dom";
+import {Menu} from "@material-ui/icons";
 
 const MobileHeader = ({handleDrawerOpen}) => {
 
@@ -34,16 +35,15 @@ const MobileHeader = ({handleDrawerOpen}) => {
         <Toolbar>
             <Grid container={true} justify="space-between" alignItems="center">
                 <Grid item={true} xs={2}>
-                    <img
+                    <Menu
                         onClick={handleDrawerOpen}
                         className={classes.hamburger}
-                        src="/assets/lightingcolored.svg"
-                        alt="zeus lighting bolt"
-                        title="zeus lighting bolt"/>
+                        color="secondary"
+                    />
                 </Grid>
                 <Grid item={true} xs={8}>
                     <Link to="/" className={classes.link}>
-                        <Button className={classes.brand} variant="text">Zeus</Button>
+                        <Button className={classes.brand} variant="text">SR GH</Button>
                     </Link>
                 </Grid>
             </Grid>

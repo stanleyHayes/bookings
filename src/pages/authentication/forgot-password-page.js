@@ -68,7 +68,7 @@ const ForgotPasswordPage = () => {
     return (
         <Layout>
             <Container className={classes.container}>
-                <Typography color="textSecondary" variant="h1" align="center">Forgot Password</Typography>
+                <Typography color="textSecondary" variant="h3" align="center">Forgot Password</Typography>
 
                 <Divider variant="fullWidth" className={classes.divider}/>
 

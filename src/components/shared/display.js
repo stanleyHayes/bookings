@@ -7,8 +7,8 @@ const Display = ({booking}) => {
     const useStyles = makeStyles(theme => {
         return {
             card: {
-                marginLeft: 32,
-                marginRight: 32
+                marginLeft: 16,
+                marginRight: 16
             },
             divider: {
                 marginTop: 32,
@@ -25,7 +25,8 @@ const Display = ({booking}) => {
                 marginBottom: 8
             },
             title: {
-                textTransform: "uppercase"
+                textTransform: "uppercase",
+                fontWeight: 600
             },
             caption:{
                 textTransform: "uppercase",
@@ -39,7 +40,7 @@ const Display = ({booking}) => {
     return (
         <Card variant="elevation" elevation={8} className={classes.card}>
             <CardContent>
-                <Typography variant="h6" align="center">Affixing Now</Typography>
+                <Typography className={classes.title} variant="h5" align="center">Affixing Now</Typography>
                 <Grid container={true} justify="center">
                     <Grid item={true}>
                         <Divider className={classes.shortDivider} variant="middle" />

@@ -56,7 +56,7 @@ const AccountPage = () => {
     return (
         <Layout>
             <Container className={classes.container}>
-                <Typography  color="textSecondary"  variant="h1" align="center">
+                <Typography  color="textSecondary"  variant="h3" align="center">
                     Account Information
                 </Typography>
 

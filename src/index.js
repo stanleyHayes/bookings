@@ -28,6 +28,9 @@ const theme = createMuiTheme({
         primary: {
             main: "#1f2833"
         },
+        secondary: {
+            main: "#45a298"
+        },
         action: {
             hover: "#45a298",
             active: "#45a298"

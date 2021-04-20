@@ -33,7 +33,7 @@ const BookingsPage = () => {
     return (
         <Layout>
             <Container className={classes.container}>
-                <Typography  color="textSecondary"  variant="h1" align="center">Bookings</Typography>
+                <Typography  color="textSecondary"  variant="h3" align="center">Bookings</Typography>
 
                 <Divider variant="fullWidth" className={classes.divider}/>
 
