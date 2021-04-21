@@ -30,9 +30,9 @@ const Booking = ({booking}) => {
             title: {
                 textTransform: "uppercase"
             },
-            caption:{
+            caption: {
                 textTransform: "uppercase",
-                fontWeight:700
+                fontWeight: 700
             }
         }
     });
@@ -42,29 +42,35 @@ const Booking = ({booking}) => {
     return (
         <Card variant="elevation" elevation={1}>
             <CardContent>
-                <Typography variant="caption" className={classes.caption}>Container</Typography>
-                <Typography variant="h4" gutterBottom={true}>{booking.container}</Typography>
+                <Typography color="textSecondary" variant="caption" className={classes.caption}>Container</Typography>
+                <Typography color="textSecondary" variant="h4" gutterBottom={true}>{booking.container}</Typography>
                 <Divider variant="fullWidth" light={true} className={classes.subDivider}/>
-                <Typography variant="caption" className={classes.caption}>Product Name</Typography>
-                <Typography variant="h6" gutterBottom={true}>{booking.product}</Typography>
+                <Typography color="textSecondary" variant="caption" className={classes.caption}>Product
+                    Name</Typography>
+                <Typography color="textSecondary" variant="h6" gutterBottom={true}>{booking.product}</Typography>
                 <Divider variant="fullWidth" light={true} className={classes.subDivider}/>
-                <Typography variant="caption" className={classes.caption}>Company Name</Typography>
-                <Typography variant="h6" gutterBottom={true}>{booking.company}</Typography>
+                <Typography color="textSecondary" variant="caption" className={classes.caption}>Company
+                    Name</Typography>
+                <Typography color="textSecondary" variant="h6" gutterBottom={true}>{booking.company}</Typography>
                 <Divider variant="fullWidth" light={true} className={classes.subDivider}/>
-                <Typography variant="caption" className={classes.caption}>Driver's Contact</Typography>
-                <Typography variant="h6" gutterBottom={true}>{booking.contact}</Typography>
+                <Typography color="textSecondary" variant="caption" className={classes.caption}>Driver's
+                    Contact</Typography>
+                <Typography color="textSecondary" variant="h6" gutterBottom={true}>{booking.contact}</Typography>
                 <Divider variant="fullWidth" light={true} className={classes.subDivider}/>
-                <Typography variant="caption" className={classes.caption}>Driver's Name</Typography>
-                <Typography variant="h6" gutterBottom={true}>{booking.name}</Typography>
+                <Typography color="textSecondary" variant="caption" className={classes.caption}>Driver's
+                    Name</Typography>
+                <Typography color="textSecondary" variant="h6" gutterBottom={true}>{booking.name}</Typography>
                 <Divider variant="fullWidth" light={true} className={classes.subDivider}/>
-                <Typography variant="caption" className={classes.caption}>Car Number</Typography>
-                <Typography variant="h6" gutterBottom={true}>{booking.car}</Typography>
+                <Typography color="textSecondary" variant="caption" className={classes.caption}>Car Number</Typography>
+                <Typography color="textSecondary" variant="h6" gutterBottom={true}>{booking.car}</Typography>
                 <Divider variant="fullWidth" light={true} className={classes.subDivider}/>
-                <Typography variant="caption" className={classes.caption}>Booking date</Typography>
-                <Typography variant="h4" gutterBottom={true}>{booking.date}</Typography>
+                <Typography color="textSecondary" variant="caption" className={classes.caption}>Booking
+                    date</Typography>
+                <Typography color="textSecondary" variant="h4" gutterBottom={true}>{booking.date}</Typography>
                 <Divider variant="fullWidth" light={true} className={classes.subDivider}/>
-                <Typography variant="caption" className={classes.caption}>Booking Time</Typography>
-                <Typography variant="h4" gutterBottom={true}>{booking.time}</Typography>
+                <Typography color="textSecondary" variant="caption" className={classes.caption}>Booking
+                    Time</Typography>
+                <Typography color="textSecondary" variant="h4" gutterBottom={true}>{booking.time}</Typography>
             </CardContent>
         </Card>
     )

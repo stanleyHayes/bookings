@@ -43,7 +43,7 @@ const HomePage = () => {
     return (
         <Layout>
             <Container className={classes.container}>
-                <Typography color="textSecondary" variant="h3" align="center">Bookings</Typography>
+                <Typography color="textPrimary" variant="h3" align="center">Bookings</Typography>
 
                 <Divider variant="fullWidth" className={classes.divider}/>
 

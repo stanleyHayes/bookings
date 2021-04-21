@@ -83,7 +83,7 @@ const LoginPage = () => {
     return (
         <Layout>
             <Container className={classes.container}>
-                <Typography  color="textSecondary"  variant="h3" align="center">Sign In</Typography>
+                <Typography  color="textPrimary"  variant="h3" align="center">Sign In</Typography>
 
                 <Divider variant="fullWidth" className={classes.divider}/>
 

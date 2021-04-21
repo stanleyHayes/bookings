@@ -37,7 +37,8 @@ const AccountPage = () => {
             button: {
                 paddingTop: 16,
                 paddingBottom: 16,
-                marginTop: 16
+                marginTop: 16,
+                marginBottom: 16
             },
             title: {
                 textTransform: "uppercase"
@@ -56,7 +57,7 @@ const AccountPage = () => {
     return (
         <Layout>
             <Container className={classes.container}>
-                <Typography  color="textSecondary"  variant="h3" align="center">
+                <Typography color="textPrimary" variant="h3" align="center">
                     Account Information
                 </Typography>
 
@@ -67,16 +68,27 @@ const AccountPage = () => {
                         <Card variant="elevation" elevation={1}>
                             <CardContent>
 
-                                <Typography align="center" gutterBottom={true} variant="h4">Stanley Hayford</Typography>
+                                <Typography
+                                    color="textSecondary"
+                                    variant="caption"
+                                    gutterBottom={true}>
+                                    Name
+                                </Typography>
+
+                                <Typography color="textSecondary" gutterBottom={true} variant="h4">
+                                    Stanley Hayford
+                                </Typography>
 
                                 <Divider variant="fullWidth" className={classes.subDivider} light={true}/>
 
-                                <Typography align="center" variant="h6">Assistant Director</Typography>
+                                <Typography color="textSecondary" variant="caption"
+                                            gutterBottom={true}>Position</Typography>
+                                <Typography color="textSecondary" variant="h6">Assistant Director</Typography>
 
                                 <Divider variant="fullWidth" className={classes.subDivider} light={true}/>
-
-                                <Typography align="center" variant="body2">IT Department</Typography>
-
+                                <Typography color="textSecondary" variant="caption"
+                                            gutterBottom={true}>Department</Typography>
+                                <Typography color="textSecondary" variant="body1">IT Department</Typography>
 
                             </CardContent>
                         </Card>
@@ -88,17 +100,16 @@ const AccountPage = () => {
                         <Card variant="elevation" elevation={1}>
                             <CardContent>
                                 <Link to="/auth/change-password" className={classes.link}>
-                                    <Button variant="outlined" size="large" fullWidth={true}>
+                                    <Button className={classes.button} variant="outlined" size="large" fullWidth={true}>
                                         Change Password
                                     </Button>
                                 </Link>
 
                                 <Divider variant="fullWidth" className={classes.subDivider} light={true}/>
 
-                                <Button variant="outlined" size="large" fullWidth={true}>
+                                <Button className={classes.button} variant="outlined" size="large" fullWidth={true}>
                                     Logout
                                 </Button>
-
                             </CardContent>
                         </Card>
                     </Grid>

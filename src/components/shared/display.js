@@ -40,20 +40,20 @@ const Display = ({booking}) => {
     return (
         <Card variant="elevation" elevation={8} className={classes.card}>
             <CardContent>
-                <Typography className={classes.title} variant="h5" align="center">Affixing Now</Typography>
+                <Typography color="textSecondary" className={classes.title} variant="h5" align="center">Affixing Now</Typography>
                 <Grid container={true} justify="center">
                     <Grid item={true}>
                         <Divider className={classes.shortDivider} variant="middle" />
                     </Grid>
                 </Grid>
                 <Typography color="textSecondary" variant="h6" align="center" className={classes.caption}>Container Number</Typography>
-                <Typography color="textPrimary" variant="h1" align="center">{booking.container}</Typography>
+                <Typography color="textSecondary" variant="h1" align="center">{booking.container}</Typography>
                 <Divider className={classes.divider} variant="fullWidth" light={true} />
-                <Typography color="textSecondary" variant="h6" align="center" className={classes.caption}>Booking Date</Typography>
-                <Typography variant="h3" align="center">{new Date(booking.date).toLocaleDateString()}</Typography>
+                <Typography  color="textSecondary" variant="h6" align="center" className={classes.caption}>Booking Date</Typography>
+                <Typography color="textSecondary" variant="h3" align="center">{new Date(booking.date).toLocaleDateString()}</Typography>
                 <Divider className={classes.divider} variant="fullWidth" light={true} />
                 <Typography color="textSecondary" variant="h6" align="center" className={classes.caption}>Next</Typography>
-                <Typography variant="h3" align="center">{booking.container}</Typography>
+                <Typography color="textSecondary" variant="h3" align="center">{booking.container}</Typography>
             </CardContent>
         </Card>
     )

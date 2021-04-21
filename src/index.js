@@ -21,7 +21,7 @@ const theme = createMuiTheme({
         },
         text: {
             primary: "#66fcf1",
-            secondary: "#45a298",
+            secondary: "#ffffff",
             hint: "#c5c6c7",
             disabled: "#c5c6c7"
         },
@@ -33,13 +33,15 @@ const theme = createMuiTheme({
         },
         action: {
             hover: "#45a298",
-            active: "#45a298"
+            active: "#45a298",
+            selected: "#45a298",
+            focus:"#45a298"
         },
         divider: "#45a298",
         type: "dark"
     },
     shape: {
-        borderRadius: 32
+        borderRadius: 2
     }
 });
 
