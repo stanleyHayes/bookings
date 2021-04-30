@@ -3,9 +3,9 @@ import {bookings} from "../../../data/data";
 import axios from "axios";
 import {DEVELOPMENT_SERVER_URL} from "../../../constants/constants";
 
-export const getBookings = createAsyncThunk('bookings/getBookings',
+export const createBooking = createAsyncThunk('bookings/createBookings',
     async (booking, token) => {
-        await axios(
+        const {data, message} = await axios(
             {
                 url: `${DEVELOPMENT_SERVER_URL}/bookings`,
                 method: 'post',
@@ -14,7 +14,21 @@ export const getBookings = createAsyncThunk('bookings/getBookings',
                     'Authorization': `Bearer ${token}`
                 }
             });
+        return {data, message};
     });
+
+export const getBookings = createAsyncThunk('bookings/getBookings',
+    async (token) => {
+        const {bookings, message, count, page} = await axios({
+            method: 'get',
+            url: `${DEVELOPMENT_SERVER_URL}/bookings`,
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+        return {bookings, message, count, page}
+    }
+);
 const bookingsSlice = createSlice({
     name: "bookings",
     initialState: {
@@ -24,17 +38,17 @@ const bookingsSlice = createSlice({
         message: ''
     },
     extraReducers: {
-        [getBookings.pending]: (state, action) => {
+        [createBooking.pending]: (state, action) => {
             state.loading = true;
             state.error = null;
         },
-        [getBookings.fulfilled]: (state, action) =>{
+        [createBooking.fulfilled]: (state, action) => {
             state.error = null;
             state.loading = false;
             state.bookings.push(action.payload.booking);
             state.message = action.payload.message
         },
-        [getBookings.rejected]: (state, action) =>{
+        [createBooking.rejected]: (state, action) => {
             state.error = action.payload.message;
             state.loading = false;
             state.message = action.payload.message
