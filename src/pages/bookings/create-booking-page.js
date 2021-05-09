@@ -6,13 +6,16 @@ import {
     CardContent,
     Container,
     Divider,
-    Grid,
+    Grid, LinearProgress,
     makeStyles,
     TextField,
     Typography
 } from "@material-ui/core";
-
+import {useDispatch, useSelector} from "react-redux";
 import {DatePicker, TimePicker} from '@material-ui/pickers';
+import {createBooking, selectBookingLoading, selectBookingsError} from "../../app/features/bookings/bookings-slice";
+import {useHistory} from "react-router-dom";
+import {selectToken} from "../../app/features/authentication/auth-slice";
 
 const CreateBookingPage = () => {
 
@@ -46,10 +49,16 @@ const CreateBookingPage = () => {
     });
 
     const classes = useStyles();
+    const dispatch = useDispatch();
+    const history = useHistory();
 
-    const [booking, setBooking] = useState({date: Date.now()});
+    const [booking, setBooking] = useState({date: "", time: ""});
     const [error, setError] = useState({});
     const {car, contact, name, container, company, time, date, product} = booking;
+
+    const loading = useSelector(selectBookingLoading);
+    const err = useSelector(selectBookingsError);
+    const token = useSelector(selectToken);
 
     const handleBookingChange = e => {
         setBooking({...booking, [e.target.name]: e.target.value});
@@ -113,10 +122,10 @@ const CreateBookingPage = () => {
         } else {
             setError({...error, time: null});
         }
-        console.log(booking);
+        dispatch(createBooking({token, history, ...booking}));
     }
 
-    const handleDateChange = date => {
+    const handleDateChange = (date) => {
         setBooking({...booking, date});
     }
 
@@ -128,9 +137,12 @@ const CreateBookingPage = () => {
     return (
         <Layout>
             <Container className={classes.container}>
-                <Typography  color="textPrimary"  variant="h3" align="center">Create Booking</Typography>
+                <Typography color="textPrimary" variant="h3" align="center">Create Booking</Typography>
+                <Divider light={true} variant="fullWidth" className={classes.divider}/>
 
-                <Divider variant="fullWidth" className={classes.divider}/>
+                {loading ? <LinearProgress color="secondary" variant="query"/> : err ? (
+                    <Typography color="error" variant="h6">{err}</Typography>
+                ) : null}
 
                 <Grid container={true} justify="center">
                     <Grid item={true} xs={12} md={6}>
@@ -238,6 +250,7 @@ const CreateBookingPage = () => {
                                 <DatePicker
                                     variant="dialog"
                                     value={date}
+                                    name="date"
                                     fullWidth={true}
                                     label="Booking Date"
                                     onChange={handleDateChange}
@@ -245,18 +258,22 @@ const CreateBookingPage = () => {
                                     disablePast={true}
                                     autoOk={true}
                                     required={true}
-                                    InputAdornmentProps={{ position: "start" }}
-                                    format="MM-DD-YYYY"
+                                    InputAdornmentProps={{position: "start"}}
                                     error={Boolean(error.date)}
                                     helperText={error.date}
                                     className={classes.textField}
+                                    placeholder={"Select Booking Date"}
+                                    okLabel={<Button>OK</Button>}
+                                    cancelLabel={<Button>Cancel</Button>}
+                                    emptyLabel="Booking Date"
                                 />
 
                                 <TimePicker
                                     variant="dialog"
                                     value={time}
-                                    InputAdornmentProps={{ position: "start" }}
+                                    InputAdornmentProps={{position: "start"}}
                                     fullWidth={true}
+                                    name="time"
                                     label="Booking Time"
                                     onChange={handleTimeChange}
                                     inputVariant="outlined"
@@ -267,6 +284,10 @@ const CreateBookingPage = () => {
                                     error={Boolean(error.time)}
                                     helperText={error.time}
                                     className={classes.textField}
+                                    okLabel={<Button>OK</Button>}
+                                    placeholder={"Select Booking Time"}
+                                    cancelLabel={<Button>Cancel</Button>}
+                                    emptyLabel="Booking Time"
                                 />
 
                                 <Button

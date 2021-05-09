@@ -1,14 +1,31 @@
 import './App.css';
 import {Switch, Route} from "react-router-dom";
 import HomePage from "./pages/home/home-page";
-import CreateBookingPage from "./pages/bookings/create-booking";
+import CreateBookingPage from "./pages/bookings/create-booking-page";
 import BookingsPage from "./pages/bookings/bookings-page";
 import LoginPage from "./pages/authentication/login-page";
 import ChangePasswordPage from "./pages/authentication/change-password-page";
 import ForgotPasswordPage from "./pages/authentication/forgot-password-page";
 import AccountPage from "./pages/authentication/account-page";
+import UpdateBookingPage from "./pages/bookings/update-booking-page";
+import {STREAMING_RESOURCE_GH_DATA_KEY, STREAMING_RESOURCE_GH_TOKEN_KEY} from "./constants/constants";
+import {useHistory} from 'react-router-dom';
+import {useDispatch} from "react-redux";
+import {restoreToken, restoreUser} from "./app/features/authentication/auth-slice";
 
 function App() {
+
+    const dispatch = useDispatch();
+    const history = useHistory();
+    const token = localStorage.getItem(STREAMING_RESOURCE_GH_TOKEN_KEY);
+    const data = localStorage.getItem(STREAMING_RESOURCE_GH_DATA_KEY);
+
+    if(!token){
+        history.push('/auth/login');
+    }else {
+        dispatch(restoreUser(JSON.parse(data)));
+        dispatch(restoreToken(token));
+    }
     return (
         <Switch>
             <Route path="/" exact={true}>
@@ -21,6 +38,10 @@ function App() {
 
             <Route path="/bookings" exact={true}>
                 <BookingsPage/>
+            </Route>
+
+            <Route path="/bookings/:bookingID/update" exact={true}>
+                <UpdateBookingPage/>
             </Route>
 
             <Route path="/auth/login" exact={true}>

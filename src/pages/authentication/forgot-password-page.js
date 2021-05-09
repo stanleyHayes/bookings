@@ -70,7 +70,7 @@ const ForgotPasswordPage = () => {
             <Container className={classes.container}>
                 <Typography color="textPrimary" variant="h3" align="center">Forgot Password</Typography>
 
-                <Divider variant="fullWidth" className={classes.divider}/>
+                <Divider light={true} variant="fullWidth" className={classes.divider}/>
 
                 <Grid container={true} justify="center">
                     <Grid item={true} xs={12} md={6}>

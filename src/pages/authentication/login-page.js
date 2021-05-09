@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import Layout from "../../components/layout";
 import {
     Button,
@@ -6,13 +6,15 @@ import {
     CardContent,
     Container,
     Divider,
-    Grid,
+    Grid, LinearProgress,
     makeStyles,
     Switch,
     TextField,
     Typography
 } from "@material-ui/core";
-
+import {useDispatch, useSelector} from "react-redux";
+import {login, selectError, selectIsSignedIn, selectLoading} from "../../app/features/authentication/auth-slice";
+import {useHistory} from "react-router-dom";
 
 const LoginPage = () => {
 
@@ -47,6 +49,19 @@ const LoginPage = () => {
 
     const classes = useStyles();
 
+    const dispatch = useDispatch();
+    const history = useHistory();
+
+    const loading = useSelector(selectLoading);
+    const err = useSelector(selectError);
+    const isSignedIn = useSelector(selectIsSignedIn);
+
+    useEffect(() => {
+        if(isSignedIn){
+            history.push('/');
+        }
+    },[history, isSignedIn]);
+
     const [user, setUser] = useState({});
     const {email, password} = user;
     const [error, setError] = useState({});
@@ -59,21 +74,20 @@ const LoginPage = () => {
     const handleUserSubmit = e => {
         e.preventDefault();
 
-        if(!email){
+        if (!email) {
             setError({...error, email: "Field required"});
             return;
-        }else {
+        } else {
             setError({...error, email: null});
         }
 
-        if(!password){
+        if (!password) {
             setError({...error, password: "Field required"});
             return;
-        }else {
+        } else {
             setError({...error, password: null});
         }
-        console.log(user);
-
+        dispatch(login({...user, history}));
     }
 
     const handlePasswordVisibility = () => {
@@ -83,9 +97,12 @@ const LoginPage = () => {
     return (
         <Layout>
             <Container className={classes.container}>
-                <Typography  color="textPrimary"  variant="h3" align="center">Sign In</Typography>
+                <Typography color="textPrimary" variant="h3" align="center">Sign In</Typography>
 
-                <Divider variant="fullWidth" className={classes.divider}/>
+                <Divider variant="fullWidth" light={true} className={classes.divider}/>
+                {loading ? <LinearProgress color="secondary" variant="query"/> : err ? (
+                    <Typography color="error" variant="h6">{err}</Typography>
+                ) : null}
 
                 <Grid container={true} justify="center">
                     <Grid item={true} xs={12} md={6}>

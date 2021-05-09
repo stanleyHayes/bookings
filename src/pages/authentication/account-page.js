@@ -61,7 +61,7 @@ const AccountPage = () => {
                     Account Information
                 </Typography>
 
-                <Divider variant="fullWidth" className={classes.divider}/>
+                <Divider light={true} variant="fullWidth" className={classes.divider}/>
 
                 <Grid container={true} justify="center">
                     <Grid item={true} xs={12} md={6}>
@@ -109,6 +109,12 @@ const AccountPage = () => {
 
                                 <Button className={classes.button} variant="outlined" size="large" fullWidth={true}>
                                     Logout
+                                </Button>
+
+                                <Divider variant="fullWidth" className={classes.subDivider} light={true}/>
+
+                                <Button className={classes.button} variant="outlined" size="large" fullWidth={true}>
+                                    Logout all devices
                                 </Button>
                             </CardContent>
                         </Card>

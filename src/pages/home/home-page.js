@@ -1,10 +1,17 @@
-import React from "react";
+import React, {useEffect} from "react";
 import Layout from "../../components/layout";
-import {Container, Divider, makeStyles, Typography} from "@material-ui/core";
-import Carousel from "react-multi-carousel";
-import {useSelector} from "react-redux";
-import Display from "../../components/shared/display";
+import {Container, Divider, LinearProgress, makeStyles, Typography} from "@material-ui/core";
+import {useDispatch, useSelector} from "react-redux";
 
+import {useHistory} from "react-router-dom";
+import {selectIsSignedIn, selectToken} from "../../app/features/authentication/auth-slice";
+import {
+    getBookings,
+    selectBookingLoading, selectBookingsError,
+    selectCurrentDisplay,
+    selectNextDisplay
+} from "../../app/features/bookings/bookings-slice";
+import Display from "../../components/shared/display";
 
 const HomePage = () => {
 
@@ -23,44 +30,38 @@ const HomePage = () => {
 
     const classes = useStyles();
 
-    const responsive = {
-        desktop: {
-            breakpoint: {max: 3000, min: 1024},
-            items: 1
-        },
-        tablet: {
-            breakpoint: {max: 1024, min: 464},
-            items: 1
-        },
-        mobile: {
-            breakpoint: {max: 464, min: 0},
-            items: 1
-        }
-    };
+    // const bookings = useSelector();
+    const isSignedIn = useSelector(selectIsSignedIn);
+    const currentBooking = useSelector(selectCurrentDisplay);
+    const nextBooking = useSelector(selectNextDisplay);
+    const loading = useSelector(selectBookingLoading);
+    const err = useSelector(selectBookingsError);
+    const token = useSelector(selectToken);
 
-    const bookings = useSelector(state => state.bookings.bookings);
+    const dispatch = useDispatch();
+    const history = useHistory();
+
+    useEffect(() => {
+        if (!isSignedIn) {
+            history.push('/auth/login');
+        }
+    }, [history, isSignedIn]);
+
+    useEffect(() => {
+        dispatch(getBookings({token}));
+    }, [dispatch, token]);
+
 
     return (
         <Layout>
             <Container className={classes.container}>
-                <Typography color="textPrimary" variant="h3" align="center">Bookings</Typography>
+                <Typography color="textPrimary" variant="h3" align="center">Affixing Now</Typography>
+                <Divider light={true} variant="fullWidth" className={classes.divider}/>
+                {loading ? <LinearProgress color="secondary" variant="query"/> : err ? (
+                    <Typography color="error" variant="h6">{err}</Typography>
+                ) : null}
 
-                <Divider variant="fullWidth" className={classes.divider}/>
-
-                <Carousel
-                    arrows={true}
-                    autoPlay={false}
-                    swipeable={true}
-                    responsive={responsive}>
-                    {
-                        bookings.map((booking, index) => {
-                            return (
-                                <Display key={index} booking={booking}/>
-                            )
-                        })
-                    }
-                </Carousel>
-
+                {currentBooking && <Display currentDisplay={currentBooking} nextDisplay={nextBooking}/>}
             </Container>
         </Layout>
     )

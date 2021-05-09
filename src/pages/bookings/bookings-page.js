@@ -1,8 +1,16 @@
-import React from "react";
+import React, {useEffect} from "react";
 import Layout from "../../components/layout";
-import {Container, Divider, Grid, makeStyles, Typography} from "@material-ui/core";
+import {Container, Divider, Grid, LinearProgress, makeStyles, Typography} from "@material-ui/core";
 import Booking from "../../components/shared/booking";
-import {useSelector} from "react-redux";
+import {useSelector, useDispatch} from "react-redux";
+import {
+    getBookings,
+    selectBookingLoading,
+    selectBookings,
+    selectBookingsError
+} from "../../app/features/bookings/bookings-slice";
+import {useHistory} from "react-router-dom";
+import {selectIsSignedIn, selectToken} from "../../app/features/authentication/auth-slice";
 
 const BookingsPage = () => {
 
@@ -17,7 +25,7 @@ const BookingsPage = () => {
                 marginBottom: 32
             },
             noBookingContainer: {
-                minHeight: '65vh'
+                minHeight: '50vh'
             },
             noBookingsText: {
                 textTransform: "uppercase",
@@ -28,16 +36,36 @@ const BookingsPage = () => {
 
     const classes = useStyles();
 
-    const bookings = useSelector(state => state.bookings.bookings);
+    const bookings = useSelector(selectBookings);
+    const isSignedIn = useSelector(selectIsSignedIn);
+    const token = useSelector(selectToken);
+    const loading = useSelector(selectBookingLoading);
+    const err = useSelector(selectBookingsError);
+
+    const history = useHistory();
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        if (!isSignedIn) {
+            history.push('/auth/login');
+        }
+    }, [history, isSignedIn]);
+
+    useEffect(() => {
+        dispatch(getBookings({token}));
+    }, [dispatch, token]);
 
     return (
         <Layout>
             <Container className={classes.container}>
-                <Typography  color="textPrimary"  variant="h3" align="center">Bookings</Typography>
+                <Typography color="textPrimary" variant="h3" align="center">Bookings</Typography>
+                <Divider light={true} variant="fullWidth" className={classes.divider}/>
 
-                <Divider variant="fullWidth" className={classes.divider}/>
+                {loading ? <LinearProgress color="secondary" variant="query"/> : err ? (
+                    <Typography color="error" variant="h6">{err}</Typography>
+                ) : null}
 
-                <Grid container={true} spacing={5}>
+                <Grid container={true} spacing={1}>
                     {
                         bookings.length ? (
                             bookings.map((booking, index) => {
@@ -55,6 +83,7 @@ const BookingsPage = () => {
                                 alignItems="center">
                                 <Grid item={true}>
                                     <Typography
+                                        color="textSecondary"
                                         className={classes.noBookingsText}
                                         variant="h5">
                                         No Bookings Available

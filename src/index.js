@@ -8,8 +8,8 @@ import { createMuiTheme, ThemeProvider} from "@material-ui/core";
 import {Provider} from "react-redux";
 import store from "./app/store";
 import {MuiPickersUtilsProvider} from "@material-ui/pickers";
-import MomentUtils from "@date-io/moment";
 import 'react-multi-carousel/lib/styles.css';
+import DateFnsUtils from '@date-io/date-fns';
 
 const theme = createMuiTheme({
     typography: {
@@ -51,7 +51,7 @@ ReactDOM.render(
       <BrowserRouter>
           <ThemeProvider theme={theme}>
               <Provider store={store}>
-                  <MuiPickersUtilsProvider utils={MomentUtils}>
+                  <MuiPickersUtilsProvider utils={DateFnsUtils}>
                       <App />
                   </MuiPickersUtilsProvider>
               </Provider>
