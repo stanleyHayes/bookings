@@ -6,11 +6,13 @@ import {
     CardContent,
     Container,
     Divider,
-    Grid,
+    Grid, LinearProgress,
     makeStyles, Switch,
     TextField,
     Typography
 } from "@material-ui/core";
+import {useDispatch, useSelector} from "react-redux";
+import {changePassword, selectLoading, selectToken} from "../../app/features/authentication/auth-slice";
 
 
 const ChangePasswordPage = () => {
@@ -30,7 +32,6 @@ const ChangePasswordPage = () => {
                 marginBottom: 8
             },
             textField: {
-                background: "#efefefef",
                 marginBottom: 8,
                 marginTop: 8
             },
@@ -46,6 +47,10 @@ const ChangePasswordPage = () => {
     });
 
     const classes = useStyles();
+    const dispatch = useDispatch();
+
+    const token = useSelector(selectToken);
+    const loading = useSelector(selectLoading);
 
     const [passwords, setPasswords] = useState({});
     const [confirmPassword, setConfirmPassword] = useState("");
@@ -87,7 +92,7 @@ const ChangePasswordPage = () => {
         }else {
             setError({...error, confirmPassword: null, newPassword: null});
         }
-        console.log(passwords);
+        dispatch(changePassword({token, ...passwords}));
     }
 
     const handleConfirmPasswordChange = e => {
@@ -101,6 +106,7 @@ const ChangePasswordPage = () => {
     return (
         <Layout>
             <Container className={classes.container}>
+                {loading && <LinearProgress color="secondary" variant="query"/> }
                 <Typography  color="textPrimary"  variant="h3" align="center">Change Password</Typography>
 
                 <Divider light={true} variant="fullWidth" className={classes.divider}/>
@@ -121,7 +127,7 @@ const ChangePasswordPage = () => {
                                     label="Current Password"
                                     placeholder="Enter current password"
                                     required={true}
-                                    error={Boolean(error.currentPassword)}
+                                    error={!!error.currentPassword}
                                     helperText={error.currentPassword}
                                 />
 
@@ -137,7 +143,7 @@ const ChangePasswordPage = () => {
                                     label="New Password"
                                     placeholder="Enter new password"
                                     required={true}
-                                    error={Boolean(error.newPassword)}
+                                    error={!!error.newPassword}
                                     helperText={error.newPassword}
                                 />
 
@@ -148,11 +154,12 @@ const ChangePasswordPage = () => {
                                     value={confirmPassword}
                                     onChange={handleConfirmPasswordChange}
                                     margin="normal"
+                                    name="confirmPassword"
                                     className={classes.textField}
                                     label="Confirm Password"
                                     placeholder="Confirm new password"
                                     required={true}
-                                    error={Boolean(error.confirmPassword)}
+                                    error={!!error.confirmPassword}
                                     helperText={error.confirmPassword}
                                 />
 
@@ -174,7 +181,7 @@ const ChangePasswordPage = () => {
                                 <Button
                                     className={classes.button}
                                     onClick={handleChangePasswordSubmit}
-                                    variant="contained"
+                                    variant="outlined"
                                     fullWidth={true}
                                     size="large"
                                     disableElevation={true}>

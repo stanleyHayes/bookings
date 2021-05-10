@@ -48,7 +48,9 @@ const HomePage = () => {
     }, [history, isSignedIn]);
 
     useEffect(() => {
-        dispatch(getBookings({token}));
+        if(token){
+            dispatch(getBookings({token}));
+        }
     }, [dispatch, token]);
 
 

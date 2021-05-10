@@ -26,11 +26,11 @@ export const login = createAsyncThunk('auth/login',
 export const logout = createAsyncThunk('auth/logout',
     async ({token}, {rejectWithValue}) => {
         try {
-            const {data, message, token} = await axios({
+            const {data} = await axios({
                 method: 'get',
-                url: `${DEVELOPMENT_SERVER_URL}/auth/login`
+                url: `${DEVELOPMENT_SERVER_URL}/auth/logout`
             });
-            return {data, message, token}
+            return {data}
         } catch (error) {
             return rejectWithValue(error.response.data.message);
         }
@@ -53,7 +53,6 @@ export const getProfile = createAsyncThunk('auth/getProfile',
     }
 );
 
-
 export const deleteProfile = createAsyncThunk('auth/deleteProfile',
     async ({token}, {rejectWithValue}) => {
         try {
@@ -64,6 +63,8 @@ export const deleteProfile = createAsyncThunk('auth/deleteProfile',
                     Authorization: `Bearer ${token}`
                 }
             });
+            await localStorage.removeItem(STREAMING_RESOURCE_GH_DATA_KEY);
+            await localStorage.removeItem(STREAMING_RESOURCE_GH_TOKEN_KEY);
             return {data}
         } catch (error) {
             return rejectWithValue(error.response.data.message);
@@ -71,9 +72,8 @@ export const deleteProfile = createAsyncThunk('auth/deleteProfile',
     }
 );
 
-
 export const updateProfile = createAsyncThunk('auth/updateProfile',
-    async ({token, user}, {rejectWithValue}) => {
+    async ({token, ...user}, {rejectWithValue}) => {
         try {
             const {data} = await axios({
                 method: 'put',
@@ -83,6 +83,8 @@ export const updateProfile = createAsyncThunk('auth/updateProfile',
                 },
                 data: {...user}
             });
+            await localStorage.removeItem(STREAMING_RESOURCE_GH_DATA_KEY);
+            await localStorage.setItem(STREAMING_RESOURCE_GH_DATA_KEY, JSON.stringify(data.data));
             return {data}
         } catch (error) {
             return rejectWithValue(error.response.data.message);
@@ -90,6 +92,24 @@ export const updateProfile = createAsyncThunk('auth/updateProfile',
     }
 );
 
+
+export const changePassword = createAsyncThunk('auth/changePassword',
+    async ({token, ...passwords}, {rejectWithValue}) => {
+        try {
+            const {data} = await axios({
+                method: 'put',
+                url: `${DEVELOPMENT_SERVER_URL}/auth/profile`,
+                headers: {
+                    Authorization: `Bearer ${token}`
+                },
+                data: {...passwords}
+            });
+            return {data}
+        } catch (error) {
+            return rejectWithValue(error.response.data.message);
+        }
+    }
+);
 
 const authSlice = createSlice({
     name: 'auth',
@@ -133,9 +153,101 @@ const authSlice = createSlice({
             state.message = action.error.message;
             state.error = action.error.message
             state.isSignedIn = false;
-        }
+        },
+        [logout.pending]: (state, action) => {
+            state.loading = true;
+            state.error = '';
+            state.message = '';
+            state.isSignedIn = true;
+        },
+        [logout.fulfilled]: (state, action) => {
+            state.token = null;
+            state.user = null;
+            state.message = action.payload.message;
+            state.error = ''
+            state.loading = false;
+            state.isSignedIn = true;
+        },
+        [logout.rejected]: (state, action) => {
+            state.loading = false;
+            state.message = action.error.message;
+            state.error = action.error.message
+            state.isSignedIn = true;
+        },
+        [getProfile.pending]: (state, action) => {
+            state.loading = true;
+            state.error = '';
+            state.message = '';
+        },
+        [getProfile.fulfilled]: (state, action) => {
+            state.user = action.payload.data;
+            state.message = action.payload.message;
+            state.error = '';
+            state.loading = false;
+        },
+        [getProfile.rejected]: (state, action) => {
+            state.loading = false;
+            state.message = action.error.message;
+            state.error = action.error.message
+        },
+        [deleteProfile.pending]: (state, action) => {
+            state.loading = true;
+            state.error = '';
+            state.message = '';
+            state.isSignedIn = false;
+        },
+        [deleteProfile.fulfilled]: (state, action) => {
+            state.token = action.payload.token;
+            state.user = action.payload.data;
+            state.message = action.payload.message;
+            state.error = ''
+            state.loading = false;
+            state.isSignedIn = false;
+        },
+        [deleteProfile.rejected]: (state, action) => {
+            state.token = null;
+            state.user = null;
+            state.loading = false;
+            state.message = action.error.message;
+            state.error = action.error.message
+            state.isSignedIn = true;
+        },
+        [updateProfile.pending]: (state, action) => {
+            state.loading = true;
+            state.error = '';
+            state.message = '';
+        },
+        [updateProfile.fulfilled]: (state, action) => {
+            state.user = action.payload.data.data;
+            state.message = action.payload.message;
+            state.error = ''
+            state.loading = false;
+        },
+        [updateProfile.rejected]: (state, action) => {
+            state.loading = false;
+            state.message = action.error.message;
+            state.error = action.error.message
+        },
+        [changePassword.pending]: (state, action) => {
+            state.loading = true;
+            state.error = '';
+            state.message = '';
+        },
+        [changePassword.fulfilled]: (state, action) => {
+            state.user = action.payload.data.data;
+            state.message = action.payload.message;
+            state.error = ''
+            state.loading = false;
+        },
+        [changePassword.rejected]: (state, action) => {
+            state.loading = false;
+            state.message = action.error.message;
+            state.error = action.error.message
+        },
+
     }
 });
+
 
 const selectProfile = state => state.auth.user;
 const selectToken = state => state.auth.token;
