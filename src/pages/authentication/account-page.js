@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import Layout from "../../components/layout";
 import {
     Button,
@@ -10,9 +10,15 @@ import {
     makeStyles,
     Typography
 } from "@material-ui/core";
-import {Link} from "react-router-dom";
+import {Link, useHistory} from "react-router-dom";
 import {useSelector, useDispatch} from "react-redux";
-import {selectLoading, selectProfile, logout, selectToken} from "../../app/features/authentication/auth-slice";
+import {
+    selectLoading,
+    selectProfile,
+    logout,
+    selectToken,
+    selectIsSignedIn
+} from "../../app/features/authentication/auth-slice";
 import {Skeleton} from "@material-ui/lab";
 
 
@@ -57,10 +63,19 @@ const AccountPage = () => {
 
     const classes = useStyles();
     const dispatch = useDispatch();
+    const history = useHistory();
 
     const profile = useSelector(selectProfile);
     const loading = useSelector(selectLoading);
     const token = useSelector(selectToken);
+    const isSignedIn = useSelector(selectIsSignedIn);
+
+    useEffect(() => {
+        if(!isSignedIn){
+            history.push('/auth/login');
+        }
+    },[history, isSignedIn]);
+
 
     return (
         <Layout>

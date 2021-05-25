@@ -187,12 +187,10 @@ const ChangePasswordPage = () => {
                                     disableElevation={true}>
                                     Submit Password
                                 </Button>
-
                             </CardContent>
                         </Card>
                     </Grid>
                 </Grid>
-
             </Container>
         </Layout>
     )
