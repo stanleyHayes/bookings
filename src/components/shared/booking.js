@@ -1,5 +1,5 @@
 import React from "react";
-import {Button, Card, CardContent, Divider, makeStyles, Typography} from "@material-ui/core";
+import {Button, Card, CardActions, CardContent, Divider, makeStyles, Typography} from "@material-ui/core";
 import {Link} from "react-router-dom";
 
 const Booking = ({booking}) => {
@@ -36,14 +36,14 @@ const Booking = ({booking}) => {
                 fontWeight: 700
             },
             link: {
-                textDecoration: "none"
+                textDecoration: "none",
+                width: '100%',
+                display: "inline-block"
             }
         }
     });
 
     const classes = useStyles();
-
-    console.log(booking)
     return (
         <Card variant="elevation" elevation={1}>
             <CardContent>
@@ -71,20 +71,27 @@ const Booking = ({booking}) => {
                 <Divider variant="fullWidth" light={true} className={classes.subDivider}/>
                 <Typography color="textSecondary" variant="caption" className={classes.caption}>Booking
                     date</Typography>
-                <Typography color="textSecondary" variant="h6" gutterBottom={true}>{new Date(booking.date).toDateString()}</Typography>
+                <Typography color="textSecondary" variant="h6"
+                            gutterBottom={true}>{new Date(booking.date).toDateString()}</Typography>
                 <Divider variant="fullWidth" light={true} className={classes.subDivider}/>
                 <Typography color="textSecondary" variant="caption" className={classes.caption}>Booking
                     Time</Typography>
-                <Typography color="textSecondary" variant="h6" gutterBottom={true}>{new Date(booking.time).toLocaleTimeString()}</Typography>
-
-                <Divider variant="fullWidth" className={classes.subDivider} light={true}/>
-
+                <Typography color="textSecondary" variant="h6"
+                            gutterBottom={true}>{new Date(booking.time).toLocaleTimeString()}</Typography>
+                <Divider variant="fullWidth" light={true} className={classes.subDivider}/>
+                <Typography color="textSecondary" variant="caption" className={classes.caption}>Booking
+                    Status</Typography>
+                <Typography color="textSecondary" variant="h6"
+                            gutterBottom={true}>{booking.status}</Typography>
+            </CardContent>
+            <Divider variant="fullWidth" className={classes.subDivider} light={true}/>
+            <CardActions>
                 <Link className={classes.link} to={`/bookings/${booking._id}/update`}>
                     <Button fullWidth={true} variant="outlined" size="large" className={classes.button}>
                         Update Booking
                     </Button>
                 </Link>
-            </CardContent>
+            </CardActions>
         </Card>
     )
 }

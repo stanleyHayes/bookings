@@ -52,7 +52,12 @@ const Display = ({currentDisplay, nextDisplay}) => {
                 <Typography color="textSecondary" variant="h3" align="center">{new Date(currentDisplay.date).toDateString()}</Typography>
                 <Divider className={classes.divider} variant="fullWidth" light={true} />
                 <Typography color="textSecondary" variant="h6" align="center" className={classes.caption}>Next</Typography>
-                <Typography color="textSecondary" variant="h3" align="center">{nextDisplay.container}</Typography>
+                {nextDisplay ?
+                    <Typography color="textSecondary" variant="h3" align="center">{nextDisplay.container}</Typography>:
+                    <Typography color="textSecondary" variant="h3" align="center">
+                        No Container Available Next
+                    </Typography>
+                }
             </CardContent>
         </Card>
     )

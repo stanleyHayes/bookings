@@ -28,7 +28,10 @@ export const logout = createAsyncThunk('auth/logout',
         try {
             const {data} = await axios({
                 method: 'get',
-                url: `${DEVELOPMENT_SERVER_URL}/auth/logout`
+                url: `${DEVELOPMENT_SERVER_URL}/auth/logout`,
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
             });
             return {data}
         } catch (error) {
@@ -132,7 +135,7 @@ const authSlice = createSlice({
         }
     },
     extraReducers: {
-        [login.pending]: (state, action) => {
+        [login.pending]: (state) => {
             state.loading = true;
             state.error = '';
             state.message = '';
@@ -154,7 +157,7 @@ const authSlice = createSlice({
             state.error = action.error.message
             state.isSignedIn = false;
         },
-        [logout.pending]: (state, action) => {
+        [logout.pending]: (state) => {
             state.loading = true;
             state.error = '';
             state.message = '';
@@ -228,7 +231,7 @@ const authSlice = createSlice({
             state.message = action.error.message;
             state.error = action.error.message
         },
-        [changePassword.pending]: (state, action) => {
+        [changePassword.pending]: (state) => {
             state.loading = true;
             state.error = '';
             state.message = '';

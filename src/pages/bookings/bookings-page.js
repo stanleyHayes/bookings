@@ -1,9 +1,10 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import Layout from "../../components/layout";
-import {Container, Divider, Grid, LinearProgress, makeStyles, Typography} from "@material-ui/core";
+import {Container, Divider, Grid, LinearProgress, makeStyles, MenuItem, Select, Typography} from "@material-ui/core";
 import Booking from "../../components/shared/booking";
-import {useSelector, useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {
+    changeFilter,
     getBookings,
     selectBookingLoading,
     selectBookings,
@@ -36,14 +37,19 @@ const BookingsPage = () => {
 
     const classes = useStyles();
 
+    const history = useHistory();
+    const dispatch = useDispatch();
+    const [status, setStatus] = useState("ALL");
+    const handleStatusChange = e => {
+        setStatus(e.target.value);
+        dispatch(changeFilter(e.target.value));
+    }
+
     const bookings = useSelector(selectBookings);
     const isSignedIn = useSelector(selectIsSignedIn);
     const token = useSelector(selectToken);
     const loading = useSelector(selectBookingLoading);
     const err = useSelector(selectBookingsError);
-
-    const history = useHistory();
-    const dispatch = useDispatch();
 
     useEffect(() => {
         if (!isSignedIn) {
@@ -63,7 +69,25 @@ const BookingsPage = () => {
                 {loading && <LinearProgress color="secondary" variant="query"/>}
                 <Typography color="textPrimary" variant="h3" align="center">Bookings</Typography>
                 <Divider light={true} variant="fullWidth" className={classes.divider}/>
-
+                <Grid spacing={4} container={true} justify="space-between" alignItems="center">
+                    <Grid item={true} xs={12} md={6}>
+                        <Typography color="textPrimary" variant="h6">Filter by Status</Typography>
+                    </Grid>
+                    <Grid item={true} xs={12} md={6}>
+                        <Select
+                            value={status}
+                            onChange={handleStatusChange}
+                            defaultValue="ALL"
+                            variant="outlined"
+                            fullWidth={true}
+                            margin="none">
+                            <MenuItem value="ALL">All</MenuItem>
+                            <MenuItem value="PENDING">Pending</MenuItem>
+                            <MenuItem value="COMPLETED">Completed</MenuItem>
+                        </Select>
+                    </Grid>
+                </Grid>
+                <Divider light={true} variant="fullWidth" className={classes.divider}/>
                 {loading ? <LinearProgress color="secondary" variant="query"/> : err ? (
                     <Typography color="error" variant="h6">{err}</Typography>
                 ) : null}

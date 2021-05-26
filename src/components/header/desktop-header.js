@@ -86,7 +86,7 @@ const DesktopHeader = () => {
                     <Grid spacing={4} alignItems="center" item={true} lg={2} container={true} justify="flex-start">
                         <Grid item={true}>
                             {loading && <CircularProgress variant="indeterminate"/>}
-                            <Avatar className={classes.avatar} variant="circle">
+                            <Avatar className={classes.avatar} variant="circular">
                                 <Typography className={classes.name} variant="h4">{profile.name[0]}</Typography>
                             </Avatar>
                         </Grid>
