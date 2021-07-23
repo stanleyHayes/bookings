@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import Layout from "../../components/layout";
 import {
     Button,
@@ -11,6 +11,9 @@ import {
     TextField,
     Typography
 } from "@material-ui/core";
+import {useSelector} from "react-redux";
+import {selectAuth} from "../../redux/authentication/auth-reducer";
+import {useHistory} from "react-router-dom";
 
 
 const ForgotPasswordPage = () => {
@@ -46,6 +49,7 @@ const ForgotPasswordPage = () => {
     });
 
     const classes = useStyles();
+    const history = useHistory();
 
     const [email, setEmail] = useState("");
     const [error, setError] = useState({});
@@ -64,6 +68,14 @@ const ForgotPasswordPage = () => {
         }
         console.log(email);
     }
+
+    const {loading, token} = useSelector(selectAuth);
+
+    useEffect(() => {
+        if (!loading && !token) {
+            history.push('/auth/login');
+        }
+    }, [loading, history, token]);
 
     return (
         <Layout>

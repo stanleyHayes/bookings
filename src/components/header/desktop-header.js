@@ -1,14 +1,9 @@
 import React from "react";
 import {Avatar, Button, CircularProgress, Grid, makeStyles, Toolbar, Typography} from "@material-ui/core";
-import {Link} from "react-router-dom";
+import {Link, useHistory} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
-import {
-    logout,
-    selectIsSignedIn,
-    selectLoading,
-    selectProfile,
-    selectToken
-} from "../../app/features/authentication/auth-slice";
+import {selectAuth} from "../../redux/authentication/auth-reducer";
+import {signOut} from "../../redux/authentication/auth-action-creators";
 
 const DesktopHeader = () => {
 
@@ -42,11 +37,13 @@ const DesktopHeader = () => {
 
     const classes = useStyles();
     const dispatch = useDispatch();
+    const history = useHistory();
 
-    const isSignedIn = useSelector(selectIsSignedIn);
-    const token = useSelector(selectToken);
-    const loading = useSelector(selectLoading);
-    const profile = useSelector(selectProfile);
+    const {token, loading, user} = useSelector(selectAuth);
+
+    const handleLogoutClick = () => {
+        dispatch(signOut(token, history));
+    }
 
     return (
         <Toolbar variant="regular" color="primary">
@@ -82,17 +79,17 @@ const DesktopHeader = () => {
                     </Grid>
                 </Grid>
 
-                {isSignedIn ? (
+                {user && (
                     <Grid spacing={4} alignItems="center" item={true} lg={2} container={true} justify="flex-start">
                         <Grid item={true}>
                             {loading && <CircularProgress variant="indeterminate"/>}
                             <Avatar className={classes.avatar} variant="circular">
-                                <Typography className={classes.name} variant="h4">{profile.name[0]}</Typography>
+                                <Typography className={classes.name} variant="h4">{user.name[0]}</Typography>
                             </Avatar>
                         </Grid>
                         <Grid item={true}>
                             <Button
-                                onClick={() => dispatch(logout(token))}
+                                onClick={handleLogoutClick}
                                 className={classes.button}
                                 variant="outlined"
                                 disabled={loading}
@@ -100,12 +97,6 @@ const DesktopHeader = () => {
                                 Logout
                             </Button>
                         </Grid>
-                    </Grid>
-                ) : (
-                    <Grid container={true} justify="flex-start" lg={2} item={true}>
-                        <Link className={classes.link} to="/auth/login">
-                            <Button className={classes.button} variant="text" size="large">Login</Button>
-                        </Link>
                     </Grid>
                 )}
             </Grid>

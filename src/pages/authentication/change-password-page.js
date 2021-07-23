@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import Layout from "../../components/layout";
 import {
     Button,
@@ -6,14 +6,17 @@ import {
     CardContent,
     Container,
     Divider,
-    Grid, LinearProgress,
-    makeStyles, Switch,
+    Grid,
+    LinearProgress,
+    makeStyles,
+    Switch,
     TextField,
     Typography
 } from "@material-ui/core";
 import {useDispatch, useSelector} from "react-redux";
-import {changePassword, selectLoading, selectToken} from "../../app/features/authentication/auth-slice";
-
+import {selectAuth} from "../../redux/authentication/auth-reducer";
+import {changePassword} from "../../redux/authentication/auth-action-creators";
+import {useHistory} from "react-router-dom";
 
 const ChangePasswordPage = () => {
 
@@ -48,9 +51,9 @@ const ChangePasswordPage = () => {
 
     const classes = useStyles();
     const dispatch = useDispatch();
+    const history = useHistory();
 
-    const token = useSelector(selectToken);
-    const loading = useSelector(selectLoading);
+    const {token, loading} = useSelector(selectAuth);
 
     const [passwords, setPasswords] = useState({});
     const [confirmPassword, setConfirmPassword] = useState("");
@@ -65,34 +68,34 @@ const ChangePasswordPage = () => {
     const handleChangePasswordSubmit = e => {
         e.preventDefault();
 
-        if(!currentPassword){
+        if (!currentPassword) {
             setError({...error, currentPassword: "Field required"});
             return;
-        }else {
+        } else {
             setError({...error, currentPassword: null});
         }
 
-        if(!newPassword){
+        if (!newPassword) {
             setError({...error, newPassword: "Field required"});
             return;
-        }else {
+        } else {
             setError({...error, newPassword: null});
         }
 
-        if(!confirmPassword){
+        if (!confirmPassword) {
             setError({...error, confirmPassword: "Field required"});
             return;
-        }else {
+        } else {
             setError({...error, confirmPassword: null});
         }
 
-        if(confirmPassword !== newPassword){
+        if (confirmPassword !== newPassword) {
             setError({...error, confirmPassword: "Password Mismatch", newPassword: "Password Mismatch"});
             return;
-        }else {
+        } else {
             setError({...error, confirmPassword: null, newPassword: null});
         }
-        dispatch(changePassword({token, ...passwords}));
+        dispatch(changePassword(passwords, token, history));
     }
 
     const handleConfirmPasswordChange = e => {
@@ -103,11 +106,17 @@ const ChangePasswordPage = () => {
         setVisible(!visible);
     }
 
+    useEffect(() => {
+        if (!loading && !token) {
+            history.push('/auth/login');
+        }
+    }, [loading, history, token]);
+
     return (
         <Layout>
             <Container className={classes.container}>
-                {loading && <LinearProgress color="secondary" variant="query"/> }
-                <Typography  color="textPrimary"  variant="h3" align="center">Change Password</Typography>
+                {loading && <LinearProgress color="secondary" variant="query"/>}
+                <Typography color="textPrimary" variant="h3" align="center">Change Password</Typography>
 
                 <Divider light={true} variant="fullWidth" className={classes.divider}/>
 
@@ -118,7 +127,7 @@ const ChangePasswordPage = () => {
                                 <TextField
                                     variant="outlined"
                                     fullWidth={true}
-                                    type={visible ? "text": "password"}
+                                    type={visible ? "text" : "password"}
                                     name="currentPassword"
                                     value={currentPassword}
                                     onChange={handlePasswordChange}
@@ -134,7 +143,7 @@ const ChangePasswordPage = () => {
                                 <TextField
                                     variant="outlined"
                                     fullWidth={true}
-                                    type={visible ? "text": "password"}
+                                    type={visible ? "text" : "password"}
                                     name="newPassword"
                                     value={newPassword}
                                     onChange={handlePasswordChange}
@@ -150,7 +159,7 @@ const ChangePasswordPage = () => {
                                 <TextField
                                     variant="outlined"
                                     fullWidth={true}
-                                    type={visible ? "text": "password"}
+                                    type={visible ? "text" : "password"}
                                     value={confirmPassword}
                                     onChange={handleConfirmPasswordChange}
                                     margin="normal"

@@ -1,28 +1,37 @@
 import React, {useEffect, useState} from "react";
-import Layout from "../../components/layout";
 import {
     Button,
     Card,
     CardContent,
     Container,
     Divider,
-    Grid, LinearProgress,
+    Grid,
+    LinearProgress,
     makeStyles,
     Switch,
     TextField,
     Typography
 } from "@material-ui/core";
 import {useDispatch, useSelector} from "react-redux";
-import {login, selectError, selectIsSignedIn, selectLoading} from "../../app/features/authentication/auth-slice";
 import {useHistory} from "react-router-dom";
+import {selectAuth} from "../../redux/authentication/auth-reducer";
+import {Alert} from "@material-ui/lab";
+import {signIn} from "../../redux/authentication/auth-action-creators";
 
 const LoginPage = () => {
 
     const useStyles = makeStyles(theme => {
         return {
             container: {
-                paddingTop: 84,
-                paddingBottom: 84
+                paddingTop: 32,
+                paddingBottom: 32
+            },
+            root: {
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                minHeight: '100vh',
+                backgroundColor: theme.palette.background.default
             },
             divider: {
                 marginTop: 32,
@@ -42,7 +51,8 @@ const LoginPage = () => {
                 marginTop: 16
             },
             title: {
-                textTransform: "uppercase"
+                textTransform: "uppercase",
+                marginBottom: 16
             }
         }
     });
@@ -52,15 +62,13 @@ const LoginPage = () => {
     const dispatch = useDispatch();
     const history = useHistory();
 
-    const loading = useSelector(selectLoading);
-    const err = useSelector(selectError);
-    const isSignedIn = useSelector(selectIsSignedIn);
+    const {token, loading, error: authError} = useSelector(selectAuth);
 
     useEffect(() => {
-        if(isSignedIn){
+        if (!loading && token) {
             history.push('/');
         }
-    },[history, isSignedIn]);
+    }, [history, loading, token]);
 
     const [user, setUser] = useState({});
     const {email, password} = user;
@@ -87,7 +95,7 @@ const LoginPage = () => {
         } else {
             setError({...error, password: null});
         }
-        dispatch(login({...user, history}));
+        dispatch(signIn(user, history));
     }
 
     const handlePasswordVisibility = () => {
@@ -95,19 +103,24 @@ const LoginPage = () => {
     }
 
     return (
-        <Layout>
+        <div className={classes.root}>
             <Container className={classes.container}>
-                <Typography color="textPrimary" variant="h3" align="center">Sign In</Typography>
-
                 <Divider variant="fullWidth" light={true} className={classes.divider}/>
-                {loading ? <LinearProgress color="secondary" variant="query"/> : err ? (
-                    <Typography color="error" variant="h6">{err}</Typography>
-                ) : null}
-
                 <Grid container={true} justify="center">
                     <Grid item={true} xs={12} md={6}>
                         <Card variant="elevation" elevation={1}>
+                            {loading && <LinearProgress color="secondary" variant="query"/>}
                             <CardContent>
+                                <Typography
+                                    className={classes.title}
+                                    color="textPrimary"
+                                    variant="h4"
+                                    align="center">
+                                    Sign In
+                                </Typography>
+                                {authError &&
+                                <Alert variant="filled" title={authError} severity="error">{authError}</Alert>}
+
                                 <TextField
                                     variant="outlined"
                                     fullWidth={true}
@@ -169,9 +182,8 @@ const LoginPage = () => {
                         </Card>
                     </Grid>
                 </Grid>
-
             </Container>
-        </Layout>
+        </div>
     )
 }
 

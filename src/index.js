@@ -6,18 +6,19 @@ import reportWebVitals from './reportWebVitals';
 import {BrowserRouter} from "react-router-dom";
 import { createMuiTheme, ThemeProvider} from "@material-ui/core";
 import {Provider} from "react-redux";
-import store from "./app/store";
 import {MuiPickersUtilsProvider} from "@material-ui/pickers";
 import 'react-multi-carousel/lib/styles.css';
 import DateFnsUtils from '@date-io/date-fns';
+import store from "./redux/store";
 
 const theme = createMuiTheme({
     typography: {
-        fontFamily: 'Quicksand, sans-serif'
+        fontFamily: 'Raleway, sans-serif'
     },
     palette: {
         background: {
-            paper: "#1f2833"
+            paper: "#1f2833",
+            default: '#0b0c10'
         },
         text: {
             primary: "#66fcf1",
@@ -41,7 +42,7 @@ const theme = createMuiTheme({
         type: "dark"
     },
     shape: {
-        borderRadius: 2
+        borderRadius: 32
     }
 });
 

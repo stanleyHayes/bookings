@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import Layout from "../../components/layout";
 import {
     Button,
@@ -13,9 +13,11 @@ import {
 } from "@material-ui/core";
 import {useDispatch, useSelector} from "react-redux";
 import {DatePicker, TimePicker} from '@material-ui/pickers';
-import {createBooking, selectBookingLoading, selectBookingsError} from "../../app/features/bookings/bookings-slice";
 import {useHistory} from "react-router-dom";
-import {selectToken} from "../../app/features/authentication/auth-slice";
+import {createBooking} from "../../redux/bookings/booking-action-creators";
+import {selectAuth} from "../../redux/authentication/auth-reducer";
+import {selectBookings} from "../../redux/bookings/booking-reducer";
+import {Alert} from "@material-ui/lab";
 
 const CreateBookingPage = () => {
 
@@ -56,9 +58,13 @@ const CreateBookingPage = () => {
     const [error, setError] = useState({});
     const {car, contact, name, container, company, time, date, product} = booking;
 
-    const loading = useSelector(selectBookingLoading);
-    const err = useSelector(selectBookingsError);
-    const token = useSelector(selectToken);
+    const {token, loading: authLoading} = useSelector(selectAuth);
+
+    useEffect(() => {
+        if (!authLoading && !token) {
+            history.push('/auth/login');
+        }
+    }, [history, authLoading, token]);
 
     const handleBookingChange = e => {
         setBooking({...booking, [e.target.name]: e.target.value});
@@ -122,7 +128,7 @@ const CreateBookingPage = () => {
         } else {
             setError({...error, time: null});
         }
-        dispatch(createBooking({token, history, ...booking}));
+        dispatch(createBooking({booking, token, history}));
     }
 
     const handleDateChange = (date) => {
@@ -133,6 +139,7 @@ const CreateBookingPage = () => {
         setBooking({...booking, time});
     }
 
+    const {loading, error: bookingError} = useSelector(selectBookings);
 
     return (
         <Layout>
@@ -140,9 +147,8 @@ const CreateBookingPage = () => {
                 <Typography color="textPrimary" variant="h3" align="center">Create Booking</Typography>
                 <Divider light={true} variant="fullWidth" className={classes.divider}/>
 
-                {loading ? <LinearProgress color="secondary" variant="query"/> : err ? (
-                    <Typography color="error" variant="h6">{err}</Typography>
-                ) : null}
+                {loading && <LinearProgress color="secondary" variant="query"/>}
+                {bookingError && <Alert title={bookingError} severity="error">{bookingError}</Alert>}
 
                 <Grid container={true} justify="center">
                     <Grid item={true} xs={12} md={6}>

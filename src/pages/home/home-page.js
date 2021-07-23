@@ -1,17 +1,13 @@
 import React, {useEffect} from "react";
 import Layout from "../../components/layout";
 import {Container, Divider, Grid, LinearProgress, makeStyles, Typography} from "@material-ui/core";
-import {useDispatch, useSelector} from "react-redux";
+import {useSelector} from "react-redux";
 
 import {useHistory} from "react-router-dom";
-import {selectIsSignedIn, selectToken} from "../../app/features/authentication/auth-slice";
-import {
-    getBookings,
-    selectBookingLoading, selectBookingsError,
-    selectCurrentDisplay,
-    selectNextDisplay
-} from "../../app/features/bookings/bookings-slice";
 import Display from "../../components/shared/display";
+import {selectAuth} from "../../redux/authentication/auth-reducer";
+import {Alert} from "@material-ui/lab";
+import {selectBookings} from "../../redux/bookings/booking-reducer";
 
 const HomePage = () => {
 
@@ -34,39 +30,27 @@ const HomePage = () => {
 
     const classes = useStyles();
 
-    const isSignedIn = useSelector(selectIsSignedIn);
-    const currentBooking = useSelector(selectCurrentDisplay);
-    const nextBooking = useSelector(selectNextDisplay);
-    const loading = useSelector(selectBookingLoading);
-    const err = useSelector(selectBookingsError);
-    const token = useSelector(selectToken);
-
-    const dispatch = useDispatch();
     const history = useHistory();
 
+    const {loading: authLoading, token} = useSelector(selectAuth);
+    const {loading, currentBooking, nextBooking, error} = useSelector(selectBookings);
     useEffect(() => {
-        if (!isSignedIn) {
+        if (!authLoading && !token) {
             history.push('/auth/login');
         }
-    }, [history, isSignedIn]);
-
-    useEffect(() => {
-        if(token){
-            dispatch(getBookings({token}));
-        }
-    }, [dispatch, token]);
+    }, [authLoading, history, token]);
 
     return (
         <Layout>
             <Container className={classes.container}>
                 <Typography color="textPrimary" variant="h3" align="center">Affixing Now</Typography>
                 <Divider light={true} variant="fullWidth" className={classes.divider}/>
-                {loading ? <LinearProgress color="secondary" variant="query"/> : err ? (
-                    <Typography color="error" variant="h6">{err}</Typography>
+                {loading && <LinearProgress color="secondary" variant="query"/>}
+                {error && <Alert title={error} severity="error">{error}</Alert>}
                 ) : null}
                 {currentBooking ? (
                     <Display currentDisplay={currentBooking} nextDisplay={nextBooking}/>
-                ): (
+                ) : (
                     <Grid className={classes.noBookingContainer} container={true} justify="center" alignItems="center">
                         <Grid item={true}>
                             <Typography variant="h6" align="center">No Bookings Available</Typography>

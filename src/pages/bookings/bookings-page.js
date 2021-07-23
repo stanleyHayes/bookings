@@ -1,17 +1,31 @@
 import React, {useEffect, useState} from "react";
 import Layout from "../../components/layout";
-import {Container, Divider, Grid, LinearProgress, makeStyles, MenuItem, Select, Typography} from "@material-ui/core";
-import Booking from "../../components/shared/booking";
-import {useDispatch, useSelector} from "react-redux";
 import {
-    changeFilter,
-    getBookings,
-    selectBookingLoading,
-    selectBookings,
-    selectBookingsError
-} from "../../app/features/bookings/bookings-slice";
+    Box,
+    Container,
+    Divider,
+    Grid,
+    LinearProgress,
+    makeStyles,
+    MenuItem,
+    Select,
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow,
+    Typography
+} from "@material-ui/core";
+import {useDispatch, useSelector} from "react-redux";
 import {useHistory} from "react-router-dom";
-import {selectIsSignedIn, selectToken} from "../../app/features/authentication/auth-slice";
+import {selectBookings} from "../../redux/bookings/booking-reducer";
+import {selectAuth} from "../../redux/authentication/auth-reducer";
+import {getBookings} from "../../redux/bookings/booking-action-creators";
+import {Alert} from "@material-ui/lab";
+import {green, grey, red} from "@material-ui/core/colors";
+import moment from "moment";
+import {Delete, Edit, Visibility} from "@material-ui/icons";
 
 const BookingsPage = () => {
 
@@ -31,38 +45,69 @@ const BookingsPage = () => {
             noBookingsText: {
                 textTransform: "uppercase",
                 fontWeight: 700
+            },
+            completed: {
+                backgroundColor: green['600'],
+                fontWeight: 'bold',
+                color: 'white'
+            },
+            deleted: {
+                backgroundColor: red['600'],
+                fontWeight: 'bold',
+                color: 'white'
+            },
+            pending: {
+                backgroundColor: grey['600'],
+                fontWeight: 'bold',
+                color: 'white'
             }
         }
     });
 
     const classes = useStyles();
 
+    const {loading, error, bookings} = useSelector(selectBookings);
+    const {loading: authLoading, token} = useSelector(selectAuth);
+
     const history = useHistory();
     const dispatch = useDispatch();
+
     const [status, setStatus] = useState("ALL");
     const handleStatusChange = e => {
         setStatus(e.target.value);
-        dispatch(changeFilter(e.target.value));
     }
 
-    const bookings = useSelector(selectBookings);
-    const isSignedIn = useSelector(selectIsSignedIn);
-    const token = useSelector(selectToken);
-    const loading = useSelector(selectBookingLoading);
-    const err = useSelector(selectBookingsError);
-
     useEffect(() => {
-        if (!isSignedIn) {
+        if (!authLoading && !token) {
             history.push('/auth/login');
         }
-    }, [history, isSignedIn]);
+    }, [authLoading, history, token]);
+
 
     useEffect(() => {
-        if (token) {
-            dispatch(getBookings({token}));
-        }
+        dispatch(getBookings(token));
     }, [dispatch, token]);
 
+    const renderStatus = status => {
+        switch (status) {
+            case 'PENDING':
+                return <Typography variant="body2" className={classes.pending}>
+                    {status}
+                </Typography>
+            case 'DELETED':
+                return <Typography variant="body2" className={classes.deleted}>
+                    {status}
+                </Typography>
+            case 'COMPLETED':
+                return <Typography variant="body2" className={classes.completed}>
+                    {status}
+                </Typography>
+            default:
+                return <Typography variant="body2" className={classes.pending}>
+                    {status}
+                </Typography>
+        }
+    }
     return (
         <Layout>
             <Container className={classes.container}>
@@ -88,39 +133,61 @@ const BookingsPage = () => {
                     </Grid>
                 </Grid>
                 <Divider light={true} variant="fullWidth" className={classes.divider}/>
-                {loading ? <LinearProgress color="secondary" variant="query"/> : err ? (
-                    <Typography color="error" variant="h6">{err}</Typography>
-                ) : null}
-
-                <Grid container={true} spacing={1}>
-                    {
-                        bookings.length ? (
-                            bookings.map((booking, index) => {
-                                return (
-                                    <Grid key={index} item={true} xs={12} md={6} lg={4}>
-                                        <Booking booking={booking}/>
-                                    </Grid>
-                                )
-                            })
-                        ) : (
-                            <Grid
-                                container={true}
-                                justify="center"
-                                className={classes.noBookingContainer}
-                                alignItems="center">
-                                <Grid item={true}>
-                                    <Typography
-                                        color="textSecondary"
-                                        className={classes.noBookingsText}
-                                        variant="h5">
-                                        No Bookings Available
-                                    </Typography>
-                                </Grid>
-                            </Grid>
-                        )
-                    }
-                </Grid>
-
+                {loading && <LinearProgress color="secondary" variant="query"/>}
+                {error && <Alert title={error} severity="error">{error}</Alert>}
+                {!loading && bookings && bookings.length === 0 ? (
+                    <Box>
+                        <Typography
+                            color="textSecondary"
+                            className={classes.noBookingsText}
+                            variant="h5">
+                            No Bookings Available
+                        </Typography>
+                    </Box>
+                ) : (
+                    <TableContainer>
+                        <Table size="small">
+                            <TableHead>
+                                <TableRow hover={true}>
+                                    <TableCell>#</TableCell>
+                                    <TableCell>Container</TableCell>
+                                    <TableCell>Car</TableCell>
+                                    <TableCell>Status</TableCell>
+                                    <TableCell>Arriving Date</TableCell>
+                                    <TableCell>Arriving Time</TableCell>
+                                    <TableCell>Actions</TableCell>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {bookings.map((booking, index) => {
+                                    return (
+                                        <TableRow hover={true}>
+                                            <TableCell>{index + 1}</TableCell>
+                                            <TableCell>{booking.container}</TableCell>
+                                            <TableCell>{booking.car}</TableCell>
+                                            <TableCell>{renderStatus(booking.status)}</TableCell>
+                                            <TableCell>{moment(booking.date).fromNow()}</TableCell>
+                                            <TableCell>new Date(booking.time).toLocaleTimeString()</TableCell>
+                                            <TableCell>
+                                                <Grid container={true} spacing={1} alignItems="center">
+                                                    <Grid item={true}>
+                                                        <Visibility className={classes.visibility}/>
+                                                    </Grid>
+                                                    <Grid item={true}>
+                                                        <Edit className={classes.edit}/>
+                                                    </Grid>
+                                                    <Grid item={true}>
+                                                        <Delete className={classes.delete}/>
+                                                    </Grid>
+                                                </Grid>
+                                            </TableCell>
+                                        </TableRow>
+                                    )
+                                })}
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
+                )}
             </Container>
         </Layout>
     )

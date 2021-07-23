@@ -6,20 +6,15 @@ import {
     CardContent,
     Container,
     Divider,
-    Grid, LinearProgress,
+    Grid,
+    LinearProgress,
     makeStyles,
     Typography
 } from "@material-ui/core";
 import {Link, useHistory} from "react-router-dom";
-import {useSelector, useDispatch} from "react-redux";
-import {
-    selectLoading,
-    selectProfile,
-    logout,
-    selectToken,
-    selectIsSignedIn
-} from "../../app/features/authentication/auth-slice";
+import {useSelector} from "react-redux";
 import {Skeleton} from "@material-ui/lab";
+import {selectAuth} from "../../redux/authentication/auth-reducer";
 
 
 const AccountPage = () => {
@@ -62,25 +57,24 @@ const AccountPage = () => {
     });
 
     const classes = useStyles();
-    const dispatch = useDispatch();
     const history = useHistory();
 
-    const profile = useSelector(selectProfile);
-    const loading = useSelector(selectLoading);
-    const token = useSelector(selectToken);
-    const isSignedIn = useSelector(selectIsSignedIn);
+    const {loading, token, user} = useSelector(selectAuth);
 
     useEffect(() => {
-        if(!isSignedIn){
+        if (!loading && !token) {
             history.push('/auth/login');
         }
-    },[history, isSignedIn]);
+    }, [loading, history, token]);
 
 
+    const handleLogoutClick = () => {
+
+    }
     return (
         <Layout>
             <Container className={classes.container}>
-                {loading && <LinearProgress color="secondary" variant="query" /> }
+                {loading && <LinearProgress color="secondary" variant="query"/>}
                 <Typography color="textPrimary" variant="h3" align="center">
                     Account Information
                 </Typography>
@@ -91,7 +85,6 @@ const AccountPage = () => {
                     <Grid item={true} xs={12} md={6}>
                         <Card variant="elevation" elevation={1}>
                             <CardContent>
-
                                 <Typography
                                     color="textSecondary"
                                     variant="caption"
@@ -100,7 +93,7 @@ const AccountPage = () => {
                                 </Typography>
                                 {loading ? <Skeleton variant="text" animation="wave"/> :
                                     <Typography color="textSecondary" gutterBottom={true} variant="h4">
-                                        {profile.name}
+                                        {user.name}
                                     </Typography>
                                 }
 
@@ -110,7 +103,7 @@ const AccountPage = () => {
                                             gutterBottom={true}>Position</Typography>
                                 {loading ? <Skeleton variant="text" animation="wave"/> :
                                     <Typography color="textSecondary" gutterBottom={true} variant="h6">
-                                        {profile.position}
+                                        {user.position}
                                     </Typography>
                                 }
                                 <Divider variant="fullWidth" className={classes.subDivider} light={true}/>
@@ -118,7 +111,7 @@ const AccountPage = () => {
                                             gutterBottom={true}>Department</Typography>
                                 {loading ? <Skeleton variant="text" animation="wave"/> :
                                     <Typography color="textSecondary" gutterBottom={true} variant="h6">
-                                        {profile.department}
+                                        {user.department}
                                     </Typography>
                                 }
                             </CardContent>
@@ -143,7 +136,7 @@ const AccountPage = () => {
                                 <Divider variant="fullWidth" className={classes.subDivider} light={true}/>
 
                                 <Button
-                                    onClick={() => dispatch(logout({token}))}
+                                    onClick={handleLogoutClick}
                                     className={classes.button}
                                     variant="outlined"
                                     size="large"
