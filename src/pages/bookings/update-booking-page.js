@@ -128,9 +128,9 @@ const UpdateBookingPage = () => {
     return (
         <Layout>
             <Container className={classes.container}>
-                <Typography  color="textPrimary"  variant="h3" align="center">Create Booking</Typography>
+                <Typography className={classes.title} color="textPrimary"  variant="h3" align="center">Create Booking</Typography>
 
-                <Divider light={true} variant="fullWidth" className={classes.divider}/>
+                <Divider variant="fullWidth" className={classes.divider}/>
 
                 <Grid container={true} justify="center">
                     <Grid item={true} xs={12} md={6}>

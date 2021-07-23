@@ -144,8 +144,8 @@ const CreateBookingPage = () => {
     return (
         <Layout>
             <Container className={classes.container}>
-                <Typography color="textPrimary" variant="h3" align="center">Create Booking</Typography>
-                <Divider light={true} variant="fullWidth" className={classes.divider}/>
+                <Typography className={classes.title} color="textPrimary" variant="h3" align="center">Create Booking</Typography>
+                <Divider variant="fullWidth" className={classes.divider}/>
 
                 {loading && <LinearProgress color="secondary" variant="query"/>}
                 {bookingError && <Alert title={bookingError} severity="error">{bookingError}</Alert>}

@@ -24,6 +24,9 @@ const HomePage = () => {
             },
             noBookingContainer: {
                 minHeight: '100%'
+            },
+            title: {
+                textTransform: 'uppercase'
             }
         }
     });
@@ -43,8 +46,8 @@ const HomePage = () => {
     return (
         <Layout>
             <Container className={classes.container}>
-                <Typography color="textPrimary" variant="h3" align="center">Affixing Now</Typography>
-                <Divider light={true} variant="fullWidth" className={classes.divider}/>
+                <Typography className={classes.title} color="textPrimary" variant="h3" align="center">Affixing Now</Typography>
+                <Divider variant="fullWidth" className={classes.divider}/>
                 {loading && <LinearProgress color="secondary" variant="query"/>}
                 {error && <Alert title={error} severity="error">{error}</Alert>}
                 ) : null}

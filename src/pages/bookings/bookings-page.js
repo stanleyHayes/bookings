@@ -8,6 +8,7 @@ import {
     LinearProgress,
     makeStyles,
     MenuItem,
+    Paper,
     Select,
     Table,
     TableBody,
@@ -49,17 +50,26 @@ const BookingsPage = () => {
             completed: {
                 backgroundColor: green['600'],
                 fontWeight: 'bold',
-                color: 'white'
+                color: 'white',
+                padding: 8,
+                borderRadius: 32
             },
             deleted: {
                 backgroundColor: red['600'],
                 fontWeight: 'bold',
-                color: 'white'
+                color: 'white',
+                padding: 8,
+                borderRadius: 32
             },
             pending: {
                 backgroundColor: grey['600'],
                 fontWeight: 'bold',
-                color: 'white'
+                color: 'white',
+                padding: 8,
+                borderRadius: 32
+            },
+            title: {
+                textTransform: 'uppercase'
             }
         }
     });
@@ -91,19 +101,19 @@ const BookingsPage = () => {
     const renderStatus = status => {
         switch (status) {
             case 'PENDING':
-                return <Typography variant="body2" className={classes.pending}>
+                return <Typography display="inline" variant="body2" className={classes.pending}>
                     {status}
                 </Typography>
             case 'DELETED':
-                return <Typography variant="body2" className={classes.deleted}>
+                return <Typography display="inline" variant="body2" className={classes.deleted}>
                     {status}
                 </Typography>
             case 'COMPLETED':
-                return <Typography variant="body2" className={classes.completed}>
+                return <Typography display="inline" variant="body2" className={classes.completed}>
                     {status}
                 </Typography>
             default:
-                return <Typography variant="body2" className={classes.pending}>
+                return <Typography display="inline" variant="body2" className={classes.pending}>
                     {status}
                 </Typography>
         }
@@ -112,8 +122,9 @@ const BookingsPage = () => {
         <Layout>
             <Container className={classes.container}>
                 {loading && <LinearProgress color="secondary" variant="query"/>}
-                <Typography color="textPrimary" variant="h3" align="center">Bookings</Typography>
-                <Divider light={true} variant="fullWidth" className={classes.divider}/>
+                <Typography className={classes.title} color="textPrimary" variant="h3"
+                            align="center">Bookings</Typography>
+                <Divider variant="fullWidth" className={classes.divider}/>
                 <Grid spacing={4} container={true} justify="space-between" alignItems="center">
                     <Grid item={true} xs={12} md={6}>
                         <Typography color="textPrimary" variant="h6">Filter by Status</Typography>
@@ -132,10 +143,10 @@ const BookingsPage = () => {
                         </Select>
                     </Grid>
                 </Grid>
-                <Divider light={true} variant="fullWidth" className={classes.divider}/>
-                {loading && <LinearProgress color="secondary" variant="query"/>}
+                <Divider variant="fullWidth" className={classes.divider}/>
+                {loading && <LinearProgress color="primary" variant="query"/>}
                 {error && <Alert title={error} severity="error">{error}</Alert>}
-                {!loading && bookings && bookings.length === 0 ? (
+                { bookings && bookings.length === 0 ? (
                     <Box>
                         <Typography
                             color="textSecondary"
@@ -145,10 +156,10 @@ const BookingsPage = () => {
                         </Typography>
                     </Box>
                 ) : (
-                    <TableContainer>
-                        <Table size="small">
+                    <TableContainer component={Paper}>
+                        <Table>
                             <TableHead>
-                                <TableRow hover={true}>
+                                <TableRow>
                                     <TableCell>#</TableCell>
                                     <TableCell>Container</TableCell>
                                     <TableCell>Car</TableCell>
@@ -159,7 +170,7 @@ const BookingsPage = () => {
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {bookings.map((booking, index) => {
+                                {bookings && bookings.map((booking, index) => {
                                     return (
                                         <TableRow hover={true}>
                                             <TableCell>{index + 1}</TableCell>
@@ -167,7 +178,7 @@ const BookingsPage = () => {
                                             <TableCell>{booking.car}</TableCell>
                                             <TableCell>{renderStatus(booking.status)}</TableCell>
                                             <TableCell>{moment(booking.date).fromNow()}</TableCell>
-                                            <TableCell>new Date(booking.time).toLocaleTimeString()</TableCell>
+                                            <TableCell>{new Date(booking.time).toLocaleTimeString()}</TableCell>
                                             <TableCell>
                                                 <Grid container={true} spacing={1} alignItems="center">
                                                     <Grid item={true}>

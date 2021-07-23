@@ -56,7 +56,7 @@ const DesktopHeader = () => {
                     </Link>
                 </Grid>
 
-                <Grid lg={5} item={true} container={true} justify="flex-start" alignItems="center">
+                <Grid lg={5} item={true} container={true} justify="flex-start" alignItems="center" spacing={2}>
                     <Grid item={true}>
                         <Link className={classes.link} to="/">
                             <Button className={classes.button} variant="text" size="large">Home</Button>
