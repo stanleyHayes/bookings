@@ -128,7 +128,7 @@ const CreateBookingPage = () => {
         } else {
             setError({...error, time: null});
         }
-        dispatch(createBooking({booking, token, history}));
+        dispatch(createBooking(booking, token, history));
     }
 
     const handleDateChange = (date) => {
@@ -144,16 +144,20 @@ const CreateBookingPage = () => {
     return (
         <Layout>
             <Container className={classes.container}>
-                <Typography className={classes.title} color="textPrimary" variant="h3" align="center">Create Booking</Typography>
+                {loading && <LinearProgress color="primary" variant="query"/>}                <Typography
+                    className={classes.title}
+                    color="textPrimary"
+                    variant="h3"
+                    align="center">Create Booking</Typography>
                 <Divider variant="fullWidth" className={classes.divider}/>
 
-                {loading && <LinearProgress color="secondary" variant="query"/>}
-                {bookingError && <Alert title={bookingError} severity="error">{bookingError}</Alert>}
 
                 <Grid container={true} justify="center">
                     <Grid item={true} xs={12} md={6}>
                         <Card variant="elevation" elevation={1}>
                             <CardContent>
+                                {loading && <LinearProgress color="primary" variant="query"/>}
+                                {bookingError && <Alert variant="filled" title={bookingError} severity="error">{bookingError}</Alert>}
                                 <TextField
                                     variant="outlined"
                                     fullWidth={true}

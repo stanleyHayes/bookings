@@ -55,7 +55,7 @@ export const signIn = (user, history) => {
             const {data, token} = res.data;
             if (data) {
                 dispatch(signInSuccess(data, token));
-                localStorage.setItem(STREAMING_RESOURCE_GH_TOKEN_KEY, JSON.stringify(token));
+                localStorage.setItem(STREAMING_RESOURCE_GH_TOKEN_KEY, token);
                 localStorage.setItem(STREAMING_RESOURCE_GH_USER_KEY, JSON.stringify(data));
                 history.push('/');
             }
@@ -95,7 +95,7 @@ export const signUp = (user, history) => {
         }).then(res => {
             const {data, token} = res.data;
             dispatch(signUpSuccess(data, token));
-            localStorage.setItem(STREAMING_RESOURCE_GH_TOKEN_KEY, JSON.stringify(token));
+            localStorage.setItem(STREAMING_RESOURCE_GH_TOKEN_KEY, token);
             localStorage.setItem(STREAMING_RESOURCE_GH_USER_KEY, JSON.stringify(data));
             history.push('/auth/verify-account');
         }).catch(error => {

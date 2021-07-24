@@ -1,5 +1,11 @@
 import {bookings} from "../../data/data";
-import {GET_BOOKINGS_FAILURE, GET_BOOKINGS_REQUEST, GET_BOOKINGS_SUCCESS} from "./booking-action-types";
+import {
+    CREATE_BOOKING_FAILURE,
+    CREATE_BOOKING_REQUEST, CREATE_BOOKING_SUCCESS,
+    GET_BOOKINGS_FAILURE,
+    GET_BOOKINGS_REQUEST,
+    GET_BOOKINGS_SUCCESS
+} from "./booking-action-types";
 
 const INITIAL_STATE = {
     bookings: [...bookings],
@@ -12,7 +18,6 @@ const INITIAL_STATE = {
 
 const bookingReducer = (state = INITIAL_STATE, action) => {
     switch (action.type) {
-
         case GET_BOOKINGS_REQUEST:
             return {
                 ...state,
@@ -33,6 +38,27 @@ const bookingReducer = (state = INITIAL_STATE, action) => {
                 loading: false,
                 error: action.payload,
                 bookings: []
+            }
+
+        case CREATE_BOOKING_REQUEST:
+            return {
+                ...state,
+                loading: true,
+                error: ""
+            }
+
+        case CREATE_BOOKING_SUCCESS:
+            return {
+                ...state,
+                loading: false,
+                error: "",
+                bookings: [...state.bookings, action.payload]
+            }
+        case CREATE_BOOKING_FAILURE:
+            return {
+                ...state,
+                loading: false,
+                error: action.payload
             }
         default:
             return state;

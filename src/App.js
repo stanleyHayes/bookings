@@ -10,6 +10,7 @@ import AccountPage from "./pages/authentication/account-page";
 import UpdateBookingPage from "./pages/bookings/update-booking-page";
 import {STREAMING_RESOURCE_GH_TOKEN_KEY} from "./constants/constants";
 import {useEffect} from "react";
+import ScrollToTop from "./components/shared/scroll-to-top";
 
 function App() {
 
@@ -23,39 +24,41 @@ function App() {
     }, [history, token]);
 
     return (
-        <Switch>
-            <Route path="/" exact={true}>
-                <HomePage/>
-            </Route>
+        <ScrollToTop>
+            <Switch>
+                <Route path="/" exact={true}>
+                    <HomePage/>
+                </Route>
 
-            <Route path="/new/booking" exact={true}>
-                <CreateBookingPage/>
-            </Route>
+                <Route path="/new/booking" exact={true}>
+                    <CreateBookingPage/>
+                </Route>
 
-            <Route path="/bookings" exact={true}>
-                <BookingsPage/>
-            </Route>
+                <Route path="/bookings" exact={true}>
+                    <BookingsPage/>
+                </Route>
 
-            <Route path="/bookings/:bookingID/update" exact={true}>
-                <UpdateBookingPage/>
-            </Route>
+                <Route path="/bookings/:bookingID/update" exact={true}>
+                    <UpdateBookingPage/>
+                </Route>
 
-            <Route path="/auth/login" exact={true}>
-                <LoginPage/>
-            </Route>
+                <Route path="/auth/login" exact={true}>
+                    <LoginPage/>
+                </Route>
 
-            <Route path="/auth/change-password" exact={true}>
-                <ChangePasswordPage/>
-            </Route>
+                <Route path="/auth/change-password" exact={true}>
+                    <ChangePasswordPage/>
+                </Route>
 
-            <Route path="/account" exact={true}>
-                <AccountPage/>
-            </Route>
+                <Route path="/account" exact={true}>
+                    <AccountPage/>
+                </Route>
 
-            <Route path="/auth/forgot-password" exact={true}>
-                <ForgotPasswordPage/>
-            </Route>
-        </Switch>
+                <Route path="/auth/forgot-password" exact={true}>
+                    <ForgotPasswordPage/>
+                </Route>
+            </Switch>
+        </ScrollToTop>
     );
 }
 
