@@ -252,7 +252,7 @@ const forgotPasswordFailure = error => {
     }
 }
 
-export const forgotPassword = (email, history) => {
+export const forgotPassword = (email, history, showNotification) => {
     return dispatch => {
         dispatch(forgotPasswordRequest());
         axios({
@@ -263,10 +263,12 @@ export const forgotPassword = (email, history) => {
             },
             data: email
         }).then(res => {
-            const {data} = res.data;
+            const {data, message} = res.data;
             dispatch(forgotPasswordSuccess(data));
-            history.push('/auth/login');
+            showNotification(message, {variant: 'success'});
+            history.push('/auth/reset-password');
         }).catch(error => {
+            showNotification(error.response.data.message, {variant: 'error'});
             dispatch(forgotPasswordFailure(error.response.data.message));
         });
     }

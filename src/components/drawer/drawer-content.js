@@ -94,6 +94,14 @@ const DrawerContent = ({handleDrawerClose}) => {
 
                     <Divider variant="fullWidth" className={classes.subDivider} light={true}/>
 
+                    <Link to="/today" className={classes.link}>
+                        <Button fullWidth={true} variant="text" size="large">
+                            Today's Bookings
+                        </Button>
+                    </Link>
+
+                    <Divider variant="fullWidth" className={classes.subDivider} light={true}/>
+
                     <Link to="/bookings" className={classes.link}>
                         <Button fullWidth={true} variant="text" size="large">
                             Bookings

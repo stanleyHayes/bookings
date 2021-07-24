@@ -13,7 +13,7 @@ import {
     Typography
 } from "@material-ui/core";
 import {useDispatch, useSelector} from "react-redux";
-import {useHistory} from "react-router-dom";
+import {Link, useHistory} from "react-router-dom";
 import {selectAuth} from "../../redux/authentication/auth-reducer";
 import {Alert} from "@material-ui/lab";
 import {signIn} from "../../redux/authentication/auth-action-creators";
@@ -54,7 +54,14 @@ const LoginPage = () => {
             title: {
                 textTransform: "uppercase",
                 marginBottom: 16
-            }
+            },
+            link: {
+                textDecoration: 'none'
+            },
+            forgotPasswordButton: {
+                marginTop: 16,
+                marginBottom: 16
+            },
         }
     });
 
@@ -114,7 +121,7 @@ const LoginPage = () => {
                 <Divider variant="fullWidth" light={true} className={classes.divider}/>
                 <Grid container={true} justify="center">
                     <Grid item={true} xs={12} md={6}>
-                        <Card variant="elevation" elevation={1}>
+                        <Card variant="outlined" elevation={1}>
                             {loading && <LinearProgress color="secondary" variant="query"/>}
                             <CardContent>
                                 <Typography
@@ -174,6 +181,13 @@ const LoginPage = () => {
                                     </Grid>
                                 </Grid>
 
+
+                                <Link className={classes.link} to="/auth/forgot-password">
+                                    <Button fullWidth={true} className={classes.button}>
+                                        Forgot Password
+                                    </Button>
+                                </Link>
+
                                 <Button
                                     className={classes.button}
                                     onClick={handleUserSubmit}
@@ -183,7 +197,6 @@ const LoginPage = () => {
                                     disableElevation={true}>
                                     Sign In
                                 </Button>
-
                             </CardContent>
                         </Card>
                     </Grid>

@@ -11,6 +11,7 @@ import UpdateBookingPage from "./pages/bookings/update-booking-page";
 import {STREAMING_RESOURCE_GH_TOKEN_KEY} from "./constants/constants";
 import {useEffect} from "react";
 import ScrollToTop from "./components/shared/scroll-to-top";
+import TodaysBookings from "./pages/bookings/todays-bookings";
 
 function App() {
 
@@ -37,6 +38,11 @@ function App() {
                 <Route path="/bookings" exact={true}>
                     <BookingsPage/>
                 </Route>
+
+                <Route path="/today" exact={true}>
+                    <TodaysBookings/>
+                </Route>
+
 
                 <Route path="/bookings/:bookingID/update" exact={true}>
                     <UpdateBookingPage/>

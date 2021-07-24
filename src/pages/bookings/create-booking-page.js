@@ -151,7 +151,6 @@ const CreateBookingPage = () => {
     return (
         <Layout>
             <Container className={classes.container}>
-                {loading && <LinearProgress color="primary" variant="query"/>}
                 <Typography
                     className={classes.title}
                     color="textPrimary"
@@ -162,9 +161,9 @@ const CreateBookingPage = () => {
 
                 <Grid container={true} justify="center">
                     <Grid item={true} xs={12} md={6}>
-                        <Card variant="elevation" elevation={1}>
+                        <Card variant="outlined" elevation={1}>
+                            {loading && <LinearProgress color="primary" variant="query"/>}
                             <CardContent>
-                                {loading && <LinearProgress color="primary" variant="query"/>}
                                 {bookingError &&
                                 <Alert variant="filled" title={bookingError} severity="error">{bookingError}</Alert>}
                                 <TextField

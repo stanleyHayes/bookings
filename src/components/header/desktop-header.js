@@ -22,7 +22,7 @@ const DesktopHeader = () => {
             },
             brand: {
                 textTransform: "uppercase",
-                fontSize: 32
+                fontSize: 24
             },
             avatar: {
                 backgroundColor: theme.palette.primary.light,
@@ -49,7 +49,7 @@ const DesktopHeader = () => {
     return (
         <Toolbar variant="regular" color="primary">
             <Grid container={true} justify="space-around" alignItems="center">
-                <Grid lg={5} item={true}>
+                <Grid lg={4} item={true}>
                     <Link to="/" className={classes.link}>
                         <Button className={classes.brand} variant="text">
                             Streamline Resources Ghana
@@ -57,12 +57,21 @@ const DesktopHeader = () => {
                     </Link>
                 </Grid>
 
-                <Grid lg={5} item={true} container={true} justify="flex-start" alignItems="center" spacing={2}>
+                <Grid lg={6} item={true} container={true} justify="flex-start" alignItems="center" spacing={2}>
                     <Grid item={true}>
                         <Link className={classes.link} to="/">
                             <Button className={classes.button} variant="text" size="large">Home</Button>
                         </Link>
                     </Grid>
+
+                    <Grid item={true}>
+                        <Link to="/today" className={classes.link}>
+                            <Button className={classes.button} fullWidth={true} variant="text" size="large">
+                                Today's Bookings
+                            </Button>
+                        </Link>
+                    </Grid>
+
                     <Grid item={true}>
                         <Link className={classes.link} to="/bookings">
                             <Button className={classes.button} variant="text" size="large">Bookings</Button>
@@ -81,7 +90,7 @@ const DesktopHeader = () => {
                 </Grid>
 
                 {user && (
-                    <Grid spacing={4} alignItems="center" item={true} lg={2} container={true} justify="flex-start">
+                    <Grid spacing={2} alignItems="center" item={true} lg={2} container={true} justify="flex-start">
                         <Grid item={true}>
                             {loading && <CircularProgress variant="indeterminate"/>}
                             <Avatar className={classes.avatar} variant="circular">

@@ -97,7 +97,7 @@ const UpdateProfilePage = () => {
 
                 <Grid container={true} justify="center">
                     <Grid item={true} xs={12} md={6}>
-                        <Card variant="elevation" elevation={1}>
+                        <Card variant="outlined" elevation={1}>
                             <CardContent>
                                 <TextField
                                     variant="outlined"

@@ -38,7 +38,7 @@ const Display = ({currentDisplay, nextDisplay}) => {
     const classes = useStyles();
 
     return (
-        <Card variant="elevation" elevation={8} className={classes.card}>
+        <Card variant="outlined" elevation={8} className={classes.card}>
             <CardContent>
                 <Grid container={true} justify="center">
                     <Grid item={true}>

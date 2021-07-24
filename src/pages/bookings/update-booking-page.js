@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import Layout from "../../components/layout";
 import {
     Button,
@@ -13,11 +13,12 @@ import {
 } from "@material-ui/core";
 
 import {DatePicker, TimePicker} from '@material-ui/pickers';
-import {updateBooking} from "../../redux/bookings/booking-action-creators";
+import {getBooking, updateBooking} from "../../redux/bookings/booking-action-creators";
 import {useSnackbar} from "notistack";
 import {useDispatch, useSelector} from "react-redux";
 import {useHistory, useParams} from 'react-router-dom';
 import {selectAuth} from "../../redux/authentication/auth-reducer";
+import {selectBookings} from "../../redux/bookings/booking-reducer";
 
 const UpdateBookingPage = () => {
 
@@ -63,13 +64,21 @@ const UpdateBookingPage = () => {
     const dispatch = useDispatch();
     const history = useHistory();
 
+    const handleBookingChange = e => {
+        setBooking({...booking, [e.target.name]: e.target.value});
+    }
+
     const handleShowNotification = (message, options) => {
         enqueueSnackbar(message, options);
     }
 
-    const handleBookingChange = e => {
-        setBooking({...booking, [e.target.name]: e.target.value});
-    }
+    const {singleBooking, loading} = useSelector(selectBookings);
+
+    useEffect(() => {
+        if(!loading && singleBooking){
+            setBooking({...singleBooking});
+        }
+    }, [loading, singleBooking]);
 
     const handleBookingSubmit = e => {
         e.preventDefault();
@@ -132,6 +141,14 @@ const UpdateBookingPage = () => {
         dispatch(updateBooking(bookingID, booking, token, history, handleShowNotification));
     }
 
+    useEffect(() => {
+        const handleShowNotification = (message, options) => {
+            enqueueSnackbar(message, options);
+        }
+        dispatch(getBooking(bookingID, token, handleShowNotification));
+    }, [bookingID, dispatch, enqueueSnackbar, token]);
+
+
     const handleDateChange = date => {
         setBooking({...booking, date});
     }
@@ -139,6 +156,7 @@ const UpdateBookingPage = () => {
     const handleTimeChange = time => {
         setBooking({...booking, time});
     }
+
 
     return (
         <Layout>
@@ -155,7 +173,7 @@ const UpdateBookingPage = () => {
 
                 <Grid container={true} justify="center">
                     <Grid item={true} xs={12} md={6}>
-                        <Card variant="elevation" elevation={1}>
+                        <Card variant="outlined" elevation={1}>
                             <CardContent>
                                 <TextField
                                     variant="outlined"
@@ -267,7 +285,6 @@ const UpdateBookingPage = () => {
                                     autoOk={true}
                                     required={true}
                                     InputAdornmentProps={{position: "start"}}
-                                    format="MM-DD-YYYY"
                                     error={Boolean(error.date)}
                                     helperText={error.date}
                                     className={classes.textField}
