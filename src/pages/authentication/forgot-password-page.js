@@ -1,19 +1,18 @@
 import React, {useState} from "react";
-import Layout from "../../components/layout";
 import {
     Button,
     Card,
     CardContent,
     Container,
-    Divider,
-    Grid, LinearProgress,
+    Grid,
+    LinearProgress,
     makeStyles,
     TextField,
     Typography
 } from "@material-ui/core";
 import {useDispatch, useSelector} from "react-redux";
 import {selectAuth} from "../../redux/authentication/auth-reducer";
-import {useHistory} from "react-router-dom";
+import {Link, useHistory} from "react-router-dom";
 import {useSnackbar} from "notistack";
 import {forgotPassword} from "../../redux/authentication/auth-action-creators";
 import {Alert} from "@material-ui/lab";
@@ -57,6 +56,9 @@ const ForgotPasswordPage = () => {
             instruction: {
                 marginTop: 16,
                 marginBottom: 16
+            },
+            link: {
+                textDecoration: 'none'
             }
         }
     });
@@ -66,14 +68,14 @@ const ForgotPasswordPage = () => {
     const dispatch = useDispatch();
     const history = useHistory();
 
-    const { enqueueSnackbar} = useSnackbar();
+    const {enqueueSnackbar} = useSnackbar();
 
     const showNotification = (message, options) => {
         enqueueSnackbar(message, options);
     }
 
 
-    const { loading, error: authError} = useSelector(selectAuth);
+    const {loading, error: authError} = useSelector(selectAuth);
 
     const [email, setEmail] = useState("");
     const [error, setError] = useState({});
@@ -95,57 +97,62 @@ const ForgotPasswordPage = () => {
 
 
     return (
-        <Layout>
-            <div className={classes.root}>
-                <Container className={classes.container}>
-                    <Grid container={true} justify="center">
-                        <Grid item={true} xs={12} md={6}>
-                            <Card variant="outlined" elevation={1}>
-                                {loading && <LinearProgress color="secondary" variant="query"/>}
-                                <CardContent>
-                                    <Typography color="textPrimary" variant="h3" align="center">Forgot Password</Typography>
-                                    {authError &&
-                                    <Alert variant="filled" title={authError} severity="error">{authError}</Alert>}
+        <div className={classes.root}>
+            <Container className={classes.container}>
+                <Grid container={true} justify="center">
+                    <Grid item={true} xs={12} md={6}>
+                        <Card variant="outlined" elevation={1}>
+                            {loading && <LinearProgress color="secondary" variant="query"/>}
+                            <CardContent>
+                                <Typography color="textPrimary" variant="h3" align="center">Forgot Password</Typography>
+                                {authError &&
+                                <Alert variant="filled" title={authError} severity="error">{authError}</Alert>}
 
-                                    <Typography className={classes.instruction} gutterBottom={true} variant="body2" align="center">
-                                        Enter the email address associated with your account and we'll send you a link to
-                                        reset your password
-                                    </Typography>
+                                <Typography className={classes.instruction} gutterBottom={true} variant="body2"
+                                            align="center">
+                                    Enter the email address associated with your account and we'll send you a link to
+                                    reset your password
+                                </Typography>
 
-                                    <TextField
-                                        variant="outlined"
-                                        fullWidth={true}
-                                        type="email"
-                                        name="email"
-                                        value={email}
-                                        onChange={handleEmailChange}
-                                        margin="normal"
-                                        className={classes.textField}
-                                        label="Email"
-                                        placeholder="Enter email"
-                                        required={true}
-                                        error={Boolean(error.email)}
-                                        helperText={error.email}
-                                    />
+                                <TextField
+                                    variant="outlined"
+                                    fullWidth={true}
+                                    type="email"
+                                    name="email"
+                                    value={email}
+                                    onChange={handleEmailChange}
+                                    margin="normal"
+                                    className={classes.textField}
+                                    label="Email"
+                                    placeholder="Enter email"
+                                    required={true}
+                                    error={Boolean(error.email)}
+                                    helperText={error.email}
+                                />
 
-                                    <Button
-                                        className={classes.button}
-                                        onClick={handlePasswordReset}
-                                        variant="outlined"
-                                        fullWidth={true}
-                                        size="large"
-                                        disableElevation={true}>
-                                        Reset Password
+                                <Button
+                                    className={classes.button}
+                                    onClick={handlePasswordReset}
+                                    variant="outlined"
+                                    fullWidth={true}
+                                    size="large"
+                                    disableElevation={true}>
+                                    Reset Password
+                                </Button>
+
+                                <Link className={classes.link} to="/auth/forgot-password">
+                                    <Button fullWidth={true} className={classes.button}>
+                                       Back to login
                                     </Button>
+                                </Link>
 
-                                </CardContent>
-                            </Card>
-                        </Grid>
+                            </CardContent>
+                        </Card>
                     </Grid>
+                </Grid>
 
-                </Container>
-            </div>
-        </Layout>
+            </Container>
+        </div>
     )
 }
 
