@@ -6,7 +6,8 @@ import {
     CardContent,
     Container,
     Divider,
-    Grid, LinearProgress,
+    Grid,
+    LinearProgress,
     makeStyles,
     TextField,
     Typography
@@ -18,6 +19,7 @@ import {createBooking} from "../../redux/bookings/booking-action-creators";
 import {selectAuth} from "../../redux/authentication/auth-reducer";
 import {selectBookings} from "../../redux/bookings/booking-reducer";
 import {Alert} from "@material-ui/lab";
+import {useSnackbar} from "notistack";
 
 const CreateBookingPage = () => {
 
@@ -59,6 +61,11 @@ const CreateBookingPage = () => {
     const {car, contact, name, container, company, time, date, product} = booking;
 
     const {token, loading: authLoading} = useSelector(selectAuth);
+
+    const {enqueueSnackbar} = useSnackbar();
+    const handleShowNotification = (message, options) => {
+        enqueueSnackbar(message, options);
+    }
 
     useEffect(() => {
         if (!authLoading && !token) {
@@ -128,7 +135,7 @@ const CreateBookingPage = () => {
         } else {
             setError({...error, time: null});
         }
-        dispatch(createBooking(booking, token, history));
+        dispatch(createBooking(booking, token, history, handleShowNotification));
     }
 
     const handleDateChange = (date) => {
@@ -144,7 +151,8 @@ const CreateBookingPage = () => {
     return (
         <Layout>
             <Container className={classes.container}>
-                {loading && <LinearProgress color="primary" variant="query"/>}                <Typography
+                {loading && <LinearProgress color="primary" variant="query"/>}
+                <Typography
                     className={classes.title}
                     color="textPrimary"
                     variant="h3"
@@ -157,7 +165,8 @@ const CreateBookingPage = () => {
                         <Card variant="elevation" elevation={1}>
                             <CardContent>
                                 {loading && <LinearProgress color="primary" variant="query"/>}
-                                {bookingError && <Alert variant="filled" title={bookingError} severity="error">{bookingError}</Alert>}
+                                {bookingError &&
+                                <Alert variant="filled" title={bookingError} severity="error">{bookingError}</Alert>}
                                 <TextField
                                     variant="outlined"
                                     fullWidth={true}

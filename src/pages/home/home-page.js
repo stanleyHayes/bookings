@@ -46,9 +46,11 @@ const HomePage = () => {
     return (
         <Layout>
             <Container className={classes.container}>
-                <Typography className={classes.title} color="textPrimary" variant="h3" align="center">Affixing Now</Typography>
+                <Typography className={classes.title} color="textPrimary" variant="h3" align="center">
+                    Affixing Now
+                </Typography>
                 <Divider variant="fullWidth" className={classes.divider}/>
-                {loading && <LinearProgress color="secondary" variant="query"/>}
+                {loading && <LinearProgress color="primary" variant="query"/>}
                 {error && <Alert title={error} severity="error">{error}</Alert>}
                 ) : null}
                 {currentBooking ? (

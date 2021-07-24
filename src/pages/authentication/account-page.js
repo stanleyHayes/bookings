@@ -79,38 +79,38 @@ const AccountPage = () => {
                     Account Information
                 </Typography>
 
-                <Divider light={true} variant="fullWidth" className={classes.divider}/>
+                <Divider variant="fullWidth" className={classes.divider}/>
 
                 <Grid container={true} justify="center">
                     <Grid item={true} xs={12} md={6}>
                         <Card variant="elevation" elevation={1}>
                             <CardContent>
                                 <Typography
-                                    color="textSecondary"
+                                    color="textPrimary"
                                     variant="caption"
                                     gutterBottom={true}>
                                     Name
                                 </Typography>
                                 {loading ? <Skeleton variant="text" animation="wave"/> :
-                                    <Typography color="textSecondary" gutterBottom={true} variant="h4">
+                                    <Typography color="textPrimary" gutterBottom={true} variant="h4">
                                         {user.name}
                                     </Typography>
                                 }
 
-                                <Divider variant="fullWidth" className={classes.subDivider} light={true}/>
+                                <Divider variant="fullWidth" className={classes.subDivider}/>
 
-                                <Typography color="textSecondary" variant="caption"
+                                <Typography color="textPrimary" variant="caption"
                                             gutterBottom={true}>Position</Typography>
                                 {loading ? <Skeleton variant="text" animation="wave"/> :
-                                    <Typography color="textSecondary" gutterBottom={true} variant="h6">
+                                    <Typography color="textPrimary" gutterBottom={true} variant="h6">
                                         {user.position}
                                     </Typography>
                                 }
-                                <Divider variant="fullWidth" className={classes.subDivider} light={true}/>
-                                <Typography color="textSecondary" variant="caption"
+                                <Divider variant="fullWidth" className={classes.subDivider}/>
+                                <Typography color="textPrimary" variant="caption"
                                             gutterBottom={true}>Department</Typography>
                                 {loading ? <Skeleton variant="text" animation="wave"/> :
-                                    <Typography color="textSecondary" gutterBottom={true} variant="h6">
+                                    <Typography color="textPrimary" gutterBottom={true} variant="h6">
                                         {user.department}
                                     </Typography>
                                 }
@@ -133,7 +133,7 @@ const AccountPage = () => {
                                     </Button>
                                 </Link>
 
-                                <Divider variant="fullWidth" className={classes.subDivider} light={true}/>
+                                <Divider variant="fullWidth" className={classes.subDivider}/>
 
                                 <Button
                                     onClick={handleLogoutClick}
@@ -144,7 +144,7 @@ const AccountPage = () => {
                                     Logout
                                 </Button>
 
-                                <Divider variant="fullWidth" className={classes.subDivider} light={true}/>
+                                <Divider variant="fullWidth" className={classes.subDivider}/>
 
                                 <Button
                                     className={classes.button}

@@ -11,8 +11,10 @@ import {
     TextField,
     Typography
 } from "@material-ui/core";
-
-import {DatePicker, TimePicker} from '@material-ui/pickers';
+import {updateProfile} from "../../redux/authentication/auth-action-creators";
+import {useDispatch, useSelector} from "react-redux";
+import {useHistory} from "react-router-dom";
+import {selectAuth} from "../../redux/authentication/auth-reducer";
 
 const UpdateProfilePage = () => {
 
@@ -46,44 +48,20 @@ const UpdateProfilePage = () => {
     });
 
     const classes = useStyles();
+    const dispatch = useDispatch();
+    const history = useHistory();
 
-    const [booking, setBooking] = useState({date: Date.now()});
+    const [user, setUser] = useState({});
     const [error, setError] = useState({});
-    const {car, contact, name, container, company, time, date, product} = booking;
+    const {name, position, department} = user;
+    const {token} = useSelector(selectAuth);
 
-    const handleBookingChange = e => {
-        setBooking({...booking, [e.target.name]: e.target.value});
+    const handleChange = e => {
+        setUser({...user, [e.target.name]: e.target.value});
     }
 
-    const handleBookingSubmit = e => {
+    const handleSubmit = e => {
         e.preventDefault();
-
-        if (!container) {
-            setError({...error, container: "Field required"});
-            return;
-        } else {
-            setError({...error, container: null});
-        }
-
-        if (!company) {
-            setError({...error, company: "Field required"});
-            return;
-        } else {
-            setError({...error, company: null});
-        }
-        if (!product) {
-            setError({...error, product: "Field required"});
-            return;
-        } else {
-            setError({...error, product: null});
-        }
-
-        if (!car) {
-            setError({...error, car: "Field required"});
-            return;
-        } else {
-            setError({...error, car: null});
-        }
 
         if (!name) {
             setError({...error, name: "Field required"});
@@ -92,46 +70,30 @@ const UpdateProfilePage = () => {
             setError({...error, name: null});
         }
 
-
-        if (!contact) {
-            setError({...error, contact: "Field required"});
+        if (!position) {
+            setError({...error, position: "Field required"});
             return;
         } else {
-            setError({...error, contact: null});
+            setError({...error, position: null});
         }
-
-        if (!date) {
-            setError({...error, date: "Field required"});
+        if (!department) {
+            setError({...error, department: "Field required"});
             return;
         } else {
-            setError({...error, date: null});
+            setError({...error, department: null});
         }
-
-        if (!time) {
-            setError({...error, time: "Field required"});
-            return;
-        } else {
-            setError({...error, time: null});
-        }
-        console.log(booking);
+        dispatch(updateProfile(user, token, history));
     }
-
-    const handleDateChange = date => {
-        setBooking({...booking, date});
-    }
-
-    const handleTimeChange = time => {
-        setBooking({...booking, time});
-    }
-
 
 
     return (
         <Layout>
             <Container className={classes.container}>
-                <Typography  color="textPrimary"  variant="h3" align="center">Create Booking</Typography>
+                <Typography  color="textPrimary"  variant="h3" align="center">
+                    Edit Profile
+                </Typography>
 
-                <Divider light={true} variant="fullWidth" className={classes.divider}/>
+                <Divider variant="fullWidth" className={classes.divider}/>
 
                 <Grid container={true} justify="center">
                     <Grid item={true} xs={12} md={6}>
@@ -141,138 +103,53 @@ const UpdateProfilePage = () => {
                                     variant="outlined"
                                     fullWidth={true}
                                     type="text"
-                                    name="container"
-                                    value={container}
-                                    onChange={handleBookingChange}
+                                    name="name"
+                                    value={name}
+                                    onChange={handleChange}
                                     margin="normal"
                                     className={classes.textField}
                                     label="Container No."
-                                    placeholder="Enter container number"
-                                    required={true}
-                                    error={Boolean(error.container)}
-                                    helperText={error.container}
-                                />
-
-                                <TextField
-                                    variant="outlined"
-                                    fullWidth={true}
-                                    type="text"
-                                    name="company"
-                                    value={company}
-                                    onChange={handleBookingChange}
-                                    margin="normal"
-                                    className={classes.textField}
-                                    label="Company Name"
-                                    placeholder="Enter company name"
-                                    required={true}
-                                    error={Boolean(error.company)}
-                                    helperText={error.company}
-                                />
-
-                                <TextField
-                                    variant="outlined"
-                                    fullWidth={true}
-                                    type="text"
-                                    name="product"
-                                    value={product}
-                                    onChange={handleBookingChange}
-                                    margin="normal"
-                                    className={classes.textField}
-                                    label="Product"
-                                    placeholder="Enter product name"
-                                    required={true}
-                                    error={Boolean(error.product)}
-                                    helperText={error.product}
-                                />
-
-
-                                <TextField
-                                    variant="outlined"
-                                    fullWidth={true}
-                                    type="text"
-                                    name="car"
-                                    value={car}
-                                    onChange={handleBookingChange}
-                                    margin="normal"
-                                    className={classes.textField}
-                                    label="Car No."
-                                    placeholder="Enter car number"
-                                    required={true}
-                                    error={Boolean(error.car)}
-                                    helperText={error.car}
-                                />
-
-
-                                <TextField
-                                    variant="outlined"
-                                    fullWidth={true}
-                                    type="text"
-                                    name="name"
-                                    value={name}
-                                    onChange={handleBookingChange}
-                                    margin="normal"
-                                    className={classes.textField}
-                                    label="Driver's Name"
-                                    placeholder="Enter drivers name"
+                                    placeholder="Enter name"
                                     required={true}
                                     error={Boolean(error.name)}
                                     helperText={error.name}
                                 />
 
+                                <TextField
+                                    variant="outlined"
+                                    fullWidth={true}
+                                    type="text"
+                                    name="position"
+                                    value={position}
+                                    onChange={handleChange}
+                                    margin="normal"
+                                    className={classes.textField}
+                                    label="Position"
+                                    placeholder="Enter position"
+                                    required={true}
+                                    error={Boolean(error.position)}
+                                    helperText={error.position}
+                                />
 
                                 <TextField
                                     variant="outlined"
                                     fullWidth={true}
-                                    type="tel"
-                                    name="contact"
-                                    value={contact}
-                                    onChange={handleBookingChange}
+                                    type="text"
+                                    name="department"
+                                    value={department}
+                                    onChange={handleChange}
                                     margin="normal"
                                     className={classes.textField}
-                                    label="Driver's Contact"
-                                    placeholder="Enter driver's contact"
+                                    label="Department"
+                                    placeholder="Enter department"
                                     required={true}
-                                    error={Boolean(error.contact)}
-                                    helperText={error.contact}
-                                />
-
-                                <DatePicker
-                                    variant="dialog"
-                                    value={date}
-                                    fullWidth={true}
-                                    label="Booking Date"
-                                    onChange={handleDateChange}
-                                    inputVariant="outlined"
-                                    disablePast={true}
-                                    autoOk={true}
-                                    required={true}
-                                    InputAdornmentProps={{ position: "start" }}
-                                    format="MM-DD-YYYY"
-                                    error={Boolean(error.date)}
-                                    helperText={error.date}
-                                    className={classes.textField}
-                                />
-
-                                <TimePicker
-                                    variant="dialog"
-                                    value={time}
-                                    InputAdornmentProps={{ position: "start" }}
-                                    fullWidth={true}
-                                    label="Booking Time"
-                                    onChange={handleTimeChange}
-                                    inputVariant="outlined"
-                                    disablePast={true}
-                                    autoOk={true}
-                                    required={true}
-                                    ampm={true}
-                                    error={Boolean(error.time)}
-                                    helperText={error.time}
-                                    className={classes.textField}
+                                    error={Boolean(error.department)}
+                                    helperText={error.department}
                                 />
 
                                 <Button
                                     className={classes.button}
-                                    onClick={handleBookingSubmit}
+                                    onClick={handleSubmit}
                                     variant="outlined"
                                     fullWidth={true}
                                     size="large"

@@ -13,6 +13,11 @@ import {
 } from "@material-ui/core";
 
 import {DatePicker, TimePicker} from '@material-ui/pickers';
+import {updateBooking} from "../../redux/bookings/booking-action-creators";
+import {useSnackbar} from "notistack";
+import {useDispatch, useSelector} from "react-redux";
+import {useHistory, useParams} from 'react-router-dom';
+import {selectAuth} from "../../redux/authentication/auth-reducer";
 
 const UpdateBookingPage = () => {
 
@@ -46,10 +51,21 @@ const UpdateBookingPage = () => {
     });
 
     const classes = useStyles();
+    const {bookingID} = useParams();
 
     const [booking, setBooking] = useState({date: Date.now()});
     const [error, setError] = useState({});
     const {car, contact, name, container, company, time, date, product} = booking;
+
+    const {token} = useSelector(selectAuth);
+
+    const {enqueueSnackbar} = useSnackbar();
+    const dispatch = useDispatch();
+    const history = useHistory();
+
+    const handleShowNotification = (message, options) => {
+        enqueueSnackbar(message, options);
+    }
 
     const handleBookingChange = e => {
         setBooking({...booking, [e.target.name]: e.target.value});
@@ -113,7 +129,7 @@ const UpdateBookingPage = () => {
         } else {
             setError({...error, time: null});
         }
-        console.log(booking);
+        dispatch(updateBooking(bookingID, booking, token, history, handleShowNotification));
     }
 
     const handleDateChange = date => {
@@ -124,11 +140,16 @@ const UpdateBookingPage = () => {
         setBooking({...booking, time});
     }
 
-
     return (
         <Layout>
             <Container className={classes.container}>
-                <Typography className={classes.title} color="textPrimary"  variant="h3" align="center">Create Booking</Typography>
+                <Typography
+                    className={classes.title}
+                    color="textPrimary"
+                    variant="h3"
+                    align="center">
+                    Update Booking
+                </Typography>
 
                 <Divider variant="fullWidth" className={classes.divider}/>
 
@@ -245,7 +266,7 @@ const UpdateBookingPage = () => {
                                     disablePast={true}
                                     autoOk={true}
                                     required={true}
-                                    InputAdornmentProps={{ position: "start" }}
+                                    InputAdornmentProps={{position: "start"}}
                                     format="MM-DD-YYYY"
                                     error={Boolean(error.date)}
                                     helperText={error.date}
@@ -255,7 +276,7 @@ const UpdateBookingPage = () => {
                                 <TimePicker
                                     variant="dialog"
                                     value={time}
-                                    InputAdornmentProps={{ position: "start" }}
+                                    InputAdornmentProps={{position: "start"}}
                                     fullWidth={true}
                                     label="Booking Time"
                                     onChange={handleTimeChange}
@@ -276,7 +297,7 @@ const UpdateBookingPage = () => {
                                     fullWidth={true}
                                     size="large"
                                     disableElevation={true}>
-                                    Submit Booking
+                                    Update Booking
                                 </Button>
 
                             </CardContent>

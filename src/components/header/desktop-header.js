@@ -4,6 +4,7 @@ import {Link, useHistory} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {selectAuth} from "../../redux/authentication/auth-reducer";
 import {signOut} from "../../redux/authentication/auth-action-creators";
+import {grey} from "@material-ui/core/colors";
 
 const DesktopHeader = () => {
 
@@ -27,7 +28,7 @@ const DesktopHeader = () => {
                 backgroundColor: theme.palette.primary.light,
                 borderStyle: "solid",
                 borderWidth: 2,
-                borderColor: theme.palette.secondary.light
+                borderColor: grey['100']
             },
             name: {
                 color: theme.palette.text.primary

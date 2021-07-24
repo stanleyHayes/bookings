@@ -44,7 +44,7 @@ const signInFailure = error => {
     }
 }
 
-export const signIn = (user, history) => {
+export const signIn = (user, history, showNotification) => {
     return dispatch => {
         dispatch(signInRequest());
         axios({
@@ -52,14 +52,16 @@ export const signIn = (user, history) => {
             url: `${STREAMING_RESOURCE_GH_SERVER_URL}/auth/login`,
             data: user
         }).then(res => {
-            const {data, token} = res.data;
+            const {data, token, message} = res.data;
             if (data) {
                 dispatch(signInSuccess(data, token));
                 localStorage.setItem(STREAMING_RESOURCE_GH_TOKEN_KEY, token);
                 localStorage.setItem(STREAMING_RESOURCE_GH_USER_KEY, JSON.stringify(data));
                 history.push('/');
+                showNotification(message, {variant: 'success'});
             }
         }).catch(error => {
+            showNotification(error.response.data.message, {variant: 'error'});
             dispatch(signInFailure(error.response.data.message));
         });
     }

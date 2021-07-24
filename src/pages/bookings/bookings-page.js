@@ -27,6 +27,7 @@ import {Alert} from "@material-ui/lab";
 import {green, grey, red} from "@material-ui/core/colors";
 import moment from "moment";
 import {Delete, Edit, Visibility} from "@material-ui/icons";
+import {useSnackbar} from "notistack";
 
 const BookingsPage = () => {
 
@@ -68,16 +69,29 @@ const BookingsPage = () => {
                 padding: 8,
                 borderRadius: 32
             },
+
+            visibility: {
+                color: green['600'],
+                cursor: 'pointer'
+            },
+            delete: {
+                color: red['600'],
+                cursor: 'pointer'
+            },
+            edit: {
+                color: grey['600'],
+                cursor: 'pointer'
+            },
             title: {
                 textTransform: 'uppercase'
             }
         }
     });
-
     const classes = useStyles();
 
     const {loading, error, bookings} = useSelector(selectBookings);
     const {loading: authLoading, token} = useSelector(selectAuth);
+    const {enqueueSnackbar} = useSnackbar();
 
     const history = useHistory();
     const dispatch = useDispatch();
@@ -95,8 +109,11 @@ const BookingsPage = () => {
 
 
     useEffect(() => {
-        dispatch(getBookings(token));
-    }, [dispatch, token]);
+        const handleShowNotification = (message, options) => {
+            enqueueSnackbar(message, options);
+        }
+        dispatch(getBookings(token, handleShowNotification));
+    }, [dispatch, enqueueSnackbar, token]);
 
     const renderStatus = status => {
         switch (status) {
@@ -125,7 +142,7 @@ const BookingsPage = () => {
                 <Typography className={classes.title} color="textPrimary" variant="h3"
                             align="center">Bookings</Typography>
                 <Divider variant="fullWidth" className={classes.divider}/>
-                <Grid spacing={4} container={true} justify="space-between" alignItems="center">
+                <Grid spacing={2} container={true} justify="space-between" alignItems="center">
                     <Grid item={true} xs={12} md={6}>
                         <Typography color="textPrimary" variant="h6">Filter by Status</Typography>
                     </Grid>
@@ -146,7 +163,7 @@ const BookingsPage = () => {
                 <Divider variant="fullWidth" className={classes.divider}/>
                 {loading && <LinearProgress color="primary" variant="query"/>}
                 {error && <Alert title={error} severity="error">{error}</Alert>}
-                { bookings && bookings.length === 0 ? (
+                {bookings && bookings.length === 0 ? (
                     <Box>
                         <Typography
                             color="textSecondary"

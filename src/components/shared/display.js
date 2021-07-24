@@ -17,7 +17,7 @@ const Display = ({currentDisplay, nextDisplay}) => {
             shortDivider: {
                 marginTop: 32,
                 marginBottom: 32,
-                width: 40,
+                width: 60,
                 height: 3
             },
             subDivider: {
@@ -42,19 +42,31 @@ const Display = ({currentDisplay, nextDisplay}) => {
             <CardContent>
                 <Grid container={true} justify="center">
                     <Grid item={true}>
-                        <Divider className={classes.shortDivider} variant="middle" />
+                        <Divider color="primary" className={classes.shortDivider} variant="middle" />
                     </Grid>
                 </Grid>
-                <Typography color="textSecondary" variant="h6" align="center" className={classes.caption}>Container Number</Typography>
-                <Typography color="textSecondary" variant="h1" align="center">{currentDisplay.container}</Typography>
+                <Typography color="textPrimary" variant="h6" align="center" className={classes.caption}>
+                    Container Number
+                </Typography>
+                <Typography color="textPrimary" variant="h1" align="center">
+                    {currentDisplay.container}
+                </Typography>
                 <Divider className={classes.divider} variant="fullWidth" light={true} />
-                <Typography  color="textSecondary" variant="h6" align="center" className={classes.caption}>Booking Date</Typography>
-                <Typography color="textSecondary" variant="h3" align="center">{new Date(currentDisplay.date).toDateString()}</Typography>
+                <Typography  color="textPrimary" variant="h6" align="center" className={classes.caption}>
+                    Booking Date
+                </Typography>
+                <Typography color="textPrimary" variant="h3" align="center">
+                    {new Date(currentDisplay.date).toDateString()}
+                </Typography>
                 <Divider className={classes.divider} variant="fullWidth" light={true} />
-                <Typography color="textSecondary" variant="h6" align="center" className={classes.caption}>Next</Typography>
+                <Typography color="textPrimary" variant="h6" align="center" className={classes.caption}>
+                    Next
+                </Typography>
                 {nextDisplay ?
-                    <Typography color="textSecondary" variant="h3" align="center">{nextDisplay.container}</Typography>:
-                    <Typography color="textSecondary" variant="h3" align="center">
+                    <Typography color="textPrimary" variant="h3" align="center">
+                        {nextDisplay.container}
+                    </Typography>:
+                    <Typography color="textPrimary" variant="h3" align="center">
                         No Container Available Next
                     </Typography>
                 }

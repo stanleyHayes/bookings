@@ -17,6 +17,7 @@ import {useHistory} from "react-router-dom";
 import {selectAuth} from "../../redux/authentication/auth-reducer";
 import {Alert} from "@material-ui/lab";
 import {signIn} from "../../redux/authentication/auth-action-creators";
+import {useSnackbar} from "notistack";
 
 const LoginPage = () => {
 
@@ -62,6 +63,8 @@ const LoginPage = () => {
     const dispatch = useDispatch();
     const history = useHistory();
 
+    const { enqueueSnackbar} = useSnackbar();
+
     const {token, loading, error: authError} = useSelector(selectAuth);
 
     useEffect(() => {
@@ -79,9 +82,12 @@ const LoginPage = () => {
         setUser({...user, [e.target.name]: e.target.value});
     }
 
+    const showNotification = (message, options) => {
+        enqueueSnackbar(message, options);
+    }
+
     const handleUserSubmit = e => {
         e.preventDefault();
-
         if (!email) {
             setError({...error, email: "Field required"});
             return;
@@ -95,7 +101,7 @@ const LoginPage = () => {
         } else {
             setError({...error, password: null});
         }
-        dispatch(signIn(user, history));
+        dispatch(signIn(user, history, showNotification));
     }
 
     const handlePasswordVisibility = () => {

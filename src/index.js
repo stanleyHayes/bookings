@@ -4,42 +4,40 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import {BrowserRouter} from "react-router-dom";
-import { createMuiTheme, ThemeProvider} from "@material-ui/core";
+import {createTheme, ThemeProvider} from "@material-ui/core";
 import {Provider} from "react-redux";
 import {MuiPickersUtilsProvider} from "@material-ui/pickers";
 import 'react-multi-carousel/lib/styles.css';
 import DateFnsUtils from '@date-io/date-fns';
 import store from "./redux/store";
+import {SnackbarProvider} from "notistack"
 
-const theme = createMuiTheme({
+const theme = createTheme({
     typography: {
-        fontFamily: 'Raleway, sans-serif'
+        fontFamily: 'Raleway, IBM Plex Mono, sans-serif;'
     },
     palette: {
-        background: {
-            paper: "#1f2833",
-            default: '#0b0c10'
-        },
-        text: {
-            primary: "#66fcf1",
-            secondary: "#ffffff",
-            hint: "#c5c6c7",
-            disabled: "#c5c6c7"
-        },
         primary: {
-            main: "#1f2833"
+            main: '#374151',
+            light: '#6B7280',
+            dark: '#1F2937'
         },
         secondary: {
-            main: "#45a298"
+            main: '#DC2626'
+        },
+        text: {
+            primary: '#E5E7EB',
+            secondary: '#374151',
+            disabled: '#9CA3AF'
         },
         action: {
-            hover: "#45a298",
-            active: "#45a298",
-            selected: "#45a298",
-            focus:"#45a298"
+            active: '#E5E7EB'
         },
-        divider: "#45a298",
-        type: "dark"
+        background: {
+            default: '#111827',
+            paper: '#1F2937'
+        },
+        type: 'dark'
     },
     shape: {
         borderRadius: 32
@@ -48,19 +46,24 @@ const theme = createMuiTheme({
 
 
 ReactDOM.render(
-  <React.StrictMode>
-      <BrowserRouter>
-          <ThemeProvider theme={theme}>
-              <Provider store={store}>
-                  <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                      <App />
-                  </MuiPickersUtilsProvider>
-              </Provider>
-          </ThemeProvider>
-      </BrowserRouter>
-
-  </React.StrictMode>,
-  document.getElementById('root')
+    <React.StrictMode>
+        <Provider store={store}>
+            <BrowserRouter>
+                <ThemeProvider theme={theme}>
+                    <SnackbarProvider
+                        anchorOrigin={{
+                            vertical: 'top',
+                            horizontal: 'right'
+                        }}>
+                        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                            <App/>
+                        </MuiPickersUtilsProvider>
+                    </SnackbarProvider>
+                </ThemeProvider>
+            </BrowserRouter>
+        </Provider>
+    </React.StrictMode>,
+    document.getElementById('root')
 );
 
 // If you want to start measuring performance in your app, pass a function

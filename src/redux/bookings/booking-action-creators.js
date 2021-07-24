@@ -7,8 +7,10 @@ import {
     DELETE_BOOKING_SUCCESS,
     GET_BOOKING_FAILURE,
     GET_BOOKING_REQUEST,
-    GET_BOOKING_SUCCESS, GET_BOOKINGS_FAILURE,
-    GET_BOOKINGS_REQUEST, GET_BOOKINGS_SUCCESS,
+    GET_BOOKING_SUCCESS,
+    GET_BOOKINGS_FAILURE,
+    GET_BOOKINGS_REQUEST,
+    GET_BOOKINGS_SUCCESS,
     UPDATE_BOOKING_FAILURE,
     UPDATE_BOOKING_REQUEST,
     UPDATE_BOOKING_SUCCESS
@@ -36,7 +38,7 @@ const createBookingFailure = error => {
     }
 }
 
-export const createBooking = (booking, token, history) => {
+export const createBooking = (booking, token, history, handleShowNotification) => {
     return dispatch => {
         dispatch(createBookingRequest());
         axios({
@@ -50,8 +52,10 @@ export const createBooking = (booking, token, history) => {
             const {data, message} = res.data;
             dispatch(createBookingSuccess(data));
             history.push('/bookings');
+            handleShowNotification(message, {variant: 'success'});
         }).catch(error => {
             dispatch(createBookingFailure(error.response.data.message));
+            handleShowNotification(error.response.data.message, {variant: 'error'});
         })
     }
 }
@@ -76,7 +80,7 @@ const getBookingFailure = error => {
     }
 }
 
-export const getBooking = (bookingID, token) => {
+export const getBooking = (bookingID, token, handleShowNotification) => {
     return dispatch => {
         dispatch(getBookingRequest());
         axios({
@@ -88,9 +92,11 @@ export const getBooking = (bookingID, token) => {
         }).then(res => {
             const {data, message} = res.data;
             dispatch(getBookingSuccess(data));
+            handleShowNotification(message, {variant: 'success'});
         }).catch(error => {
             dispatch(getBookingFailure(error.response.data.message));
-        })
+            handleShowNotification(error.response.data.message, {variant: 'error'});
+        });
     }
 }
 
@@ -115,7 +121,7 @@ const updateBookingFailure = error => {
     }
 }
 
-export const updateBooking = (bookingID, booking, token, history) => {
+export const updateBooking = (bookingID, booking, token, history, handleShowNotification) => {
     return dispatch => {
         dispatch(updateBookingRequest());
         axios({
@@ -129,8 +135,10 @@ export const updateBooking = (bookingID, booking, token, history) => {
             const {data, message} = res.data;
             dispatch(updateBookingSuccess(data));
             history.push(`/bookings/${bookingID}`);
+            handleShowNotification(message, {variant: 'success'});
         }).catch(error => {
             dispatch(updateBookingFailure(error.response.data.message));
+            handleShowNotification(error.response.data.message, {variant: 'error'});
         })
     }
 }
@@ -155,7 +163,7 @@ const deleteBookingFailure = error => {
     }
 }
 
-export const deleteBooking = (bookingID, token, history) => {
+export const deleteBooking = (bookingID, token, history, handleShowNotification) => {
     return dispatch => {
         dispatch(deleteBookingRequest());
         axios({
@@ -168,8 +176,10 @@ export const deleteBooking = (bookingID, token, history) => {
             const {data, message} = res.data;
             dispatch(deleteBookingSuccess(data));
             history.push(`/bookings/${bookingID}`);
+            handleShowNotification(message, {variant: 'success'});
         }).catch(error => {
             dispatch(deleteBookingFailure(error.response.data.message));
+            handleShowNotification(error.response.data.message, {variant: 'error'});
         })
     }
 }
@@ -195,7 +205,7 @@ const getBookingsFailure = error => {
     }
 }
 
-export const getBookings = ( token) => {
+export const getBookings = (token, handleShowNotification) => {
     return dispatch => {
         dispatch(getBookingsRequest());
         axios({
@@ -207,8 +217,10 @@ export const getBookings = ( token) => {
         }).then(res => {
             const {data, message} = res.data;
             dispatch(getBookingsSuccess(data));
+            handleShowNotification(message, {variant: 'success'});
         }).catch(error => {
             dispatch(getBookingsFailure(error.response.data.message));
+            handleShowNotification(error.response.data.message, {variant: 'error'});
         })
     }
 }
