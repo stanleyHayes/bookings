@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import Layout from "../../components/layout";
 import {
     Button,
@@ -60,18 +60,12 @@ const CreateBookingPage = () => {
     const [error, setError] = useState({});
     const {car, contact, name, container, company, time, date, product} = booking;
 
-    const {token, loading: authLoading} = useSelector(selectAuth);
+    const {token} = useSelector(selectAuth);
 
     const {enqueueSnackbar} = useSnackbar();
     const handleShowNotification = (message, options) => {
         enqueueSnackbar(message, options);
     }
-
-    useEffect(() => {
-        if (!authLoading && !token) {
-            history.push('/auth/login');
-        }
-    }, [history, authLoading, token]);
 
     const handleBookingChange = e => {
         setBooking({...booking, [e.target.name]: e.target.value});

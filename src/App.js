@@ -12,6 +12,8 @@ import {STREAMING_RESOURCE_GH_TOKEN_KEY} from "./constants/constants";
 import {useEffect} from "react";
 import ScrollToTop from "./components/shared/scroll-to-top";
 import TodaysBookings from "./pages/bookings/todays-bookings";
+import ProtectedRoute from "./components/shared/protected-route";
+import UpdateProfilePage from "./pages/authentication/update-profile-page";
 
 function App() {
 
@@ -27,42 +29,25 @@ function App() {
     return (
         <ScrollToTop>
             <Switch>
-                <Route path="/" exact={true}>
-                    <HomePage/>
-                </Route>
+                <Route path="/" exact={true} component={HomePage}/>
 
-                <Route path="/new/booking" exact={true}>
-                    <CreateBookingPage/>
-                </Route>
+                <ProtectedRoute path="/new/booking" exact={true} component={CreateBookingPage}/>
 
-                <Route path="/bookings" exact={true}>
-                    <BookingsPage/>
-                </Route>
+                <ProtectedRoute path="/bookings" exact={true} component={BookingsPage}/>
 
-                <Route path="/today" exact={true}>
-                    <TodaysBookings/>
-                </Route>
+                <ProtectedRoute path="/today" exact={true} component={TodaysBookings}/>
 
+                <ProtectedRoute path="/bookings/:bookingID/update" exact={true} component={UpdateBookingPage}/>
 
-                <Route path="/bookings/:bookingID/update" exact={true}>
-                    <UpdateBookingPage/>
-                </Route>
+                <Route path="/auth/login" exact={true} component={LoginPage}/>
 
-                <Route path="/auth/login" exact={true}>
-                    <LoginPage/>
-                </Route>
+                <ProtectedRoute path="/auth/change-password" exact={true} component={ChangePasswordPage}/>
 
-                <Route path="/auth/change-password" exact={true}>
-                    <ChangePasswordPage/>
-                </Route>
+                <ProtectedRoute path="/auth/update-profile" exact={true} component={UpdateProfilePage}/>
 
-                <Route path="/account" exact={true}>
-                    <AccountPage/>
-                </Route>
+                <ProtectedRoute path="/account" exact={true} component={AccountPage}/>
 
-                <Route path="/auth/forgot-password" exact={true}>
-                    <ForgotPasswordPage/>
-                </Route>
+                <Route path="/auth/forgot-password" exact={true} component={ForgotPasswordPage}/>
             </Switch>
         </ScrollToTop>
     );

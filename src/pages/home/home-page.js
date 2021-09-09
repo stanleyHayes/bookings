@@ -1,13 +1,13 @@
 import React, {useEffect} from "react";
 import Layout from "../../components/layout";
 import {Container, Divider, Grid, LinearProgress, makeStyles, Typography} from "@material-ui/core";
-import {useSelector} from "react-redux";
-
-import {useHistory} from "react-router-dom";
+import {useDispatch, useSelector} from "react-redux";
 import Display from "../../components/shared/display";
 import {selectAuth} from "../../redux/authentication/auth-reducer";
 import {Alert} from "@material-ui/lab";
 import {selectBookings} from "../../redux/bookings/booking-reducer";
+import {getCurrentBooking, getNextBooking} from "../../redux/bookings/booking-action-creators";
+import {useSnackbar} from "notistack";
 
 const HomePage = () => {
 
@@ -33,15 +33,19 @@ const HomePage = () => {
 
     const classes = useStyles();
 
-    const history = useHistory();
-
-    const {loading: authLoading, token} = useSelector(selectAuth);
+    const {token} = useSelector(selectAuth);
     const {loading, currentBooking, nextBooking, error} = useSelector(selectBookings);
+    const {enqueueSnackbar} = useSnackbar();
+    const dispatch = useDispatch();
+
     useEffect(() => {
-        if (!authLoading && !token) {
-            history.push('/auth/login');
+        const handleShowNotification = (message, options) => {
+            enqueueSnackbar(message, options);
         }
-    }, [authLoading, history, token]);
+        dispatch(getCurrentBooking(token, handleShowNotification));
+        dispatch(getNextBooking(token, handleShowNotification));
+    }, [dispatch, enqueueSnackbar, token]);
+
 
     return (
         <Layout>

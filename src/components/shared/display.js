@@ -28,9 +28,9 @@ const Display = ({currentDisplay, nextDisplay}) => {
                 textTransform: "uppercase",
                 fontWeight: 600
             },
-            caption:{
+            caption: {
                 textTransform: "uppercase",
-                fontWeight:700
+                fontWeight: 700
             }
         }
     });
@@ -42,30 +42,41 @@ const Display = ({currentDisplay, nextDisplay}) => {
             <CardContent>
                 <Grid container={true} justify="center">
                     <Grid item={true}>
-                        <Divider color="primary" className={classes.shortDivider} variant="middle" />
+                        <Divider color="primary" className={classes.shortDivider} variant="middle"/>
                     </Grid>
                 </Grid>
-                <Typography color="textPrimary" variant="h6" align="center" className={classes.caption}>
-                    Container Number
-                </Typography>
-                <Typography color="textPrimary" variant="h1" align="center">
-                    {currentDisplay.container}
-                </Typography>
-                <Divider className={classes.divider} variant="fullWidth" light={true} />
-                <Typography  color="textPrimary" variant="h6" align="center" className={classes.caption}>
-                    Booking Date
-                </Typography>
-                <Typography color="textPrimary" variant="h3" align="center">
-                    {new Date(currentDisplay.date).toDateString()}
-                </Typography>
-                <Divider className={classes.divider} variant="fullWidth" light={true} />
+                {currentDisplay ? (
+                    <React.Fragment>
+                        <Typography color="textPrimary" variant="h6" align="center" className={classes.caption}>
+                            Container Number
+                        </Typography>
+                        <Typography color="textPrimary" variant="h1" align="center">
+                            {currentDisplay.container}
+                        </Typography>
+                        <Divider className={classes.divider} variant="fullWidth" light={true}/>
+                        <Typography color="textPrimary" variant="h6" align="center" className={classes.caption}>
+                            Booking Date
+                        </Typography>
+                        <Typography color="textPrimary" variant="h3" align="center">
+                            {new Date(currentDisplay.date).toDateString()}
+                        </Typography>
+                    </React.Fragment>
+                ) : (
+                    <React.Fragment>
+                        <Typography color="textPrimary" variant="h3" align="center">
+                            No Booking Available
+                        </Typography>
+                    </React.Fragment>
+                )}
+
+                <Divider className={classes.divider} variant="fullWidth" light={true}/>
                 <Typography color="textPrimary" variant="h6" align="center" className={classes.caption}>
                     Next
                 </Typography>
                 {nextDisplay ?
                     <Typography color="textPrimary" variant="h3" align="center">
                         {nextDisplay.container}
-                    </Typography>:
+                    </Typography> :
                     <Typography color="textPrimary" variant="h3" align="center">
                         No Container Available Next
                     </Typography>

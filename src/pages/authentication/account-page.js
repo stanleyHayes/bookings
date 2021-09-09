@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React from "react";
 import Layout from "../../components/layout";
 import {
     Button,
@@ -11,7 +11,7 @@ import {
     makeStyles,
     Typography
 } from "@material-ui/core";
-import {Link, useHistory} from "react-router-dom";
+import {Link} from "react-router-dom";
 import {useSelector} from "react-redux";
 import {Skeleton} from "@material-ui/lab";
 import {selectAuth} from "../../redux/authentication/auth-reducer";
@@ -57,16 +57,8 @@ const AccountPage = () => {
     });
 
     const classes = useStyles();
-    const history = useHistory();
 
-    const {loading, token, user} = useSelector(selectAuth);
-
-    useEffect(() => {
-        if (!loading && !token) {
-            history.push('/auth/login');
-        }
-    }, [loading, history, token]);
-
+    const {loading, user} = useSelector(selectAuth);
 
     const handleLogoutClick = () => {
 
@@ -123,6 +115,18 @@ const AccountPage = () => {
                     <Grid item={true} xs={12} md={6}>
                         <Card variant="outlined" elevation={1}>
                             <CardContent>
+                                <Link to="/auth/update-profile" className={classes.link}>
+                                    <Button
+                                        className={classes.button}
+                                        variant="outlined"
+                                        size="large"
+                                        fullWidth={true}>
+                                        Update Profile
+                                    </Button>
+                                </Link>
+
+                                <Divider variant="fullWidth" className={classes.subDivider}/>
+
                                 <Link to="/auth/change-password" className={classes.link}>
                                     <Button
                                         className={classes.button}

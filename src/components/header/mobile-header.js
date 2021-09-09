@@ -60,7 +60,6 @@ const MobileHeader = ({handleDrawerOpen}) => {
                     <Menu
                         onClick={handleDrawerOpen}
                         className={classes.hamburger}
-                        color="secondary"
                     />
                 </Grid>
                 <Grid item={true} xs={6}>

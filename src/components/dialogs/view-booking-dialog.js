@@ -1,13 +1,13 @@
 import React from "react";
-import {Button, Card, CardActions, CardContent, Divider, makeStyles, Typography} from "@material-ui/core";
+import {Button, Dialog, DialogActions, DialogContent, Divider, makeStyles, Typography} from "@material-ui/core";
+import {brown, green, grey, purple, red} from "@material-ui/core/colors";
 import {useDispatch, useSelector} from "react-redux";
-import {selectAuth} from "../../redux/authentication/auth-reducer";
-import {updateBooking} from "../../redux/bookings/booking-action-creators";
 import {useHistory} from "react-router-dom";
 import {useSnackbar} from "notistack";
-import {brown, green, grey, purple, red} from "@material-ui/core/colors";
+import {selectAuth} from "../../redux/authentication/auth-reducer";
+import {updateBooking} from "../../redux/bookings/booking-action-creators";
 
-const Booking = ({booking}) => {
+const ViewBookingDialog = ({open, handleClose, booking}) => {
 
     const useStyles = makeStyles(theme => {
         return {
@@ -62,7 +62,7 @@ const Booking = ({booking}) => {
             currentButton: {
                 paddingTop: 8,
                 paddingBottom: 8,
-                backgroundColor: theme.palette.primary.dark,
+                backgroundColor: theme.palette.primary.main,
                 color: "white"
             }
         }
@@ -90,12 +90,10 @@ const Booking = ({booking}) => {
     const handleSetCompletedClick = () => {
         dispatch(updateBooking(booking._id, {status: 'COMPLETED'}, token, history, handleShowNotification))
     }
+
     return (
-        <Card
-            variant="outlined"
-            elevation={1}
-            className={`${booking.status === 'CURRENT' && classes.current} ${booking.status === 'NEXT' && classes.next} ${booking.status === 'DELETED' && classes.deleted} ${booking.status === 'COMPLETED' && classes.completed} ${booking.status === 'PENDING' && classes.pending}`}>
-            <CardContent>
+        <Dialog open={open} onClose={handleClose}>
+            <DialogContent>
                 <Typography
                     color="textPrimary"
                     variant="caption"
@@ -207,9 +205,9 @@ const Booking = ({booking}) => {
                     gutterBottom={true}>
                     {booking.status}
                 </Typography>
-            </CardContent>
+            </DialogContent>
             <Divider variant="fullWidth" className={classes.subDivider} light={true}/>
-            <CardActions>
+            <DialogActions>
                 {booking.status === 'CURRENT' ? (
                     <Button
                         onClick={handleSetCompletedClick}
@@ -217,7 +215,7 @@ const Booking = ({booking}) => {
                         variant="outlined"
                         size="large"
                         className={classes.button}>
-                        Set Completed
+                        Completed
                     </Button>
                 ) : booking.status === 'COMPLETED' ? (
                     <Button
@@ -237,26 +235,17 @@ const Booking = ({booking}) => {
                         size="large"
                         disableElevation={true}
                         className={classes.currentButton}>
-                        Set Current
+                        Current
                     </Button>
-                ) : booking.status === 'DELETED' ? (
-                    <Button
-                        disabled={true}
-                        fullWidth={true}
-                        variant="outlined"
-                        size="large"
-                        className={classes.button}>
-                        Deleted
-                    </Button>
-                ): (
+                ) : (
                     <React.Fragment>
                         <Button
                             onClick={handleSetNextClick}
                             fullWidth={true}
-                            variant="contained"
+                            variant="outlined"
                             size="large"
                             className={classes.button}>
-                            Make Next
+                            Next
                         </Button>
                         <Button
                             onClick={handleSetCurrentClick}
@@ -265,13 +254,13 @@ const Booking = ({booking}) => {
                             disableElevation={true}
                             size="large"
                             className={classes.currentButton}>
-                            Make Current
+                            Current
                         </Button>
                     </React.Fragment>
                 )}
-            </CardActions>
-        </Card>
+            </DialogActions>
+        </Dialog>
     )
 }
 
-export default Booking;
+export default ViewBookingDialog;

@@ -11,6 +11,10 @@ import {
     GET_BOOKINGS_FAILURE,
     GET_BOOKINGS_REQUEST,
     GET_BOOKINGS_SUCCESS,
+    GET_CURRENT_BOOKING_FAILURE,
+    GET_CURRENT_BOOKING_REQUEST,
+    GET_CURRENT_BOOKING_SUCCESS, GET_NEXT_BOOKING_FAILURE,
+    GET_NEXT_BOOKING_REQUEST, GET_NEXT_BOOKING_SUCCESS,
     UPDATE_BOOKING_FAILURE,
     UPDATE_BOOKING_REQUEST,
     UPDATE_BOOKING_SUCCESS
@@ -101,6 +105,89 @@ export const getBooking = (bookingID, token, handleShowNotification) => {
 }
 
 
+const getCurrentBookingRequest = () => {
+    return {
+        type: GET_CURRENT_BOOKING_REQUEST
+    }
+}
+
+const getCurrentBookingSuccess = booking => {
+    return {
+        type: GET_CURRENT_BOOKING_SUCCESS,
+        payload: booking
+    }
+}
+
+const getCurrentBookingFailure = error => {
+    return {
+        type: GET_CURRENT_BOOKING_FAILURE,
+        payload: error
+    }
+}
+
+export const getCurrentBooking = (token, handleShowNotification) => {
+    return dispatch => {
+        dispatch(getCurrentBookingRequest());
+        axios({
+            method: 'GET',
+            url: `${STREAMING_RESOURCE_GH_SERVER_URL}/bookings/booking/status/current`,
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        }).then(res => {
+            const {data, message} = res.data;
+            dispatch(getCurrentBookingSuccess(data));
+            handleShowNotification(message, {variant: 'success'});
+        }).catch(error => {
+            dispatch(getCurrentBookingFailure(error.response.data.message));
+            handleShowNotification(error.response.data.message, {variant: 'error'});
+        });
+    }
+}
+
+
+
+const getNextBookingRequest = () => {
+    return {
+        type: GET_NEXT_BOOKING_REQUEST
+    }
+}
+
+const getNextBookingSuccess = booking => {
+    return {
+        type: GET_NEXT_BOOKING_SUCCESS,
+        payload: booking
+    }
+}
+
+const getNextBookingFailure = error => {
+    return {
+        type: GET_NEXT_BOOKING_FAILURE,
+        payload: error
+    }
+}
+
+export const getNextBooking = ( token, handleShowNotification) => {
+    return dispatch => {
+        dispatch(getNextBookingRequest());
+        axios({
+            method: 'GET',
+            url: `${STREAMING_RESOURCE_GH_SERVER_URL}/bookings/booking/status/next`,
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        }).then(res => {
+            const {data, message} = res.data;
+            dispatch(getNextBookingSuccess(data));
+            handleShowNotification(message, {variant: 'success'});
+        }).catch(error => {
+            dispatch(getNextBookingFailure(error.response.data.message));
+            handleShowNotification(error.response.data.message, {variant: 'error'});
+        });
+    }
+}
+
+
 const updateBookingRequest = () => {
     return {
         type: UPDATE_BOOKING_REQUEST
@@ -134,7 +221,7 @@ export const updateBooking = (bookingID, booking, token, history, handleShowNoti
         }).then(res => {
             const {data, message} = res.data;
             dispatch(updateBookingSuccess(data));
-            history.push(`/bookings/${bookingID}`);
+            history.push(`/`);
             handleShowNotification(message, {variant: 'success'});
         }).catch(error => {
             dispatch(updateBookingFailure(error.response.data.message));
@@ -167,7 +254,7 @@ export const deleteBooking = (bookingID, token, history, handleShowNotification)
     return dispatch => {
         dispatch(deleteBookingRequest());
         axios({
-            method: 'GET',
+            method: 'DELETE',
             url: `${STREAMING_RESOURCE_GH_SERVER_URL}/bookings/${bookingID}`,
             headers: {
                 Authorization: `Bearer ${token}`
@@ -175,7 +262,7 @@ export const deleteBooking = (bookingID, token, history, handleShowNotification)
         }).then(res => {
             const {data, message} = res.data;
             dispatch(deleteBookingSuccess(data));
-            history.push(`/bookings/${bookingID}`);
+            history.push(`/bookings`);
             handleShowNotification(message, {variant: 'success'});
         }).catch(error => {
             dispatch(deleteBookingFailure(error.response.data.message));
@@ -191,10 +278,10 @@ const getBookingsRequest = () => {
     }
 }
 
-const getBookingsSuccess = bookings => {
+const getBookingsSuccess = (bookings, totalBookings) => {
     return {
         type: GET_BOOKINGS_SUCCESS,
-        payload: bookings
+        payload: {bookings, totalBookings}
     }
 }
 
@@ -205,18 +292,18 @@ const getBookingsFailure = error => {
     }
 }
 
-export const getBookings = (token, handleShowNotification) => {
+export const getBookings = (token, query, handleShowNotification) => {
     return dispatch => {
         dispatch(getBookingsRequest());
         axios({
             method: 'GET',
-            url: `${STREAMING_RESOURCE_GH_SERVER_URL}/bookings`,
+            url: `${STREAMING_RESOURCE_GH_SERVER_URL}/bookings?${query}`,
             headers: {
                 Authorization: `Bearer ${token}`
             }
         }).then(res => {
-            const {data, message} = res.data;
-            dispatch(getBookingsSuccess(data));
+            const {data, message, totalBookings} = res.data;
+            dispatch(getBookingsSuccess(data, totalBookings));
             handleShowNotification(message, {variant: 'success'});
         }).catch(error => {
             dispatch(getBookingsFailure(error.response.data.message));

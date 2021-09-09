@@ -140,7 +140,7 @@ const ForgotPasswordPage = () => {
                                     Reset Password
                                 </Button>
 
-                                <Link className={classes.link} to="/auth/forgot-password">
+                                <Link className={classes.link} to="/auth/login">
                                     <Button fullWidth={true} className={classes.button}>
                                        Back to login
                                     </Button>

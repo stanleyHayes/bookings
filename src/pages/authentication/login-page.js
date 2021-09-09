@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import {
     Button,
     Card,
@@ -15,7 +15,6 @@ import {
 import {useDispatch, useSelector} from "react-redux";
 import {Link, useHistory} from "react-router-dom";
 import {selectAuth} from "../../redux/authentication/auth-reducer";
-import {Alert} from "@material-ui/lab";
 import {signIn} from "../../redux/authentication/auth-action-creators";
 import {useSnackbar} from "notistack";
 
@@ -70,15 +69,9 @@ const LoginPage = () => {
     const dispatch = useDispatch();
     const history = useHistory();
 
-    const { enqueueSnackbar} = useSnackbar();
+    const {enqueueSnackbar} = useSnackbar();
 
-    const {token, loading, error: authError} = useSelector(selectAuth);
-
-    useEffect(() => {
-        if (!loading && token) {
-            history.push('/');
-        }
-    }, [history, loading, token]);
+    const {loading} = useSelector(selectAuth);
 
     const [user, setUser] = useState({});
     const {email, password} = user;
@@ -118,8 +111,15 @@ const LoginPage = () => {
     return (
         <div className={classes.root}>
             <Container className={classes.container}>
+                <Typography
+                    className={classes.title}
+                    color="textPrimary"
+                    variant="h4"
+                    align="center">
+                    GH Streaming
+                </Typography>
                 <Divider variant="fullWidth" light={true} className={classes.divider}/>
-                <Grid container={true} justify="center">
+                <Grid container={true} justifyContent="center">
                     <Grid item={true} xs={12} md={6}>
                         <Card variant="outlined" elevation={1}>
                             {loading && <LinearProgress color="secondary" variant="query"/>}
@@ -131,9 +131,6 @@ const LoginPage = () => {
                                     align="center">
                                     Sign In
                                 </Typography>
-                                {authError &&
-                                <Alert variant="filled" title={authError} severity="error">{authError}</Alert>}
-
                                 <TextField
                                     variant="outlined"
                                     fullWidth={true}

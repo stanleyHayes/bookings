@@ -4,7 +4,7 @@ import {
     CHANGE_PASSWORD_SUCCESS,
     FORGOT_PASSWORD_FAILURE,
     FORGOT_PASSWORD_REQUEST,
-    FORGOT_PASSWORD_SUCCESS,
+    FORGOT_PASSWORD_SUCCESS, GET_PROFILE_FAILURE, GET_PROFILE_REQUEST, GET_PROFILE_SUCCESS,
     SIGN_IN_FAILURE,
     SIGN_IN_REQUEST,
     SIGN_IN_SUCCESS,
@@ -22,7 +22,52 @@ import {
     VERIFY_ACCOUNT_SUCCESS
 } from "./auth-action-types";
 import axios from "axios";
-import {STREAMING_RESOURCE_GH_SERVER_URL, STREAMING_RESOURCE_GH_TOKEN_KEY, STREAMING_RESOURCE_GH_USER_KEY} from "../../constants/constants";
+import {
+    STREAMING_RESOURCE_GH_SERVER_URL,
+    STREAMING_RESOURCE_GH_TOKEN_KEY,
+    STREAMING_RESOURCE_GH_USER_KEY
+} from "../../constants/constants";
+
+
+const getProfileRequest = () => {
+    return {
+        type: GET_PROFILE_REQUEST
+    }
+}
+
+const getProfileSuccess = (user, token) => {
+    return {
+        type: GET_PROFILE_SUCCESS,
+        payload: {user, token}
+    }
+}
+
+const getProfileFailure = error => {
+    return {
+        type: GET_PROFILE_FAILURE,
+        payload: error
+    }
+}
+
+export const getProfile = (token) => {
+    return dispatch => {
+        dispatch(getProfileRequest());
+        axios({
+            method: 'get',
+            url: `${STREAMING_RESOURCE_GH_SERVER_URL}/auth/profile`,
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        }).then(res => {
+            const {data, token} = res.data;
+            dispatch(getProfileSuccess(data, token));
+            localStorage.setItem(STREAMING_RESOURCE_GH_TOKEN_KEY, JSON.stringify(token));
+            localStorage.setItem(STREAMING_RESOURCE_GH_USER_KEY, JSON.stringify(data));
+        }).catch(error => {
+            dispatch(getProfileFailure(error.response.data.message));
+        });
+    }
+}
 
 const signInRequest = () => {
     return {
@@ -53,13 +98,11 @@ export const signIn = (user, history, showNotification) => {
             data: user
         }).then(res => {
             const {data, token, message} = res.data;
-            if (data) {
-                dispatch(signInSuccess(data, token));
-                localStorage.setItem(STREAMING_RESOURCE_GH_TOKEN_KEY, token);
-                localStorage.setItem(STREAMING_RESOURCE_GH_USER_KEY, JSON.stringify(data));
-                history.push('/');
-                showNotification(message, {variant: 'success'});
-            }
+            dispatch(signInSuccess(data, token));
+            localStorage.setItem(STREAMING_RESOURCE_GH_TOKEN_KEY, JSON.stringify(token));
+            localStorage.setItem(STREAMING_RESOURCE_GH_USER_KEY, JSON.stringify(data));
+            history.push('/');
+            showNotification(message, {variant: 'success'});
         }).catch(error => {
             showNotification(error.response.data.message, {variant: 'error'});
             dispatch(signInFailure(error.response.data.message));
@@ -97,7 +140,7 @@ export const signUp = (user, history) => {
         }).then(res => {
             const {data, token} = res.data;
             dispatch(signUpSuccess(data, token));
-            localStorage.setItem(STREAMING_RESOURCE_GH_TOKEN_KEY, token);
+            localStorage.setItem(STREAMING_RESOURCE_GH_TOKEN_KEY, JSON.stringify(token));
             localStorage.setItem(STREAMING_RESOURCE_GH_USER_KEY, JSON.stringify(data));
             history.push('/auth/verify-account');
         }).catch(error => {
@@ -168,22 +211,24 @@ const updateProfileFailure = error => {
     }
 }
 
-export const updateProfile = (user, token, history) => {
+export const updateProfile = (user, token, history, handleShowNotification) => {
     return dispatch => {
         dispatch(updateProfileRequest());
         axios({
             method: 'put',
             url: `${STREAMING_RESOURCE_GH_SERVER_URL}/auth/profile`,
             headers: {
-                Authorization: `Bearer ${token}`,
-                'Content-Type': 'application/json'
+                Authorization: `Bearer ${token}`
             },
             data: user
         }).then(res => {
-            const {data} = res.data;
+            const {data, message} = res.data;
+            handleShowNotification(message, {variant: 'success'});
             dispatch(updateProfileSuccess(data));
-            history.push('/profile');
+            localStorage.setItem(STREAMING_RESOURCE_GH_USER_KEY, JSON.stringify(data));
+            history.push('/account');
         }).catch(error => {
+            handleShowNotification(error.response.data.message, {variant: 'error'});
             dispatch(updateProfileFailure(error.response.data.message));
         });
     }
@@ -307,7 +352,8 @@ export const signOut = (token, history) => {
         }).then(res => {
             const {data} = res.data;
             dispatch(signOutSuccess(data));
-            localStorage.clear();
+            localStorage.removeItem(STREAMING_RESOURCE_GH_USER_KEY);
+            localStorage.removeItem(STREAMING_RESOURCE_GH_TOKEN_KEY);
             history.push('/auth/login');
         }).catch(error => {
             dispatch(signOutFailure(error.response.data.message));

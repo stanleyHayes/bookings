@@ -11,14 +11,13 @@ import {
     Select,
     Typography
 } from "@material-ui/core";
-import {Alert} from "@material-ui/lab";
+import {Alert, Pagination} from "@material-ui/lab";
 import Booking from "../../components/shared/booking";
 import {green, grey, red} from "@material-ui/core/colors";
 import {useDispatch, useSelector} from "react-redux";
 import {selectBookings} from "../../redux/bookings/booking-reducer";
 import {selectAuth} from "../../redux/authentication/auth-reducer";
 import {useSnackbar} from "notistack";
-import {useHistory} from "react-router-dom";
 import {getBookings} from "../../redux/bookings/booking-action-creators";
 
 const TodaysBookings = () => {
@@ -81,31 +80,30 @@ const TodaysBookings = () => {
     });
     const classes = useStyles();
 
-    const {loading, error, bookings} = useSelector(selectBookings);
-    const {loading: authLoading, token} = useSelector(selectAuth);
+    const {loading, error, bookings, totalBookings} = useSelector(selectBookings);
+    const {token} = useSelector(selectAuth);
     const {enqueueSnackbar} = useSnackbar();
 
-    const history = useHistory();
     const dispatch = useDispatch();
 
     const [status, setStatus] = useState("ALL");
+    const [page, setPage] = useState(0);
+    const query = `page=${page + 1}${status === 'ALL' ? '' : `&status=${status}`}`;
+
+    const handlePageChange = (event, page) => {
+        setPage(page);
+    }
+
     const handleStatusChange = e => {
         setStatus(e.target.value);
     }
 
     useEffect(() => {
-        if (!authLoading && !token) {
-            history.push('/auth/login');
-        }
-    }, [authLoading, history, token]);
-
-
-    useEffect(() => {
         const handleShowNotification = (message, options) => {
             enqueueSnackbar(message, options);
         }
-        dispatch(getBookings(token, handleShowNotification));
-    }, [dispatch, enqueueSnackbar, token]);
+        dispatch(getBookings(token, query, handleShowNotification));
+    }, [dispatch, enqueueSnackbar, query, token]);
 
     return (
         <Layout>
@@ -133,6 +131,9 @@ const TodaysBookings = () => {
                             <MenuItem value="ALL">All</MenuItem>
                             <MenuItem value="PENDING">Pending</MenuItem>
                             <MenuItem value="COMPLETED">Completed</MenuItem>
+                            <MenuItem value="CURRENT">Current</MenuItem>
+                            <MenuItem value="NEXT">Next</MenuItem>
+                            <MenuItem value="DELETED">Deleted</MenuItem>
                         </Select>
                     </Grid>
                 </Grid>
@@ -152,13 +153,25 @@ const TodaysBookings = () => {
                     <Grid container={true} spacing={1}>
                         {bookings.map((booking, index) => {
                             return (
-                                <Grid item={true} xs={12} md={6} lg={4}>
+                                <Grid key={index} item={true} xs={12} md={6} lg={4}>
                                     <Booking booking={booking}/>
                                 </Grid>
                             )
                         })}
                     </Grid>
                 )}
+                {totalBookings > 12 && (
+                    <React.Fragment>
+                        <Divider variant="fullWidth" className={classes.divider}/>
+                        <Pagination
+                            page={page}
+                            onChange={handlePageChange}
+                            count={totalBookings / 12}
+                            variant="outlined"
+                            size="large"/>
+                    </React.Fragment>
+                )}
+
             </Container>
         </Layout>
     )

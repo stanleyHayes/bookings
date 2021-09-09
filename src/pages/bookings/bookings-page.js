@@ -15,24 +15,31 @@ import {
     TableCell,
     TableContainer,
     TableHead,
+    TablePagination,
     TableRow,
     Typography
 } from "@material-ui/core";
 import {useDispatch, useSelector} from "react-redux";
-import {useHistory} from "react-router-dom";
 import {selectBookings} from "../../redux/bookings/booking-reducer";
 import {selectAuth} from "../../redux/authentication/auth-reducer";
-import {getBookings} from "../../redux/bookings/booking-action-creators";
+import {deleteBooking, getBookings} from "../../redux/bookings/booking-action-creators";
 import {Alert} from "@material-ui/lab";
-import {green, grey, red} from "@material-ui/core/colors";
+import {brown, green, grey, purple, red} from "@material-ui/core/colors";
 import moment from "moment";
 import {Delete, Edit, Visibility} from "@material-ui/icons";
 import {useSnackbar} from "notistack";
+import ViewBookingDialog from "../../components/dialogs/view-booking-dialog";
+import DeleteDialog from "../../components/dialogs/delete-dialog";
+import UpdateBookingDialog from "../../components/dialogs/update-booking-dialog";
+import {useHistory} from "react-router-dom";
 
 const BookingsPage = () => {
 
     const useStyles = makeStyles(theme => {
         return {
+            loading: {
+                marginTop: 66
+            },
             container: {
                 paddingTop: 84,
                 paddingBottom: 84
@@ -69,7 +76,20 @@ const BookingsPage = () => {
                 padding: 8,
                 borderRadius: 32
             },
-
+            next: {
+                backgroundColor: purple['600'],
+                fontWeight: 'bold',
+                color: 'white',
+                padding: 8,
+                borderRadius: 32
+            },
+            current: {
+                backgroundColor: brown['600'],
+                fontWeight: 'bold',
+                color: 'white',
+                padding: 8,
+                borderRadius: 32
+            },
             visibility: {
                 color: green['600'],
                 cursor: 'pointer'
@@ -89,48 +109,68 @@ const BookingsPage = () => {
     });
     const classes = useStyles();
 
-    const {loading, error, bookings} = useSelector(selectBookings);
-    const {loading: authLoading, token} = useSelector(selectAuth);
+    const {loading, error, bookings, totalBookings} = useSelector(selectBookings);
+    const {token} = useSelector(selectAuth);
     const {enqueueSnackbar} = useSnackbar();
 
-    const history = useHistory();
     const dispatch = useDispatch();
+    const history = useHistory();
 
     const [status, setStatus] = useState("ALL");
+    const [page, setPage] = useState(0);
+    const query = `page=${page + 1}${status === 'ALL' ? '' : `&status=${status}`}`;
+    const [selectedViewBooking, setSelectedViewBooking] = useState(null);
+    const [selectedUpdateBooking, setSelectedUpdateBooking] = useState(null);
+    const [selectedDeleteBooking, setSelectedDeleteBooking] = useState(null);
+
+    const handlePageChange = page => {
+        setPage(page);
+    }
+
     const handleStatusChange = e => {
         setStatus(e.target.value);
     }
 
-    useEffect(() => {
-        if (!authLoading && !token) {
-            history.push('/auth/login');
-        }
-    }, [authLoading, history, token]);
-
+    const handleShowNotification = (message, options) => {
+        enqueueSnackbar(message, options);
+    }
 
     useEffect(() => {
         const handleShowNotification = (message, options) => {
             enqueueSnackbar(message, options);
         }
-        dispatch(getBookings(token, handleShowNotification));
-    }, [dispatch, enqueueSnackbar, token]);
+        dispatch(getBookings(token, query, handleShowNotification));
+    }, [dispatch, enqueueSnackbar, query, token]);
+
+    const handleConfirmDeleteBooking = () => {
+        dispatch(deleteBooking(selectedDeleteBooking._id, token, history, handleShowNotification));
+        setSelectedDeleteBooking(null);
+    }
 
     const renderStatus = status => {
         switch (status) {
             case 'PENDING':
-                return <Typography display="inline" variant="body2" className={classes.pending}>
+                return <Typography align="center" display="block" variant="body2" className={classes.pending}>
                     {status}
                 </Typography>
             case 'DELETED':
-                return <Typography display="inline" variant="body2" className={classes.deleted}>
+                return <Typography align="center" display="block" variant="body2" className={classes.deleted}>
                     {status}
                 </Typography>
             case 'COMPLETED':
-                return <Typography display="inline" variant="body2" className={classes.completed}>
+                return <Typography align="center" display="block" variant="body2" className={classes.completed}>
+                    {status}
+                </Typography>
+            case 'CURRENT':
+                return <Typography align="center" display="block" variant="body2" className={classes.current}>
+                    {status}
+                </Typography>
+            case 'NEXT':
+                return <Typography align="center" display="block" variant="body2" className={classes.next}>
                     {status}
                 </Typography>
             default:
-                return <Typography display="inline" variant="body2" className={classes.pending}>
+                return <Typography align="center" display="block" variant="body2" className={classes.pending}>
                     {status}
                 </Typography>
         }
@@ -144,7 +184,7 @@ const BookingsPage = () => {
                 <Divider variant="fullWidth" className={classes.divider}/>
                 <Grid spacing={2} container={true} justify="space-between" alignItems="center">
                     <Grid item={true} xs={12} md={6}>
-                        <Typography color="textPrimary" variant="h6">Filter by Status</Typography>
+                        <Typography color="textPrimary" variant="h6">Filter Bookings</Typography>
                     </Grid>
                     <Grid item={true} xs={12} md={6}>
                         <Select
@@ -157,11 +197,13 @@ const BookingsPage = () => {
                             <MenuItem value="ALL">All</MenuItem>
                             <MenuItem value="PENDING">Pending</MenuItem>
                             <MenuItem value="COMPLETED">Completed</MenuItem>
+                            <MenuItem value="CURRENT">Current</MenuItem>
+                            <MenuItem value="NEXT">Next</MenuItem>
+                            <MenuItem value="DELETED">Deleted</MenuItem>
                         </Select>
                     </Grid>
                 </Grid>
                 <Divider variant="fullWidth" className={classes.divider}/>
-                {loading && <LinearProgress color="primary" variant="query"/>}
                 {error && <Alert title={error} severity="error">{error}</Alert>}
                 {bookings && bookings.length === 0 ? (
                     <Box>
@@ -189,7 +231,7 @@ const BookingsPage = () => {
                             <TableBody>
                                 {bookings && bookings.map((booking, index) => {
                                     return (
-                                        <TableRow hover={true}>
+                                        <TableRow hover={true} key={booking._id}>
                                             <TableCell>{index + 1}</TableCell>
                                             <TableCell>{booking.container}</TableCell>
                                             <TableCell>{booking.car}</TableCell>
@@ -199,13 +241,19 @@ const BookingsPage = () => {
                                             <TableCell>
                                                 <Grid container={true} spacing={1} alignItems="center">
                                                     <Grid item={true}>
-                                                        <Visibility className={classes.visibility}/>
+                                                        <Visibility
+                                                            onClick={() => setSelectedViewBooking(booking)}
+                                                            className={classes.visibility}/>
                                                     </Grid>
                                                     <Grid item={true}>
-                                                        <Edit className={classes.edit}/>
+                                                        <Edit
+                                                            onClick={() => setSelectedUpdateBooking(booking)}
+                                                            className={classes.edit}/>
                                                     </Grid>
                                                     <Grid item={true}>
-                                                        <Delete className={classes.delete}/>
+                                                        <Delete
+                                                            onClick={() => setSelectedDeleteBooking(booking)}
+                                                            className={classes.delete}/>
                                                     </Grid>
                                                 </Grid>
                                             </TableCell>
@@ -213,8 +261,39 @@ const BookingsPage = () => {
                                     )
                                 })}
                             </TableBody>
+                            <TablePagination
+                                count={totalBookings}
+                                page={page}
+                                onPageChange={handlePageChange}
+                                rowsPerPage={25}
+                            />
                         </Table>
                     </TableContainer>
+                )}
+
+                {selectedViewBooking && (
+                    <ViewBookingDialog
+                        booking={selectedViewBooking}
+                        open={Boolean(selectedViewBooking)}
+                        handleClose={() => setSelectedViewBooking(null)}
+                    />
+                )}
+
+                {selectedUpdateBooking && (
+                    <UpdateBookingDialog
+                        booking={selectedUpdateBooking}
+                        open={Boolean(selectedUpdateBooking)}
+                        handleClose={() => setSelectedUpdateBooking(null)}
+                    />
+                )}
+
+                {selectedDeleteBooking && (
+                    <DeleteDialog
+                        confirmDelete={handleConfirmDeleteBooking}
+                        message={`Are you sure you want to delete booking with container ${selectedDeleteBooking.container}`}
+                        open={Boolean(selectedDeleteBooking)}
+                        handleClose={() => setSelectedDeleteBooking(null)}
+                    />
                 )}
             </Container>
         </Layout>

@@ -15,6 +15,7 @@ import {updateProfile} from "../../redux/authentication/auth-action-creators";
 import {useDispatch, useSelector} from "react-redux";
 import {useHistory} from "react-router-dom";
 import {selectAuth} from "../../redux/authentication/auth-reducer";
+import {useSnackbar} from "notistack";
 
 const UpdateProfilePage = () => {
 
@@ -51,120 +52,135 @@ const UpdateProfilePage = () => {
     const dispatch = useDispatch();
     const history = useHistory();
 
-    const [user, setUser] = useState({});
+    const {token, user} = useSelector(selectAuth);
+
+    const [updatedUser, setUpdatedUser] = useState({
+        name: user.name,
+        position: user.position,
+        department: user.department
+    });
     const [error, setError] = useState({});
-    const {name, position, department} = user;
-    const {token} = useSelector(selectAuth);
+    const {name, position, department} = updatedUser;
 
     const handleChange = e => {
-        setUser({...user, [e.target.name]: e.target.value});
+        setUpdatedUser({...updatedUser, [e.target.name]: e.target.value});
+    }
+
+    const {enqueueSnackbar} = useSnackbar();
+
+    const handleShowNotification = (message, options) => {
+        enqueueSnackbar(message, options);
     }
 
     const handleSubmit = e => {
         e.preventDefault();
 
         if (!name) {
-            setError({...error, name: "Field required"});
+            setError({error, name: "Field required"});
             return;
         } else {
-            setError({...error, name: null});
+            setError({error, name: null});
         }
 
         if (!position) {
-            setError({...error, position: "Field required"});
+            setError({error, position: "Field required"});
             return;
         } else {
-            setError({...error, position: null});
+            setError({error, position: null});
         }
         if (!department) {
-            setError({...error, department: "Field required"});
+            setError({error, department: "Field required"});
             return;
         } else {
-            setError({...error, department: null});
+            setError({error, department: null});
         }
-        dispatch(updateProfile(user, token, history));
+
+        dispatch(updateProfile(
+            updatedUser,
+            token,
+            history,
+            handleShowNotification));
     }
 
+        return (
+            <Layout>
+                <Container className={classes.container}>
+                    <Typography color="textPrimary" variant="h3" align="center">
+                        Edit Profile
+                    </Typography>
 
-    return (
-        <Layout>
-            <Container className={classes.container}>
-                <Typography  color="textPrimary"  variant="h3" align="center">
-                    Edit Profile
-                </Typography>
+                    <Divider variant="fullWidth" className={classes.divider}/>
 
-                <Divider variant="fullWidth" className={classes.divider}/>
+                    <Grid container={true} justify="center">
+                        <Grid item={true} xs={12} md={6}>
+                            <Card variant="outlined" elevation={1}>
+                                <CardContent>
+                                    <TextField
+                                        variant="outlined"
+                                        fullWidth={true}
+                                        type="text"
+                                        name="name"
+                                        value={name}
+                                        onChange={handleChange}
+                                        margin="normal"
+                                        className={classes.textField}
+                                        label="Name"
+                                        placeholder="Enter name"
+                                        required={true}
+                                        error={Boolean(error.name)}
+                                        helperText={error.name}
+                                    />
 
-                <Grid container={true} justify="center">
-                    <Grid item={true} xs={12} md={6}>
-                        <Card variant="outlined" elevation={1}>
-                            <CardContent>
-                                <TextField
-                                    variant="outlined"
-                                    fullWidth={true}
-                                    type="text"
-                                    name="name"
-                                    value={name}
-                                    onChange={handleChange}
-                                    margin="normal"
-                                    className={classes.textField}
-                                    label="Container No."
-                                    placeholder="Enter name"
-                                    required={true}
-                                    error={Boolean(error.name)}
-                                    helperText={error.name}
-                                />
+                                    <TextField
+                                        variant="outlined"
+                                        fullWidth={true}
+                                        type="text"
+                                        name="position"
+                                        value={position}
+                                        onChange={handleChange}
+                                        margin="normal"
+                                        className={classes.textField}
+                                        label="Position"
+                                        placeholder="Enter position"
+                                        required={true}
+                                        error={Boolean(error.position)}
+                                        helperText={error.position}
+                                    />
 
-                                <TextField
-                                    variant="outlined"
-                                    fullWidth={true}
-                                    type="text"
-                                    name="position"
-                                    value={position}
-                                    onChange={handleChange}
-                                    margin="normal"
-                                    className={classes.textField}
-                                    label="Position"
-                                    placeholder="Enter position"
-                                    required={true}
-                                    error={Boolean(error.position)}
-                                    helperText={error.position}
-                                />
+                                    <TextField
+                                        variant="outlined"
+                                        fullWidth={true}
+                                        type="text"
+                                        name="department"
+                                        value={department}
+                                        onChange={handleChange}
+                                        margin="normal"
+                                        className={classes.textField}
+                                        label="Department"
+                                        placeholder="Enter department"
+                                        required={true}
+                                        error={Boolean(error.department)}
+                                        helperText={error.department}
+                                    />
 
-                                <TextField
-                                    variant="outlined"
-                                    fullWidth={true}
-                                    type="text"
-                                    name="department"
-                                    value={department}
-                                    onChange={handleChange}
-                                    margin="normal"
-                                    className={classes.textField}
-                                    label="Department"
-                                    placeholder="Enter department"
-                                    required={true}
-                                    error={Boolean(error.department)}
-                                    helperText={error.department}
-                                />
+                                    <Button
+                                        className={classes.button}
+                                        onClick={handleSubmit}
+                                        variant="outlined"
+                                        fullWidth={true}
+                                        size="large"
+                                        disableElevation={true}>
+                                        Update Profile
+                                    </Button>
 
-                                <Button
-                                    className={classes.button}
-                                    onClick={handleSubmit}
-                                    variant="outlined"
-                                    fullWidth={true}
-                                    size="large"
-                                    disableElevation={true}>
-                                    Update Profile
-                                </Button>
-
-                            </CardContent>
-                        </Card>
+                                </CardContent>
+                            </Card>
+                        </Grid>
                     </Grid>
-                </Grid>
 
-            </Container>
-        </Layout>
-    )
-}
+                </Container>
+            </Layout>
+        )
+    }
 
-export default UpdateProfilePage;
+    export default UpdateProfilePage;

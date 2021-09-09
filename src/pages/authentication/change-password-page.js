@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import Layout from "../../components/layout";
 import {
     Button,
@@ -105,12 +105,6 @@ const ChangePasswordPage = () => {
     const handlePasswordVisibility = () => {
         setVisible(!visible);
     }
-
-    useEffect(() => {
-        if (!loading && !token) {
-            history.push('/auth/login');
-        }
-    }, [loading, history, token]);
 
     return (
         <Layout>
