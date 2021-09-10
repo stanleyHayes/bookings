@@ -18,7 +18,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {selectBookings} from "../../redux/bookings/booking-reducer";
 import {selectAuth} from "../../redux/authentication/auth-reducer";
 import {useSnackbar} from "notistack";
-import {getBookings} from "../../redux/bookings/booking-action-creators";
+import {getBookings, getTodayBookings} from "../../redux/bookings/booking-action-creators";
 
 const TodaysBookings = () => {
 
@@ -102,7 +102,7 @@ const TodaysBookings = () => {
         const handleShowNotification = (message, options) => {
             enqueueSnackbar(message, options);
         }
-        dispatch(getBookings(token, query, handleShowNotification));
+        dispatch(getTodayBookings(token, query, handleShowNotification));
     }, [dispatch, enqueueSnackbar, query, token]);
 
     return (

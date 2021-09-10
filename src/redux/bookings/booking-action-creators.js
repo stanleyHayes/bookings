@@ -13,8 +13,13 @@ import {
     GET_BOOKINGS_SUCCESS,
     GET_CURRENT_BOOKING_FAILURE,
     GET_CURRENT_BOOKING_REQUEST,
-    GET_CURRENT_BOOKING_SUCCESS, GET_NEXT_BOOKING_FAILURE,
-    GET_NEXT_BOOKING_REQUEST, GET_NEXT_BOOKING_SUCCESS,
+    GET_CURRENT_BOOKING_SUCCESS,
+    GET_NEXT_BOOKING_FAILURE,
+    GET_NEXT_BOOKING_REQUEST,
+    GET_NEXT_BOOKING_SUCCESS,
+    GET_TODAY_BOOKINGS_FAILURE,
+    GET_TODAY_BOOKINGS_REQUEST,
+    GET_TODAY_BOOKINGS_SUCCESS,
     UPDATE_BOOKING_FAILURE,
     UPDATE_BOOKING_REQUEST,
     UPDATE_BOOKING_SUCCESS
@@ -104,7 +109,6 @@ export const getBooking = (bookingID, token, handleShowNotification) => {
     }
 }
 
-
 const getCurrentBookingRequest = () => {
     return {
         type: GET_CURRENT_BOOKING_REQUEST
@@ -145,8 +149,6 @@ export const getCurrentBooking = (token, handleShowNotification) => {
     }
 }
 
-
-
 const getNextBookingRequest = () => {
     return {
         type: GET_NEXT_BOOKING_REQUEST
@@ -186,7 +188,6 @@ export const getNextBooking = ( token, handleShowNotification) => {
         });
     }
 }
-
 
 const updateBookingRequest = () => {
     return {
@@ -271,7 +272,6 @@ export const deleteBooking = (bookingID, token, history, handleShowNotification)
     }
 }
 
-
 const getBookingsRequest = () => {
     return {
         type: GET_BOOKINGS_REQUEST
@@ -307,6 +307,46 @@ export const getBookings = (token, query, handleShowNotification) => {
             handleShowNotification(message, {variant: 'success'});
         }).catch(error => {
             dispatch(getBookingsFailure(error.response.data.message));
+            handleShowNotification(error.response.data.message, {variant: 'error'});
+        })
+    }
+}
+
+const getTodayBookingsRequest = () => {
+    return {
+        type: GET_TODAY_BOOKINGS_REQUEST
+    }
+}
+
+const getTodayBookingsSuccess = (bookings, todayBookingsCount) => {
+    return {
+        type: GET_TODAY_BOOKINGS_SUCCESS,
+        payload: {bookings, todayBookingsCount}
+    }
+}
+
+const getTodayBookingsFailure = error => {
+    return {
+        type: GET_TODAY_BOOKINGS_FAILURE,
+        payload: error
+    }
+}
+
+export const getTodayBookings = (token, query, handleShowNotification) => {
+    return dispatch => {
+        dispatch(getTodayBookingsRequest());
+        axios({
+            method: 'GET',
+            url: `${STREAMING_RESOURCE_GH_SERVER_URL}/bookings/day/today?${query}`,
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        }).then(res => {
+            const {data, message, totalBookings} = res.data;
+            dispatch(getTodayBookingsSuccess(data, totalBookings));
+            handleShowNotification(message, {variant: 'success'});
+        }).catch(error => {
+            dispatch(getTodayBookingsFailure(error.response.data.message));
             handleShowNotification(error.response.data.message, {variant: 'error'});
         })
     }

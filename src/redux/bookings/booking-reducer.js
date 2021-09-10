@@ -14,7 +14,7 @@ import {
     GET_CURRENT_BOOKING_SUCCESS,
     GET_NEXT_BOOKING_FAILURE,
     GET_NEXT_BOOKING_REQUEST,
-    GET_NEXT_BOOKING_SUCCESS,
+    GET_NEXT_BOOKING_SUCCESS, GET_TODAY_BOOKINGS_FAILURE, GET_TODAY_BOOKINGS_REQUEST, GET_TODAY_BOOKINGS_SUCCESS,
     UPDATE_BOOKING_FAILURE,
     UPDATE_BOOKING_REQUEST,
     UPDATE_BOOKING_SUCCESS
@@ -27,7 +27,9 @@ const INITIAL_STATE = {
     singleBooking: {},
     currentBooking: {},
     nextBooking: {},
-    totalBookings: 0
+    totalBookings: 0,
+    todayBookings: {},
+    todayBookingsCount: 0
 }
 
 const bookingReducer = (state = INITIAL_STATE, action) => {
@@ -54,6 +56,30 @@ const bookingReducer = (state = INITIAL_STATE, action) => {
                 error: action.payload,
                 bookings: [],
                 totalBookings: 0
+            }
+
+        case GET_TODAY_BOOKINGS_REQUEST:
+            return {
+                ...state,
+                loading: true,
+                error: ""
+            }
+
+        case GET_TODAY_BOOKINGS_SUCCESS:
+            return {
+                ...state,
+                loading: false,
+                error: "",
+                todayBookings: action.payload.bookings,
+                todayBookingsCount: action.payload.totalBookings
+            }
+        case GET_TODAY_BOOKINGS_FAILURE:
+            return {
+                ...state,
+                loading: false,
+                error: action.payload,
+                todayBookings: [],
+                todayBookingsCount: 0
             }
 
         case GET_NEXT_BOOKING_REQUEST:
