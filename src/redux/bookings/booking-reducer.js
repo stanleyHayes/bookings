@@ -1,4 +1,3 @@
-import {bookings} from "../../data/data";
 import {
     CREATE_BOOKING_FAILURE,
     CREATE_BOOKING_REQUEST,
@@ -14,21 +13,24 @@ import {
     GET_CURRENT_BOOKING_SUCCESS,
     GET_NEXT_BOOKING_FAILURE,
     GET_NEXT_BOOKING_REQUEST,
-    GET_NEXT_BOOKING_SUCCESS, GET_TODAY_BOOKINGS_FAILURE, GET_TODAY_BOOKINGS_REQUEST, GET_TODAY_BOOKINGS_SUCCESS,
+    GET_NEXT_BOOKING_SUCCESS,
+    GET_TODAY_BOOKINGS_FAILURE,
+    GET_TODAY_BOOKINGS_REQUEST,
+    GET_TODAY_BOOKINGS_SUCCESS,
     UPDATE_BOOKING_FAILURE,
     UPDATE_BOOKING_REQUEST,
     UPDATE_BOOKING_SUCCESS
 } from "./booking-action-types";
 
 const INITIAL_STATE = {
-    bookings: [...bookings],
+    bookings: [],
     loading: false,
     error: "",
     singleBooking: {},
     currentBooking: {},
     nextBooking: {},
     totalBookings: 0,
-    todayBookings: {},
+    todayBookings: [],
     todayBookingsCount: 0
 }
 

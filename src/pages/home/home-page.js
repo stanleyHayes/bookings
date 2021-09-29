@@ -27,6 +27,9 @@ const HomePage = () => {
             },
             title: {
                 textTransform: 'uppercase'
+            },
+            emptyLabel:{
+                textTransform: 'uppercase'
             }
         }
     });
@@ -62,7 +65,7 @@ const HomePage = () => {
                 ) : (
                     <Grid className={classes.noBookingContainer} container={true} justify="center" alignItems="center">
                         <Grid item={true}>
-                            <Typography variant="h6" align="center">No Bookings Available</Typography>
+                            <Typography color="textPrimary" className={classes.emptyLabel} variant="h6" align="center">No Bookings Available</Typography>
                         </Grid>
                     </Grid>
                 )}
