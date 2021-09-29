@@ -18,7 +18,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {selectBookings} from "../../redux/bookings/booking-reducer";
 import {selectAuth} from "../../redux/authentication/auth-reducer";
 import {useSnackbar} from "notistack";
-import {getBookings, getTodayBookings} from "../../redux/bookings/booking-action-creators";
+import {getTodayBookings} from "../../redux/bookings/booking-action-creators";
 
 const TodaysBookings = () => {
 

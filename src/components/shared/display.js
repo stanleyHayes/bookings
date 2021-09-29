@@ -54,7 +54,7 @@ const Display = ({currentDisplay, nextDisplay}) => {
                             Container Number
                         </Typography>
                         <Divider variant="middle" light={true} className={classes.subDivider} />
-                        <Typography className={classes.containerNumber} color="textPrimary" variant="h1" align="center">
+                        <Typography className={classes.containerNumber} color="textPrimary" variant="h3" align="center">
                             {currentDisplay.container}
                         </Typography>
                         <Divider className={classes.divider} variant="fullWidth" light={true}/>
@@ -62,7 +62,7 @@ const Display = ({currentDisplay, nextDisplay}) => {
                             Booking Date
                         </Typography>
                         <Divider variant="middle" light={true} className={classes.subDivider} />
-                        <Typography color="textPrimary" variant="h3" align="center">
+                        <Typography color="textPrimary" variant="h6" align="center">
                             {new Date(currentDisplay.date).toDateString()}
                         </Typography>
                     </React.Fragment>
