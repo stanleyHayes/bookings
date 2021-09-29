@@ -262,7 +262,7 @@ const BookingsPage = () => {
                                 })}
                             </TableBody>
                             <TablePagination
-                                count={totalBookings}
+                                count={Math.floor(totalBookings / 10)}
                                 page={page}
                                 onPageChange={handlePageChange}
                                 rowsPerPage={25}
