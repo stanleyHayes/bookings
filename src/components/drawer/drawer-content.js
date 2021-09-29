@@ -1,7 +1,10 @@
 import React from "react";
 import {Avatar, Button, Container, Divider, Grid, makeStyles, Typography} from "@material-ui/core";
-import {Link} from "react-router-dom";
+import {Link, useHistory} from "react-router-dom";
 import {Close} from "@material-ui/icons";
+import {signOut} from "../../redux/authentication/auth-action-creators";
+import {selectAuth} from "../../redux/authentication/auth-reducer";
+import {useDispatch, useSelector} from "react-redux";
 
 
 const DrawerContent = ({handleDrawerClose}) => {
@@ -42,7 +45,13 @@ const DrawerContent = ({handleDrawerClose}) => {
 
     const classes = useStyles();
 
+    const {token} = useSelector(selectAuth);
+    const dispatch = useDispatch();
+    const history = useHistory();
 
+    const handleLogoutClick = () => {
+        dispatch(signOut(token, history));
+    }
     return (
         <Container className={classes.container}>
             <Grid container={true} justify="center">
@@ -126,11 +135,9 @@ const DrawerContent = ({handleDrawerClose}) => {
 
                     <Divider variant="fullWidth" className={classes.subDivider} light={true}/>
 
-                    <Link to="/auth/login" className={classes.link}>
-                        <Button fullWidth={true} variant="text" size="large">
-                            Login
-                        </Button>
-                    </Link>
+                    <Button onClick={handleLogoutClick} fullWidth={true} variant="text" size="large">
+                        Logout
+                    </Button>
                 </Grid>
             </Grid>
         </Container>

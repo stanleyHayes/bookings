@@ -31,6 +31,9 @@ const Display = ({currentDisplay, nextDisplay}) => {
             caption: {
                 textTransform: "uppercase",
                 fontWeight: 700
+            },
+            containerNumber: {
+                wordBreak: 'break-word'
             }
         }
     });
@@ -50,20 +53,22 @@ const Display = ({currentDisplay, nextDisplay}) => {
                         <Typography color="textPrimary" variant="h6" align="center" className={classes.caption}>
                             Container Number
                         </Typography>
-                        <Typography color="textPrimary" variant="h1" align="center">
+                        <Divider variant="middle" light={true} className={classes.subDivider} />
+                        <Typography className={classes.containerNumber} color="textPrimary" variant="h1" align="center">
                             {currentDisplay.container}
                         </Typography>
                         <Divider className={classes.divider} variant="fullWidth" light={true}/>
                         <Typography color="textPrimary" variant="h6" align="center" className={classes.caption}>
                             Booking Date
                         </Typography>
+                        <Divider variant="middle" light={true} className={classes.subDivider} />
                         <Typography color="textPrimary" variant="h3" align="center">
                             {new Date(currentDisplay.date).toDateString()}
                         </Typography>
                     </React.Fragment>
                 ) : (
                     <React.Fragment>
-                        <Typography color="textPrimary" variant="h3" align="center">
+                        <Typography color="textPrimary" variant="h6" align="center">
                             No Booking Available
                         </Typography>
                     </React.Fragment>
@@ -73,11 +78,14 @@ const Display = ({currentDisplay, nextDisplay}) => {
                 <Typography color="textPrimary" variant="h6" align="center" className={classes.caption}>
                     Next
                 </Typography>
+
+                <Divider variant="middle" light={true} className={classes.subDivider} />
+
                 {nextDisplay ?
-                    <Typography color="textPrimary" variant="h3" align="center">
+                    <Typography className={classes.containerNumber} color="textPrimary" variant="h3" align="center">
                         {nextDisplay.container}
                     </Typography> :
-                    <Typography color="textPrimary" variant="h3" align="center">
+                    <Typography color="textPrimary" variant="h6" align="center">
                         No Container Available Next
                     </Typography>
                 }
