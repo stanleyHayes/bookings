@@ -31,6 +31,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {useSnackbar} from "notistack";
 import {selectAuth} from "../../redux/authentication/auth-reducer";
 import {signUp} from "../../redux/authentication/auth-action-creators";
+import {makeStyles} from "@material-ui/core";
 
 const RegisterPage = () => {
 
@@ -255,93 +256,94 @@ const RegisterPage = () => {
                                 </Grid>
 
                                 <Grid mb={2} container={true} spacing={2} alignItems="center">
-                                    <Box>
-                                        <Typography
-                                            mb={1}
-                                            variant="body2"
-                                            sx={{color: 'secondary.main', fontWeight: 'bold'}}>
-                                            Email
-                                        </Typography>
-                                        <FormControl fullWidth={true} variant="outlined">
-                                            <OutlinedInput
-                                                fullWidth={true}
-                                                id="email"
-                                                value={formik.values.email}
-                                                name="email"
-                                                endAdornment={
-                                                    <InputAdornment
-                                                        position="end">
-                                                        <MailOutline
-                                                            sx={{
-                                                                cursor: 'pointer',
-                                                                color: 'secondary.main',
-                                                                padding: 1,
-                                                                fontSize: 36,
-                                                            }}
-                                                        />
-                                                    </InputAdornment>
-                                                }
-                                                error={formik.touched.email && formik.errors.email}
-                                                onChange={formik.handleChange}
-                                                onBlur={formik.handleBlur}
-                                                placeholder="Enter email"
-                                                required={true}
-                                                size="medium"
-                                                margin="dense"
-                                            />
-                                            {formik.touched.email && formik.errors.email && (
-                                                <FormHelperText
-                                                    error={true}>
-                                                    {formik.errors.email}
-                                                </FormHelperText>
-                                            )}
-                                        </FormControl>
-                                    </Box>
-                                </Grid>
-
-                                <Grid mb={2} container={true} spacing={2} alignItems="center">
-                                    <Box>
-                                        <Typography
-                                            mb={1}
-                                            variant="body2"
-                                            sx={{color: 'secondary.main', fontWeight: 'bold'}}>
-                                            Phone
-                                        </Typography>
-                                        <FormControl fullWidth={true} variant="outlined">
-                                            <OutlinedInput
-                                                fullWidth={true}
-                                                id="phoneNumber"
-                                                value={formik.values.phoneNumber}
-                                                name="phoneNumber"
-                                                endAdornment={
-                                                    <InputAdornment
-                                                        position="end">
-                                                        <CallOutlined
-                                                            sx={{
-                                                                cursor: 'pointer',
-                                                                color: 'secondary.main',
-                                                                padding: 1,
-                                                                fontSize: 36,
-                                                            }}
-                                                        />
-                                                    </InputAdornment>
-                                                }
-                                                error={formik.touched.phoneNumber && formik.errors.phoneNumber}
-                                                onChange={formik.handleChange}
-                                                onBlur={formik.handleBlur}
-                                                placeholder="Enter phone"
-                                                required={true}
-                                                size="medium"
-                                                margin="dense"
-                                            />
-                                            {formik.touched.phoneNumber && formik.errors.phoneNumber && (
-                                                <FormHelperText
-                                                    error={true}>
-                                                    {formik.errors.phoneNumber}
-                                                </FormHelperText>
-                                            )}
-                                        </FormControl>
-                                    </Box>
+                                    <Grid item={true} xs={12} md={6}>
+                                        <Box>
+                                            <Typography
+                                                mb={1}
+                                                variant="body2"
+                                                sx={{color: 'secondary.main', fontWeight: 'bold'}}>
+                                                Email
+                                            </Typography>
+                                            <FormControl fullWidth={true} variant="outlined">
+                                                <OutlinedInput
+                                                    fullWidth={true}
+                                                    id="email"
+                                                    value={formik.values.email}
+                                                    name="email"
+                                                    endAdornment={
+                                                        <InputAdornment
+                                                            position="end">
+                                                            <MailOutline
+                                                                sx={{
+                                                                    cursor: 'pointer',
+                                                                    color: 'secondary.main',
+                                                                    padding: 1,
+                                                                    fontSize: 36,
+                                                                }}
+                                                            />
+                                                        </InputAdornment>
+                                                    }
+                                                    error={formik.touched.email && formik.errors.email}
+                                                    onChange={formik.handleChange}
+                                                    onBlur={formik.handleBlur}
+                                                    placeholder="Enter email"
+                                                    required={true}
+                                                    size="medium"
+                                                    margin="dense"
+                                                />
+                                                {formik.touched.email && formik.errors.email && (
+                                                    <FormHelperText
+                                                        error={true}>
+                                                        {formik.errors.email}
+                                                    </FormHelperText>
+                                                )}
+                                            </FormControl>
+                                        </Box>
+                                    </Grid>
+                                    <Grid item={true} xs={12} md={6}>
+                                        <Box>
+                                            <Typography
+                                                mb={1}
+                                                variant="body2"
+                                                sx={{color: 'secondary.main', fontWeight: 'bold'}}>
+                                                Phone
+                                            </Typography>
+                                            <FormControl fullWidth={true} variant="outlined">
+                                                <OutlinedInput
+                                                    fullWidth={true}
+                                                    id="phoneNumber"
+                                                    value={formik.values.phoneNumber}
+                                                    name="phoneNumber"
+                                                    endAdornment={
+                                                        <InputAdornment
+                                                            position="end">
+                                                            <CallOutlined
+                                                                sx={{
+                                                                    cursor: 'pointer',
+                                                                    color: 'secondary.main',
+                                                                    padding: 1,
+                                                                    fontSize: 36,
+                                                                }}
+                                                            />
+                                                        </InputAdornment>
+                                                    }
+                                                    error={formik.touched.phoneNumber && formik.errors.phoneNumber}
+                                                    onChange={formik.handleChange}
+                                                    onBlur={formik.handleBlur}
+                                                    placeholder="Enter phone"
+                                                    required={true}
+                                                    size="medium"
+                                                    margin="dense"
+                                                />
+                                                {formik.touched.phoneNumber && formik.errors.phoneNumber && (
+                                                    <FormHelperText
+                                                        error={true}>
+                                                        {formik.errors.phoneNumber}
+                                                    </FormHelperText>
+                                                )}
+                                            </FormControl>
+                                        </Box>
+                                    </Grid>
                                 </Grid>
 
                                 <Grid mb={6} container={true} spacing={2} alignItems="center">
