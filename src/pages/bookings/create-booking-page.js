@@ -153,7 +153,7 @@ const CreateBookingPage = () => {
                 <Divider variant="fullWidth" className={classes.divider}/>
 
 
-                <Grid container={true} justify="center">
+                <Grid container={true} justifyContent="center">
                     <Grid item={true} xs={12} md={6}>
                         <Card variant="outlined" elevation={1}>
                             {loading && <LinearProgress color="primary" variant="query"/>}
@@ -267,7 +267,6 @@ const CreateBookingPage = () => {
                                     label="Booking Date"
                                     onChange={handleDateChange}
                                     inputVariant="outlined"
-                                    disablePast={false}
                                     autoOk={true}
                                     required={true}
                                     InputAdornmentProps={{position: "start"}}
@@ -289,7 +288,6 @@ const CreateBookingPage = () => {
                                     label="Booking Time"
                                     onChange={handleTimeChange}
                                     inputVariant="outlined"
-                                    disablePast={false}
                                     autoOk={true}
                                     required={true}
                                     ampm={true}

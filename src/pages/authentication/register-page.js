@@ -3,7 +3,6 @@ import {
     AlertTitle,
     Box,
     Button,
-    CircularProgress,
     Container,
     FormControl,
     FormHelperText,
@@ -15,7 +14,6 @@ import {
     Typography,
     useTheme
 } from "@mui/material";
-import loginLogo from "./../../assets/images/sign-up.png";
 import {useFormik} from "formik";
 import * as yup from "yup";
 import "yup-phone";
@@ -29,7 +27,6 @@ import {
     VisibilityOutlined
 } from "@mui/icons-material";
 import {useState} from "react";
-import {LoadingButton} from "@mui/lab";
 import {useDispatch, useSelector} from "react-redux";
 import {useSnackbar} from "notistack";
 import {selectAuth} from "../../redux/authentication/auth-reducer";
@@ -89,28 +86,6 @@ const RegisterPage = () => {
                 display: 'flex',
                 minHeight: '100vh',
             }}>
-            <Box
-                sx={{
-                    display: {xs: 'none', lg: 'block'},
-                    overflow: 'hidden',
-                    maxHeight: '100vh',
-                    backgroundColor: 'background.default'
-                }}>
-                <Stack justifyContent="center" alignItems="center" sx={{height: '100%'}}>
-                    <img
-                        style={{
-                            maxHeight: '100vh',
-                            width: '50%',
-                            height: '50%',
-                            objectFit: 'cover',
-                            objectPosition: 'center'
-                        }}
-                        alt=""
-                        src={loginLogo}
-                    />
-                </Stack>
-            </Box>
-
             <Box
                 sx={{
                     flex: 1,
@@ -489,7 +464,7 @@ const RegisterPage = () => {
                                     </Grid>
                                 </Grid>
 
-                                <LoadingButton
+                                <Button
                                     onClick={formik.handleSubmit}
                                     type="submit"
                                     size="large"
@@ -502,17 +477,14 @@ const RegisterPage = () => {
                                         borderBottomLeftRadius: 12,
                                         borderTopLeftRadius: 4,
                                     }}
+                                    disabled={authLoading}
                                     fullWidth={false}
                                     loadingPosition="start"
-                                    startIcon={authLoading ?
-                                        <CircularProgress color="secondary"/> : null}
-                                    loadingIndicator={authLoading ?
-                                        <CircularProgress color="secondary"/> : null}
                                     loading={authLoading}
                                     variant="contained"
                                     disableElevation={true}>
                                     {authLoading ? 'Creating account...' : 'Create an account'}
-                                </LoadingButton>
+                                </Button>
                             </Box>
                         </form>
                     </Box>
