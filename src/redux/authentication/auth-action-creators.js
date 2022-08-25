@@ -130,7 +130,7 @@ const signUpFailure = error => {
     }
 }
 
-export const signUp = (user, history) => {
+export const signUp = (user, history,  resetForm, setSubmitting, showMessage) => {
     return dispatch => {
         dispatch(signUpRequest());
         axios({
@@ -138,12 +138,16 @@ export const signUp = (user, history) => {
             url: `${STREAMING_RESOURCE_GH_SERVER_URL}/auth/register`,
             data: user
         }).then(res => {
-            const {data, token} = res.data;
+            const {data, token, message} = res.data;
+            setSubmitting(false);
+            resetForm();
             dispatch(signUpSuccess(data, token));
             localStorage.setItem(STREAMING_RESOURCE_GH_TOKEN_KEY, JSON.stringify(token));
             localStorage.setItem(STREAMING_RESOURCE_GH_USER_KEY, JSON.stringify(data));
-            history.push('/auth/verify-account');
+            showMessage(message, {variant: 'success'});
+            history.push('/auth/login');
         }).catch(error => {
+            showMessage(error.response.data.message, {variant: 'error'});
             dispatch(signUpFailure(error.response.data.message));
         });
     }

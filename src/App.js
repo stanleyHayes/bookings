@@ -14,6 +14,7 @@ import ScrollToTop from "./components/shared/scroll-to-top";
 import TodaysBookings from "./pages/bookings/todays-bookings";
 import ProtectedRoute from "./components/shared/protected-route";
 import UpdateProfilePage from "./pages/authentication/update-profile-page";
+import RegisterPage from "./pages/authentication/register-page";
 
 function App() {
 
@@ -40,6 +41,8 @@ function App() {
                 <ProtectedRoute path="/bookings/:bookingID/update" exact={true} component={UpdateBookingPage}/>
 
                 <Route path="/auth/login" exact={true} component={LoginPage}/>
+
+                <Route path="/auth/register" exact={true} component={RegisterPage}/>
 
                 <ProtectedRoute path="/auth/change-password" exact={true} component={ChangePasswordPage}/>
 

@@ -111,7 +111,7 @@ const UpdateProfilePage = () => {
 
                     <Divider variant="fullWidth" className={classes.divider}/>
 
-                    <Grid container={true} justify="center">
+                    <Grid container={true} justifyContent="center">
                         <Grid item={true} xs={12} md={6}>
                             <Card variant="outlined" elevation={1}>
                                 <CardContent>

@@ -267,7 +267,7 @@ const CreateBookingPage = () => {
                                     label="Booking Date"
                                     onChange={handleDateChange}
                                     inputVariant="outlined"
-                                    disablePast={true}
+                                    disablePast={false}
                                     autoOk={true}
                                     required={true}
                                     InputAdornmentProps={{position: "start"}}
@@ -289,7 +289,7 @@ const CreateBookingPage = () => {
                                     label="Booking Time"
                                     onChange={handleTimeChange}
                                     inputVariant="outlined"
-                                    disablePast={true}
+                                    disablePast={false}
                                     autoOk={true}
                                     required={true}
                                     ampm={true}
