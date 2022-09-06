@@ -1,57 +1,25 @@
 import React, {useState} from "react";
 import Layout from "../../components/layout";
+import {useDispatch, useSelector} from "react-redux";
+import {selectAuth} from "../../redux/authentication/auth-reducer";
+import {changePassword} from "../../redux/authentication/auth-action-creators";
+import {useNavigate} from "react-router-dom";
 import {
-    Button,
-    Card,
+    Button, Card,
     CardContent,
     Container,
     Divider,
     Grid,
     LinearProgress,
-    makeStyles,
     Switch,
     TextField,
     Typography
-} from "@material-ui/core";
-import {useDispatch, useSelector} from "react-redux";
-import {selectAuth} from "../../redux/authentication/auth-reducer";
-import {changePassword} from "../../redux/authentication/auth-action-creators";
-import {useHistory} from "react-router-dom";
+} from "@mui/material";
 
 const ChangePasswordPage = () => {
 
-    const useStyles = makeStyles(theme => {
-        return {
-            container: {
-                paddingTop: 84,
-                paddingBottom: 84
-            },
-            divider: {
-                marginTop: 32,
-                marginBottom: 32
-            },
-            subDivider: {
-                marginTop: 8,
-                marginBottom: 8
-            },
-            textField: {
-                marginBottom: 8,
-                marginTop: 8
-            },
-            button: {
-                paddingTop: 16,
-                paddingBottom: 16,
-                marginTop: 16
-            },
-            title: {
-                textTransform: "uppercase"
-            }
-        }
-    });
-
-    const classes = useStyles();
     const dispatch = useDispatch();
-    const history = useHistory();
+    const navigate = useNavigate();
 
     const {token, loading} = useSelector(selectAuth);
 
@@ -95,7 +63,7 @@ const ChangePasswordPage = () => {
         } else {
             setError({...error, confirmPassword: null, newPassword: null});
         }
-        dispatch(changePassword(passwords, token, history));
+        dispatch(changePassword(passwords, token, navigate));
     }
 
     const handleConfirmPasswordChange = e => {
@@ -108,11 +76,11 @@ const ChangePasswordPage = () => {
 
     return (
         <Layout>
-            <Container className={classes.container}>
+            <Container >
                 {loading && <LinearProgress color="secondary" variant="query"/>}
                 <Typography color="textPrimary" variant="h3" align="center">Change Password</Typography>
 
-                <Divider light={true} variant="fullWidth" className={classes.divider}/>
+                <Divider light={true} variant="fullWidth" />
 
                 <Grid container={true} justify="center">
                     <Grid item={true} xs={12} md={6}>
@@ -126,7 +94,6 @@ const ChangePasswordPage = () => {
                                     value={currentPassword}
                                     onChange={handlePasswordChange}
                                     margin="normal"
-                                    className={classes.textField}
                                     label="Current Password"
                                     placeholder="Enter current password"
                                     required={true}
@@ -142,7 +109,6 @@ const ChangePasswordPage = () => {
                                     value={newPassword}
                                     onChange={handlePasswordChange}
                                     margin="normal"
-                                    className={classes.textField}
                                     label="New Password"
                                     placeholder="Enter new password"
                                     required={true}
@@ -158,7 +124,6 @@ const ChangePasswordPage = () => {
                                     onChange={handleConfirmPasswordChange}
                                     margin="normal"
                                     name="confirmPassword"
-                                    className={classes.textField}
                                     label="Confirm Password"
                                     placeholder="Confirm new password"
                                     required={true}
@@ -182,7 +147,6 @@ const ChangePasswordPage = () => {
                                 </Grid>
 
                                 <Button
-                                    className={classes.button}
                                     onClick={handleChangePasswordSubmit}
                                     variant="outlined"
                                     fullWidth={true}

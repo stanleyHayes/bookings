@@ -1,107 +1,115 @@
 import React from "react";
-import {Avatar, Button, CircularProgress, Grid, makeStyles, Toolbar, Typography} from "@material-ui/core";
-import {Link, useHistory} from "react-router-dom";
+import {Avatar, Button, CircularProgress, Grid, Toolbar, Typography} from "@mui/material";
+import {Link, useNavigate} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {selectAuth} from "../../redux/authentication/auth-reducer";
 import {signOut} from "../../redux/authentication/auth-action-creators";
-import {grey} from "@material-ui/core/colors";
+import {useLocation} from "react-router";
 
 const DesktopHeader = () => {
 
-    const useStyles = makeStyles(theme => {
-        return {
-            link: {
-                textDecoration: "none"
-            },
-            button: {
-                fontWeight: 700
-            },
-            logo: {
-                width: 100,
-                height: 50
-            },
-            brand: {
-                textTransform: "uppercase",
-                fontSize: 24
-            },
-            avatar: {
-                backgroundColor: theme.palette.primary.light,
-                borderStyle: "solid",
-                borderWidth: 2,
-                borderColor: grey['100']
-            },
-            name: {
-                color: theme.palette.text.primary
-            }
-        }
-    });
-
-    const classes = useStyles();
     const dispatch = useDispatch();
-    const history = useHistory();
+    const navigate = useNavigate();
 
     const {token, loading, user} = useSelector(selectAuth);
 
     const handleLogoutClick = () => {
-        dispatch(signOut(token, history));
+        dispatch(signOut(token, navigate));
     }
+
+    const {pathname} = useLocation();
 
     return (
         <Toolbar variant="regular" color="primary">
-            <Grid container={true} justify="space-around" alignItems="center">
+            <Grid container={true} justifyContent="space-around" alignItems="center">
                 <Grid lg={4} item={true}>
-                    <Link to="/" className={classes.link}>
-                        <Button className={classes.brand} variant="text">
+                    <Link style={{textDecoration: 'none'}} to="/">
+                        <Typography sx={{color: 'text.primary'}} variant="h6">
                             Streamline Resources Ghana
-                        </Button>
+                        </Typography>
                     </Link>
                 </Grid>
 
-                <Grid lg={6} item={true} container={true} justify="flex-start" alignItems="center" spacing={2}>
+                <Grid lg={6} item={true} container={true} justifyContent="flex-start" alignItems="center" spacing={2}>
                     <Grid item={true}>
-                        <Link className={classes.link} to="/">
-                            <Button className={classes.button} variant="text" size="large">Home</Button>
+                        <Link style={{textDecoration: 'none'}} to="/">
+                            <Button
+                                sx={{
+                                    color: pathname === '/' ? 'text.primary' : 'text.secondary',
+                                    textTransform: 'capitalize'
+                                }}
+                                variant="text"
+                                size="large">Home</Button>
                         </Link>
                     </Grid>
 
                     <Grid item={true}>
-                        <Link to="/today" className={classes.link}>
-                            <Button className={classes.button} fullWidth={true} variant="text" size="large">
+                        <Link style={{textDecoration: 'none'}} to="/today">
+                            <Button sx={{
+                                color: pathname === '/today' ? 'text.primary' : 'text.secondary',
+                                textTransform: 'capitalize'
+                            }} fullWidth={true}
+                                    variant="text" size="large">
                                 Today's Bookings
                             </Button>
                         </Link>
                     </Grid>
 
                     <Grid item={true}>
-                        <Link className={classes.link} to="/bookings">
-                            <Button className={classes.button} variant="text" size="large">Bookings</Button>
+                        <Link style={{textDecoration: 'none'}} to="/bookings">
+                            <Button sx={{
+                                color: pathname === '/bookings' ? 'text.primary' : 'text.secondary',
+                                textTransform: 'capitalize'
+                            }} variant="text" size="large">Bookings</Button>
                         </Link>
                     </Grid>
                     <Grid item={true}>
-                        <Link className={classes.link} to="/new/booking">
-                            <Button className={classes.button} variant="text" size="large">Create</Button>
+                        <Link style={{textDecoration: 'none'}} to="/new/booking">
+                            <Button sx={{
+                                color: pathname === '/new/booking' ? 'text.primary' : 'text.secondary',
+                                textTransform: 'capitalize'
+                            }} variant="text" size="large">Create</Button>
                         </Link>
                     </Grid>
-                    <Grid item={true}>
-                        <Link className={classes.link} to="/account">
-                            <Button className={classes.button} variant="text" size="large">Account</Button>
-                        </Link>
-                    </Grid>
+                    {user && user.role === 'ADMIN' && (
+                        <Grid item={true}>
+                            <Link style={{textDecoration: 'none'}} to="/invitations">
+                                <Button
+                                    sx={{
+                                        color: pathname === '/invitations' ? 'text.primary' : 'text.secondary',
+                                        textTransform: 'capitalize'
+                                    }}
+                                    variant="text" size="large">Invitations</Button>
+                            </Link>
+                        </Grid>
+                    )}
                 </Grid>
 
                 {user && (
                     <Grid spacing={2} alignItems="center" item={true} lg={2} container={true} justify="flex-start">
                         <Grid item={true}>
                             {loading && <CircularProgress variant="indeterminate"/>}
-                            <Avatar className={classes.avatar} variant="circular">
-                                <Typography className={classes.name} variant="h4">{user.name[0]}</Typography>
-                            </Avatar>
+                            <Link style={{textDecoration: 'none'}} to="/account">
+                                <Avatar sx={{backgroundColor:'light.secondary'}} variant="circular">
+                                    <Typography
+                                        sx={{color: 'secondary.main'}}
+                                        variant="h4">{user.name[0]}</Typography>
+                                </Avatar>
+                            </Link>
                         </Grid>
                         <Grid item={true}>
                             <Button
+                                color="secondary"
+                                sx={{
+                                    borderBottomRightRadius: 0,
+                                    borderTopRightRadius: 12,
+                                    borderBottomLeftRadius: 12,
+                                    borderTopLeftRadius: 0,
+                                    textTransform: 'capitalize'
+                                }}
                                 onClick={handleLogoutClick}
-                                className={classes.button}
-                                variant="outlined"
+                                variant="contained"
+                                disableElevation={true}
                                 disabled={loading}
                                 size="large">
                                 Logout

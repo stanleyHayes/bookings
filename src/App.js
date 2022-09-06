@@ -1,5 +1,4 @@
 import './App.css';
-import {Route, Switch, useHistory} from "react-router-dom";
 import HomePage from "./pages/home/home-page";
 import CreateBookingPage from "./pages/bookings/create-booking-page";
 import BookingsPage from "./pages/bookings/bookings-page";
@@ -8,51 +7,139 @@ import ChangePasswordPage from "./pages/authentication/change-password-page";
 import ForgotPasswordPage from "./pages/authentication/forgot-password-page";
 import AccountPage from "./pages/authentication/account-page";
 import UpdateBookingPage from "./pages/bookings/update-booking-page";
-import {STREAMING_RESOURCE_GH_TOKEN_KEY} from "./constants/constants";
-import {useEffect} from "react";
-import ScrollToTop from "./components/shared/scroll-to-top";
 import TodaysBookings from "./pages/bookings/todays-bookings";
-import ProtectedRoute from "./components/shared/protected-route";
 import UpdateProfilePage from "./pages/authentication/update-profile-page";
 import RegisterPage from "./pages/authentication/register-page";
+import RequireAuth from "./components/shared/require-auth";
+import {Route, Routes} from "react-router";
+import InvitationsPage from "./pages/invitations/invitations-page";
+import InvitationResponsePage from "./pages/invitations/invitation-response-page";
+import NotFoundPage from "./pages/404/not-found-page";
 
 function App() {
 
-    const history = useHistory();
-    const token = localStorage.getItem(STREAMING_RESOURCE_GH_TOKEN_KEY);
-
-    useEffect(() => {
-        if (!token) {
-            history.push('/auth/login');
-        }
-    }, [history, token]);
-
     return (
-        <ScrollToTop>
-            <Switch>
-                <Route path="/" exact={true} component={HomePage}/>
+        <Routes>
+            <Route
+                path="/"
+                exact={true}
+                element={
+                    <RequireAuth>
+                        <HomePage/>
+                    </RequireAuth>
+                }/>
 
-                <ProtectedRoute path="/new/booking" exact={true} component={CreateBookingPage}/>
+            <Route
+                path="/new/booking"
+                exact={true}
+                element={
+                    <RequireAuth>
+                        <CreateBookingPage/>
+                    </RequireAuth>
+                }/>
 
-                <ProtectedRoute path="/bookings" exact={true} component={BookingsPage}/>
+            <Route
+                path="/bookings"
+                exact={true}
+                element={
+                    <RequireAuth>
+                        <BookingsPage/>
+                    </RequireAuth>
+                }/>
 
-                <ProtectedRoute path="/today" exact={true} component={TodaysBookings}/>
+            <Route
+                path="/today"
+                exact={true}
+                element={
+                    <RequireAuth>
+                        <TodaysBookings/>
+                    </RequireAuth>
+                }/>
 
-                <ProtectedRoute path="/bookings/:bookingID/update" exact={true} component={UpdateBookingPage}/>
+            <Route
+                path="/bookings/:bookingID/update"
+                exact={true}
+                element={
+                    <RequireAuth>
+                        <UpdateBookingPage/>
+                    </RequireAuth>
+                }/>
 
-                <Route path="/auth/login" exact={true} component={LoginPage}/>
+            <Route
+                path="/auth/login"
+                exact={true}
+                element={
+                    <RequireAuth>
+                        <LoginPage/>
+                    </RequireAuth>
+                }/>
 
-                <Route path="/auth/register" exact={true} component={RegisterPage}/>
+            <Route
+                path="/auth/register"
+                exact={true}
+                element={
+                    <RequireAuth>
+                        <RegisterPage/>
+                    </RequireAuth>
+                }/>
 
-                <ProtectedRoute path="/auth/change-password" exact={true} component={ChangePasswordPage}/>
+            <Route
+                path="/auth/change-password"
+                exact={true}
+                element={
+                    <RequireAuth>
+                        <ChangePasswordPage/>
+                    </RequireAuth>
+                }/>
 
-                <ProtectedRoute path="/auth/update-profile" exact={true} component={UpdateProfilePage}/>
+            <Route
+                path="/auth/update-profile"
+                exact={true}
+                element={
+                    <RequireAuth>
+                        <UpdateProfilePage/>
+                    </RequireAuth>
+                }/>
 
-                <ProtectedRoute path="/account" exact={true} component={AccountPage}/>
+            <Route
+                path="/account"
+                exact={true}
+                element={
+                    <RequireAuth>
+                        <AccountPage/>
+                    </RequireAuth>
+                }/>
 
-                <Route path="/auth/forgot-password" exact={true} component={ForgotPasswordPage}/>
-            </Switch>
-        </ScrollToTop>
+            <Route
+                path="/auth/forgot-password"
+                exact={true}
+                element={
+                    <RequireAuth>
+                        <ForgotPasswordPage/>
+                    </RequireAuth>
+                }/>
+
+            <Route
+                exact={true}
+                path="/invitations"
+                element={
+                    <RequireAuth>
+                        <InvitationsPage/>
+                    </RequireAuth>}
+            />
+
+            <Route
+                exact={true}
+                path="/invitations/:invitationID/:code"
+                element={<InvitationResponsePage/>}
+            />
+
+
+            <Route path="*" element={<RequireAuth>
+                <NotFoundPage/>
+            </RequireAuth>}/>
+
+        </Routes>
     );
 }
 

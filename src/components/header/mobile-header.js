@@ -1,70 +1,47 @@
-import {Avatar, Button, CircularProgress, Grid, makeStyles, Toolbar, Typography} from "@material-ui/core";
 import React from "react";
-import {Link, useHistory} from "react-router-dom";
-import {ExitToApp, Menu} from "@material-ui/icons";
+import {Link, useNavigate} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {selectAuth} from "../../redux/authentication/auth-reducer";
 import {signOut} from "../../redux/authentication/auth-action-creators";
-import {grey} from "@material-ui/core/colors";
+import {Avatar, CircularProgress, Grid, Toolbar, Typography} from "@mui/material";
+import {ExitToApp, Menu} from "@mui/icons-material";
 
 const MobileHeader = ({handleDrawerOpen}) => {
 
-    const useStyles = makeStyles(theme => {
-        return {
-            link: {
-                textDecoration: "none"
-            },
-            button: {
-                fontWeight: 700
-            },
-            hamburger: {
-                width: 50,
-                height: 30
-            },
-            brand: {
-                textTransform: "uppercase",
-                fontWeight: 700,
-                fontSize: 24
-            },
-            role: {
-                textTransform: "uppercase",
-                fontWeight: 700
-            },
-            avatar: {
-                backgroundColor: theme.palette.primary.light,
-                borderStyle: "solid",
-                borderWidth: 2,
-                borderColor: grey['100'],
-                width: 30,
-                height: 30
-            },
-            name: {
-                color: theme.palette.text.primary
-            }
-        }
-    });
-    const classes = useStyles();
-
     const dispatch = useDispatch();
-    const history = useHistory();
+    const navigate = useNavigate();
 
     const {token, user, loading} = useSelector(selectAuth);
+
     const handleLogoutClick = () => {
-        dispatch(signOut(token, history));
+        dispatch(signOut(token, navigate));
     }
 
     return (
         <Toolbar>
-            <Grid container={true} justify="flex-start" alignItems="center">
+            <Grid container={true} justifyContent="space-between" alignItems="center">
                 <Grid item={true} xs={2}>
                     <Menu
-                        onClick={handleDrawerOpen}
-                        className={classes.hamburger}
-                    />
+                        sx={{
+                            borderBottomRightRadius: 0,
+                            borderTopRightRadius: 12,
+                            borderBottomLeftRadius: 12,
+                            borderTopLeftRadius: 0,
+                            backgroundColor: 'light.secondary',
+                            color: 'secondary.main',
+                            fontSize: 32,
+                            padding: 0.4
+                        }}
+                        onClick={handleDrawerOpen}/>
                 </Grid>
+
                 <Grid item={true} xs={6}>
-                    <Link to="/" className={classes.link}>
-                        <Button className={classes.brand} variant="text">SR GH</Button>
+                    <Link style={{textDecoration: 'none'}} to="/">
+                        <Typography
+                            sx={{color: 'text.primary'}}
+                            variant="h5">
+                            SR GH
+                        </Typography>
                     </Link>
                 </Grid>
 
@@ -72,14 +49,35 @@ const MobileHeader = ({handleDrawerOpen}) => {
                     <Grid xs={4} spacing={2} alignItems="center" item={true} container={true} justify="space-around">
                         <Grid item={true}>
                             {loading && <CircularProgress variant="indeterminate"/>}
-                            <Avatar className={classes.avatar} variant="circular">
-                                <Typography className={classes.name} variant="h6">{user.name[0]}</Typography>
+                            <Avatar
+                                sx={{
+                                    color: 'secondary.main',
+                                    backgroundColor: 'light.secondary',
+                                    borderBottomRightRadius: 0,
+                                    borderTopRightRadius: 12,
+                                    borderBottomLeftRadius: 12,
+                                    borderTopLeftRadius: 0,
+                                }}
+                                variant="circular">
+                                <Typography
+                                    sx={{color: 'secondary.main'}}
+                                    variant="h6">
+                                    {user.name[0]}</Typography>
                             </Avatar>
                         </Grid>
                         <Grid item={true}>
                             <ExitToApp
+                                sx={{
+                                    borderBottomRightRadius: 0,
+                                    borderTopRightRadius: 12,
+                                    borderBottomLeftRadius: 12,
+                                    borderTopLeftRadius: 0,
+                                    backgroundColor: 'light.secondary',
+                                    color: 'secondary.main',
+                                    fontSize: 32,
+                                    padding: 0.4
+                                }}
                                 onClick={handleLogoutClick}
-                                className={classes.button}
                             />
                         </Grid>
                     </Grid>

@@ -1,94 +1,62 @@
 import React from "react";
-import {Card, CardContent, Divider, Grid, makeStyles, Typography} from "@material-ui/core";
+import {Card, CardContent, Divider, Stack, Typography} from "@mui/material";
 
 
 const Display = ({currentDisplay, nextDisplay}) => {
 
-    const useStyles = makeStyles(theme => {
-        return {
-            card: {
-                marginLeft: 16,
-                marginRight: 16
-            },
-            divider: {
-                marginTop: 32,
-                marginBottom: 32
-            },
-            shortDivider: {
-                marginTop: 32,
-                marginBottom: 32,
-                width: 60,
-                height: 3
-            },
-            subDivider: {
-                marginTop: 8,
-                marginBottom: 8
-            },
-            title: {
-                textTransform: "uppercase",
-                fontWeight: 600
-            },
-            caption: {
-                textTransform: "uppercase",
-                fontWeight: 700
-            },
-            containerNumber: {
-                wordBreak: 'break-word'
-            }
-        }
-    });
-
-    const classes = useStyles();
-
     return (
-        <Card variant="outlined" elevation={8} className={classes.card}>
+        <Card
+            variant="elevation"
+            elevation={1}
+            sx={{
+                borderBottomRightRadius: 0,
+                borderTopRightRadius: 32,
+                borderBottomLeftRadius: 32,
+                borderTopLeftRadius: 0
+            }}>
             <CardContent>
-                <Grid container={true} justify="center">
-                    <Grid item={true}>
-                        <Divider color="primary" className={classes.shortDivider} variant="middle"/>
-                    </Grid>
-                </Grid>
                 {currentDisplay ? (
                     <React.Fragment>
-                        <Typography color="textPrimary" variant="h6" align="center" className={classes.caption}>
-                            Container Number
-                        </Typography>
-                        <Divider variant="middle" light={true} className={classes.subDivider} />
-                        <Typography className={classes.containerNumber} color="textPrimary" variant="h3" align="center">
-                            {currentDisplay.container}
-                        </Typography>
-                        <Divider className={classes.divider} variant="fullWidth" light={true}/>
-                        <Typography color="textPrimary" variant="h6" align="center" className={classes.caption}>
-                            Booking Date
-                        </Typography>
-                        <Divider variant="middle" light={true} className={classes.subDivider} />
-                        <Typography color="textPrimary" variant="h6" align="center">
-                            {new Date(currentDisplay.date).toDateString()}
-                        </Typography>
+                        <Stack direction="column" spacing={2} divider={<Divider variant="middle" light={true}/>}>
+                            <Typography sx={{color: 'text.primary'}} variant="h6" align="center">
+                                Container Number
+                            </Typography>
+
+                            <Typography sx={{color: 'text.primary'}} variant="h3" align="center">
+                                {currentDisplay.container}
+                            </Typography>
+
+                            <Typography sx={{color: 'text.primary'}} variant="h6" align="center">
+                                Booking Date
+                            </Typography>
+
+                            <Typography sx={{color: 'text.primary'}} variant="h6" align="center">
+                                {new Date(currentDisplay.date).toDateString()}
+                            </Typography>
+                        </Stack>
                     </React.Fragment>
                 ) : (
                     <React.Fragment>
-                        <Typography color="textPrimary" variant="h6" align="center">
+                        <Typography sx={{color: 'text.primary'}} variant="h6" align="center">
                             No Booking Available
                         </Typography>
                     </React.Fragment>
                 )}
 
-                <Divider className={classes.divider} variant="fullWidth" light={true}/>
-                <Typography color="textPrimary" variant="h6" align="center" className={classes.caption}>
-                    Next
-                </Typography>
-
-                <Divider variant="middle" light={true} className={classes.subDivider} />
-
-                {nextDisplay ?
-                    <Typography className={classes.containerNumber} color="textPrimary" variant="h3" align="center">
-                        {nextDisplay.container}
-                    </Typography> :
-                    <Typography color="textPrimary" variant="h6" align="center">
-                        No Container Available Next
+                <Stack direction="column" spacing={2} divider={<Divider light={true} variant="fullWidth"/>}>
+                    <Typography sx={{color: 'text.primary'}} variant="h6" align="center">
+                        Next
                     </Typography>
-                }
+
+                    {nextDisplay ?
+                        <Typography sx={{color: 'text.primary'}} variant="h3" align="center">
+                            {nextDisplay.container}
+                        </Typography> :
+                        <Typography sx={{color: 'text.primary'}} variant="h6" align="center">
+                            No Container Available Next
+                        </Typography>
+                    }
+                </Stack>
             </CardContent>
         </Card>
     )

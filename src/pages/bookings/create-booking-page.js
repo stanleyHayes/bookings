@@ -1,6 +1,9 @@
 import React, {useState} from "react";
 import Layout from "../../components/layout";
 import {
+    Alert,
+    AlertTitle,
+    Box,
     Button,
     Card,
     CardContent,
@@ -8,57 +11,23 @@ import {
     Divider,
     Grid,
     LinearProgress,
-    makeStyles,
+    Stack,
     TextField,
     Typography
-} from "@material-ui/core";
+} from "@mui/material";
 import {useDispatch, useSelector} from "react-redux";
-import {DatePicker, TimePicker} from '@material-ui/pickers';
-import {useHistory} from "react-router-dom";
+import {DatePicker, TimePicker} from '@mui/x-date-pickers';
 import {createBooking} from "../../redux/bookings/booking-action-creators";
 import {selectAuth} from "../../redux/authentication/auth-reducer";
 import {selectBookings} from "../../redux/bookings/booking-reducer";
-import {Alert} from "@material-ui/lab";
 import {useSnackbar} from "notistack";
+import {useNavigate} from "react-router";
+import {useFormik} from "formik";
+import * as yup from "yup";
 
 const CreateBookingPage = () => {
 
-    const useStyles = makeStyles(theme => {
-        return {
-            container: {
-                paddingTop: 84,
-                paddingBottom: 84
-            },
-            divider: {
-                marginTop: 32,
-                marginBottom: 32
-            },
-            subDivider: {
-                marginTop: 8,
-                marginBottom: 8
-            },
-            textField: {
-                marginBottom: 8,
-                marginTop: 8
-            },
-            button: {
-                paddingTop: 16,
-                paddingBottom: 16,
-                marginTop: 16
-            },
-            title: {
-                textTransform: "uppercase"
-            }
-        }
-    });
-
-    const classes = useStyles();
     const dispatch = useDispatch();
-    const history = useHistory();
-
-    const [booking, setBooking] = useState({date: "", time: ""});
-    const [error, setError] = useState({});
-    const {car, contact, name, container, company, time, date, product} = booking;
 
     const {token} = useSelector(selectAuth);
 
@@ -67,255 +36,279 @@ const CreateBookingPage = () => {
         enqueueSnackbar(message, options);
     }
 
-    const handleBookingChange = e => {
-        setBooking({...booking, [e.target.name]: e.target.value});
+    const [dateError, setDateError] = useState(null);
+    const [timeError, setTimeError] = useState(null);
+
+    const [date, setDate] = useState(new Date());
+    const handleDateChange = date => {
+        setDate(date);
     }
 
-    const handleBookingSubmit = e => {
-        e.preventDefault();
-
-        if (!container) {
-            setError({...error, container: "Field required"});
-            return;
-        } else {
-            setError({...error, container: null});
-        }
-
-        if (!company) {
-            setError({...error, company: "Field required"});
-            return;
-        } else {
-            setError({...error, company: null});
-        }
-        if (!product) {
-            setError({...error, product: "Field required"});
-            return;
-        } else {
-            setError({...error, product: null});
-        }
-
-        if (!car) {
-            setError({...error, car: "Field required"});
-            return;
-        } else {
-            setError({...error, car: null});
-        }
-
-        if (!name) {
-            setError({...error, name: "Field required"});
-            return;
-        } else {
-            setError({...error, name: null});
-        }
-
-
-        if (!contact) {
-            setError({...error, contact: "Field required"});
-            return;
-        } else {
-            setError({...error, contact: null});
-        }
-
-        if (!date) {
-            setError({...error, date: "Field required"});
-            return;
-        } else {
-            setError({...error, date: null});
-        }
-
-        if (!time) {
-            setError({...error, time: "Field required"});
-            return;
-        } else {
-            setError({...error, time: null});
-        }
-        dispatch(createBooking(booking, token, history, handleShowNotification));
-    }
-
-    const handleDateChange = (date) => {
-        setBooking({...booking, date});
-    }
-
+    const [time, setTime] = useState(new Date());
     const handleTimeChange = time => {
-        setBooking({...booking, time});
+        setTime(time);
     }
 
     const {loading, error: bookingError} = useSelector(selectBookings);
 
+    const navigate = useNavigate();
+
+    const formik = useFormik({
+        validationSchema: yup.object().shape({
+            car: yup.string().required('Car number required'),
+            contact: yup.string().required('Contact required'),
+            name: yup.string().required('Driver name required required'),
+            container: yup.string().required('Container required'),
+            company: yup.string().required('Company required'),
+            product: yup.string().required('Product required'),
+            date: yup.string().required('Date required'),
+            time: yup.string().required('Time required'),
+        }),
+        validateOnChange: true,
+        validateOnBlur: true,
+        initialValues: {
+            car: '', contact: '', name: '', container: '', company: '', product: '', date: '', time: ''
+        },
+        onSubmit: (values, {resetForm}) => {
+            dispatch(createBooking(values, token, navigate, handleShowNotification));
+        }
+    });
+
+    console.log(formik.values);
+
     return (
         <Layout>
-            <Container className={classes.container}>
-                <Typography
-                    className={classes.title}
-                    color="textPrimary"
-                    variant="h3"
-                    align="center">Create Booking</Typography>
-                <Divider variant="fullWidth" className={classes.divider}/>
+            <Box sx={{py: 8}}>
+                <Container maxWidth="md">
+                    <Typography
+                        sx={{color: 'text.primary'}}
+                        variant="h4"
+                        align="center">Create Booking</Typography>
+                    <Divider sx={{my: 3}} light={true} variant="fullWidth"/>
+                    <Card
+                        sx={{
+                            borderBottomRightRadius: 0,
+                            borderTopRightRadius: 12,
+                            borderBottomLeftRadius: 12,
+                            borderTopLeftRadius: 0
+                        }} variant="elevation" elevation={1}>
+                        {loading && <LinearProgress color="secondary" variant="query"/>}
+                        <CardContent>
+                            {bookingError &&
+                                <Alert
+                                    variant="filled"
+                                    title={bookingError}
+                                    severity="error">
+                                    <AlertTitle>
+                                        {bookingError}
+                                    </AlertTitle>
+                                </Alert>}
+                            <form onSubmit={formik.handleSubmit}>
+                                <Stack direction="column" spacing={2}>
+                                    <Box>
+                                        <Grid container={true} spacing={2}>
+                                            <Grid item={true} xs={12} md={6}>
+                                                <TextField
+                                                    variant="outlined"
+                                                    fullWidth={true}
+                                                    type="text"
+                                                    name="container"
+                                                    value={formik.values.container}
+                                                    onChange={formik.handleChange}
+                                                    margin="normal"
+                                                    label="Container No."
+                                                    placeholder="Enter container number"
+                                                    required={true}
+                                                    error={Boolean(formik.touched.container && formik.errors.container)}
+                                                    helperText={formik.touched.container && formik.errors.container}
+                                                />
+                                            </Grid>
+                                            <Grid item={true} xs={12} md={6}>
+                                                <TextField
+                                                    variant="outlined"
+                                                    fullWidth={true}
+                                                    type="text"
+                                                    name="company"
+                                                    value={formik.values.company}
+                                                    onChange={formik.handleChange}
+                                                    margin="normal"
+                                                    label="Company Name"
+                                                    placeholder="Enter company name"
+                                                    required={true}
+                                                    error={Boolean(formik.touched.company && formik.errors.company)}
+                                                    helperText={formik.touched.company && formik.errors.company}
+                                                />
+                                            </Grid>
+                                        </Grid>
+                                    </Box>
+                                    <Box>
+                                        <Grid container={true} spacing={2}>
+                                            <Grid item={true} xs={12} md={6}>
+                                                <TextField
+                                                    variant="outlined"
+                                                    fullWidth={true}
+                                                    type="text"
+                                                    name="product"
+                                                    value={formik.values.product}
+                                                    onChange={formik.handleChange}
+                                                    margin="normal"
+                                                    label="Product"
+                                                    placeholder="Enter product name"
+                                                    required={true}
+                                                    error={Boolean(formik.touched.product && formik.errors.product)}
+                                                    helperText={formik.touched.product && formik.errors.product}
+                                                />
+                                            </Grid>
+                                            <Grid item={true} xs={12} md={6}>
+                                                <TextField
+                                                    variant="outlined"
+                                                    fullWidth={true}
+                                                    type="text"
+                                                    name="car"
+                                                    value={formik.values.car}
+                                                    onChange={formik.handleChange}
+                                                    margin="normal"
+                                                    label="Car No."
+                                                    placeholder="Enter car number"
+                                                    required={true}
+                                                    error={Boolean(formik.touched.car && formik.errors.car)}
+                                                    helperText={formik.touched.car && formik.errors.car}
+                                                />
+                                            </Grid>
+                                        </Grid>
+                                    </Box>
+                                    <Box>
+                                        <Grid container={true} spacing={2}>
+                                            <Grid item={true} xs={12} md={6}>
+                                                <TextField
+                                                    variant="outlined"
+                                                    fullWidth={true}
+                                                    type="text"
+                                                    name="name"
+                                                    value={formik.values.name}
+                                                    onChange={formik.handleChange}
+                                                    margin="normal"
+                                                    label="Driver's Name"
+                                                    placeholder="Enter drivers name"
+                                                    required={true}
+                                                    error={Boolean(formik.touched.name && formik.errors.name)}
+                                                    helperText={formik.touched.name && formik.errors.name}
+                                                />
+                                            </Grid>
+                                            <Grid item={true} xs={12} md={6}>
+                                                <TextField
+                                                    variant="outlined"
+                                                    fullWidth={true}
+                                                    type="tel"
+                                                    name="contact"
+                                                    value={formik.values.contact}
+                                                    onChange={formik.handleChange}
+                                                    margin="normal"
+                                                    label="Driver's Contact"
+                                                    placeholder="Enter driver's contact"
+                                                    required={true}
+                                                    error={Boolean(formik.touched.contact && formik.errors.contact)}
+                                                    helperText={formik.touched.contact && formik.errors.contact}
+                                                />
 
+                                            </Grid>
+                                        </Grid>
+                                    </Box>
+                                    <Box>
+                                        <Grid container={true} spacing={2}>
+                                            <Grid item={true} xs={12} md={6}>
+                                                <DatePicker
+                                                    label="Select Booking Date"
+                                                    required={true}
+                                                    InputLabelProps={{shrink: true}}
+                                                    renderInput={params => {
+                                                        return (
+                                                            <TextField
+                                                                {...params}
+                                                                name="date"
+                                                                placeholder="Select Booking Date"
+                                                                variant="outlined"
+                                                                onChange={formik.handleChange}
+                                                                onBlur={formik.handleBlur}
+                                                                size="medium"
+                                                                fullWidth={true}
+                                                                helperText={formik.touched.date && formik.errors.date}
+                                                                error={Boolean(formik.touched.date && formik.errors.date)}
+                                                            />
+                                                        )
 
-                <Grid container={true} justifyContent="center">
-                    <Grid item={true} xs={12} md={6}>
-                        <Card variant="outlined" elevation={1}>
-                            {loading && <LinearProgress color="primary" variant="query"/>}
-                            <CardContent>
-                                {bookingError &&
-                                <Alert variant="filled" title={bookingError} severity="error">{bookingError}</Alert>}
-                                <TextField
-                                    variant="outlined"
-                                    fullWidth={true}
-                                    type="text"
-                                    name="container"
-                                    value={container}
-                                    onChange={handleBookingChange}
-                                    margin="normal"
-                                    className={classes.textField}
-                                    label="Container No."
-                                    placeholder="Enter container number"
-                                    required={true}
-                                    error={Boolean(error.container)}
-                                    helperText={error.container}
-                                />
+                                                    }}
+                                                    value={formik.values.date}
+                                                    color="primary"
+                                                    onChange={formik.handleChange}/>
+                                            </Grid>
+                                            <Grid item={true} xs={12} md={6}>
+                                                <TimePicker
+                                                    value={time}
+                                                    fullWidth={true}
+                                                    name="time"
+                                                    label="Booking Time"
+                                                    onChange={handleTimeChange}
+                                                    inputVariant="outlined"
+                                                    required={true}
+                                                    ampm={true}
+                                                    error={Boolean(timeError)}
+                                                    helperText={timeError}
+                                                    okLabel={<Button>OK</Button>}
+                                                    placeholder={"Select Booking Time"}
+                                                    cancelLabel={<Button>Cancel</Button>}
+                                                    emptyLabel="Booking Time"
+                                                    renderInput={params => {
+                                                        return (
+                                                            <TextField
+                                                                {...params}
+                                                                name="time"
+                                                                placeholder="Select Booking Time"
+                                                                variant="outlined"
+                                                                onChange={formik.handleChange}
+                                                                onBlur={formik.handleBlur}
+                                                                size="medium"
+                                                                value={time}
+                                                                fullWidth={true}
+                                                                helperText={timeError}
+                                                                error={Boolean(timeError)}
+                                                            />
+                                                        )
 
-                                <TextField
-                                    variant="outlined"
-                                    fullWidth={true}
-                                    type="text"
-                                    name="company"
-                                    value={company}
-                                    onChange={handleBookingChange}
-                                    margin="normal"
-                                    className={classes.textField}
-                                    label="Company Name"
-                                    placeholder="Enter company name"
-                                    required={true}
-                                    error={Boolean(error.company)}
-                                    helperText={error.company}
-                                />
-
-                                <TextField
-                                    variant="outlined"
-                                    fullWidth={true}
-                                    type="text"
-                                    name="product"
-                                    value={product}
-                                    onChange={handleBookingChange}
-                                    margin="normal"
-                                    className={classes.textField}
-                                    label="Product"
-                                    placeholder="Enter product name"
-                                    required={true}
-                                    error={Boolean(error.product)}
-                                    helperText={error.product}
-                                />
-
-
-                                <TextField
-                                    variant="outlined"
-                                    fullWidth={true}
-                                    type="text"
-                                    name="car"
-                                    value={car}
-                                    onChange={handleBookingChange}
-                                    margin="normal"
-                                    className={classes.textField}
-                                    label="Car No."
-                                    placeholder="Enter car number"
-                                    required={true}
-                                    error={Boolean(error.car)}
-                                    helperText={error.car}
-                                />
-
-
-                                <TextField
-                                    variant="outlined"
-                                    fullWidth={true}
-                                    type="text"
-                                    name="name"
-                                    value={name}
-                                    onChange={handleBookingChange}
-                                    margin="normal"
-                                    className={classes.textField}
-                                    label="Driver's Name"
-                                    placeholder="Enter drivers name"
-                                    required={true}
-                                    error={Boolean(error.name)}
-                                    helperText={error.name}
-                                />
-
-
-                                <TextField
-                                    variant="outlined"
-                                    fullWidth={true}
-                                    type="tel"
-                                    name="contact"
-                                    value={contact}
-                                    onChange={handleBookingChange}
-                                    margin="normal"
-                                    className={classes.textField}
-                                    label="Driver's Contact"
-                                    placeholder="Enter driver's contact"
-                                    required={true}
-                                    error={Boolean(error.contact)}
-                                    helperText={error.contact}
-                                />
-
-                                <DatePicker
-                                    variant="dialog"
-                                    value={date}
-                                    name="date"
-                                    fullWidth={true}
-                                    label="Booking Date"
-                                    onChange={handleDateChange}
-                                    inputVariant="outlined"
-                                    autoOk={true}
-                                    required={true}
-                                    InputAdornmentProps={{position: "start"}}
-                                    error={Boolean(error.date)}
-                                    helperText={error.date}
-                                    className={classes.textField}
-                                    placeholder={"Select Booking Date"}
-                                    okLabel={<Button>OK</Button>}
-                                    cancelLabel={<Button>Cancel</Button>}
-                                    emptyLabel="Booking Date"
-                                />
-
-                                <TimePicker
-                                    variant="dialog"
-                                    value={time}
-                                    InputAdornmentProps={{position: "start"}}
-                                    fullWidth={true}
-                                    name="time"
-                                    label="Booking Time"
-                                    onChange={handleTimeChange}
-                                    inputVariant="outlined"
-                                    autoOk={true}
-                                    required={true}
-                                    ampm={true}
-                                    error={Boolean(error.time)}
-                                    helperText={error.time}
-                                    className={classes.textField}
-                                    okLabel={<Button>OK</Button>}
-                                    placeholder={"Select Booking Time"}
-                                    cancelLabel={<Button>Cancel</Button>}
-                                    emptyLabel="Booking Time"
-                                />
-
-                                <Button
-                                    className={classes.button}
-                                    onClick={handleBookingSubmit}
-                                    variant="outlined"
-                                    fullWidth={true}
-                                    size="large"
-                                    disableElevation={true}>
-                                    Submit Booking
-                                </Button>
-
-                            </CardContent>
-                        </Card>
-                    </Grid>
-                </Grid>
-
-            </Container>
+                                                    }}
+                                                />
+                                            </Grid>
+                                        </Grid>
+                                    </Box>
+                                    <Box>
+                                        <Grid container={true} justifyContent="center">
+                                            <Grid item={true} xs={12} md={6}>
+                                                <Button
+                                                    type="submit"
+                                                    color="secondary"
+                                                    onClick={formik.handleSubmit}
+                                                    variant="contained"
+                                                    sx={{
+                                                        borderBottomRightRadius: 0,
+                                                        borderTopRightRadius: 12,
+                                                        borderBottomLeftRadius: 12,
+                                                        borderTopLeftRadius: 0,
+                                                        py: 1.2
+                                                    }}
+                                                    fullWidth={true}
+                                                    size="large"
+                                                    disableElevation={true}>
+                                                    Submit Booking
+                                                </Button>
+                                            </Grid>
+                                        </Grid>
+                                    </Box>
+                                </Stack>
+                            </form>
+                        </CardContent>
+                    </Card>
+                </Container>
+            </Box>
         </Layout>
     )
 }

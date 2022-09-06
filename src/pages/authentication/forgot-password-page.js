@@ -1,72 +1,29 @@
 import React, {useState} from "react";
+import {useDispatch, useSelector} from "react-redux";
+import {selectAuth} from "../../redux/authentication/auth-reducer";
+import {Link, useNavigate} from "react-router-dom";
+import {useSnackbar} from "notistack";
+import {forgotPassword} from "../../redux/authentication/auth-action-creators";
 import {
+    Alert,
+    AlertTitle,
+    Box,
     Button,
     Card,
     CardContent,
     Container,
     Grid,
     LinearProgress,
-    makeStyles,
+    Stack,
     TextField,
     Typography
-} from "@material-ui/core";
-import {useDispatch, useSelector} from "react-redux";
-import {selectAuth} from "../../redux/authentication/auth-reducer";
-import {Link, useHistory} from "react-router-dom";
-import {useSnackbar} from "notistack";
-import {forgotPassword} from "../../redux/authentication/auth-action-creators";
-import {Alert} from "@material-ui/lab";
-
+} from "@mui/material";
+import {KeyboardArrowLeft} from "@mui/icons-material";
 
 const ForgotPasswordPage = () => {
 
-    const useStyles = makeStyles(theme => {
-        return {
-            container: {
-                paddingTop: 32,
-                paddingBottom: 32
-            },
-            root: {
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                minHeight: '100vh',
-                backgroundColor: theme.palette.background.default
-            },
-            divider: {
-                marginTop: 32,
-                marginBottom: 32
-            },
-            subDivider: {
-                marginTop: 8,
-                marginBottom: 8
-            },
-            textField: {
-                marginBottom: 8,
-                marginTop: 8
-            },
-            button: {
-                paddingTop: 16,
-                paddingBottom: 16,
-                marginTop: 16
-            },
-            title: {
-                textTransform: "uppercase"
-            },
-            instruction: {
-                marginTop: 16,
-                marginBottom: 16
-            },
-            link: {
-                textDecoration: 'none'
-            }
-        }
-    });
-
-    const classes = useStyles();
-
     const dispatch = useDispatch();
-    const history = useHistory();
+    const navigate = useNavigate();
 
     const {enqueueSnackbar} = useSnackbar();
 
@@ -92,67 +49,110 @@ const ForgotPasswordPage = () => {
         } else {
             setError({...error, email: null});
         }
-        dispatch(forgotPassword(email, history, showNotification))
+        dispatch(forgotPassword(email, navigate, showNotification))
     }
 
 
     return (
-        <div className={classes.root}>
-            <Container className={classes.container}>
-                <Grid container={true} justify="center">
+        <Box
+            sx={{
+                minHeight: '100vh',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center'
+            }}>
+            <Container>
+                <Grid container={true} justifyContent="center">
                     <Grid item={true} xs={12} md={6}>
-                        <Card variant="outlined" elevation={1}>
+                        <Card
+                            sx={{
+                                borderBottomRightRadius: 0,
+                                borderTopRightRadius: 32,
+                                borderBottomLeftRadius: 32,
+                                borderTopLeftRadius: 0
+                            }}
+                            variant="elevation"
+                            elevation={1}>
                             {loading && <LinearProgress color="secondary" variant="query"/>}
                             <CardContent>
-                                <Typography color="textPrimary" variant="h3" align="center">Forgot Password</Typography>
-                                {authError &&
-                                <Alert variant="filled" title={authError} severity="error">{authError}</Alert>}
+                                <Stack direction="column" spacing={3}>
+                                    <Typography
+                                        sx={{color: 'text.primary'}}
+                                        variant="h3"
+                                        align="center">
+                                        Forgot Password
+                                    </Typography>
+                                    {authError &&
+                                        <Alert
+                                            variant="filled"
+                                            title={authError}
+                                            severity="error">
+                                            <AlertTitle>
+                                                {authError}
+                                            </AlertTitle>
+                                        </Alert>}
 
-                                <Typography className={classes.instruction} gutterBottom={true} variant="body2"
-                                            align="center">
-                                    Enter the email address associated with your account and we'll send you a link to
-                                    reset your password
-                                </Typography>
+                                    <Typography
+                                        sx={{color: 'text.secondary'}}
+                                        gutterBottom={true}
+                                        variant="body2"
+                                        align="center">
+                                        Enter the email address associated with your account and we'll send you a link
+                                        to
+                                        reset your password
+                                    </Typography>
 
-                                <TextField
-                                    variant="outlined"
-                                    fullWidth={true}
-                                    type="email"
-                                    name="email"
-                                    value={email}
-                                    onChange={handleEmailChange}
-                                    margin="normal"
-                                    className={classes.textField}
-                                    label="Email"
-                                    placeholder="Enter email"
-                                    required={true}
-                                    error={Boolean(error.email)}
-                                    helperText={error.email}
-                                />
+                                    <TextField
+                                        variant="outlined"
+                                        fullWidth={true}
+                                        type="email"
+                                        name="email"
+                                        value={email}
+                                        onChange={handleEmailChange}
+                                        margin="normal"
+                                        label="Email"
+                                        placeholder="Enter email"
+                                        required={true}
+                                        error={Boolean(error.email)}
+                                        helperText={error.email}
+                                    />
 
-                                <Button
-                                    className={classes.button}
-                                    onClick={handlePasswordReset}
-                                    variant="outlined"
-                                    fullWidth={true}
-                                    size="large"
-                                    disableElevation={true}>
-                                    Reset Password
-                                </Button>
-
-                                <Link className={classes.link} to="/auth/login">
-                                    <Button fullWidth={true} className={classes.button}>
-                                       Back to login
+                                    <Button
+                                        onClick={handlePasswordReset}
+                                        variant="contained"
+                                        color="secondary"
+                                        sx={{
+                                            textTransform: 'capitalize',
+                                            py: 1.2,
+                                            borderBottomRightRadius: 0,
+                                            borderTopRightRadius: 12,
+                                            borderBottomLeftRadius: 12,
+                                            borderTopLeftRadius: 0
+                                        }}
+                                        fullWidth={true}
+                                        size="large"
+                                        disableElevation={true}>
+                                        Reset Password
                                     </Button>
-                                </Link>
 
+                                    <Link style={{textDecoration: 'none'}} to="/auth/login">
+                                        <Button
+                                            startIcon={<KeyboardArrowLeft/>}
+                                            variant="text"
+                                            color="secondary"
+                                            sx={{textTransform: 'capitalize'}}
+                                            fullWidth={true}>
+                                            Back to login
+                                        </Button>
+                                    </Link>
+                                </Stack>
                             </CardContent>
                         </Card>
                     </Grid>
                 </Grid>
 
             </Container>
-        </div>
+        </Box>
     )
 }
 

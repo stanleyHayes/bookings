@@ -1,56 +1,16 @@
 import React, {useState} from "react";
 import Layout from "../../components/layout";
-import {
-    Button,
-    Card,
-    CardContent,
-    Container,
-    Divider,
-    Grid,
-    makeStyles,
-    TextField,
-    Typography
-} from "@material-ui/core";
 import {updateProfile} from "../../redux/authentication/auth-action-creators";
 import {useDispatch, useSelector} from "react-redux";
-import {useHistory} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import {selectAuth} from "../../redux/authentication/auth-reducer";
 import {useSnackbar} from "notistack";
+import {Button, Card, CardContent, Container, Divider, Grid, TextField, Typography} from "@mui/material";
 
 const UpdateProfilePage = () => {
 
-    const useStyles = makeStyles(theme => {
-        return {
-            container: {
-                paddingTop: 84,
-                paddingBottom: 84
-            },
-            divider: {
-                marginTop: 32,
-                marginBottom: 32
-            },
-            subDivider: {
-                marginTop: 8,
-                marginBottom: 8
-            },
-            textField: {
-                marginBottom: 8,
-                marginTop: 8
-            },
-            button: {
-                paddingTop: 16,
-                paddingBottom: 16,
-                marginTop: 16
-            },
-            title: {
-                textTransform: "uppercase"
-            }
-        }
-    });
-
-    const classes = useStyles();
     const dispatch = useDispatch();
-    const history = useHistory();
+    const navigate = useNavigate();
 
     const {token, user} = useSelector(selectAuth);
 
@@ -98,18 +58,18 @@ const UpdateProfilePage = () => {
         dispatch(updateProfile(
             updatedUser,
             token,
-            history,
+            navigate,
             handleShowNotification));
     }
 
         return (
             <Layout>
-                <Container className={classes.container}>
+                <Container>
                     <Typography color="textPrimary" variant="h3" align="center">
                         Edit Profile
                     </Typography>
 
-                    <Divider variant="fullWidth" className={classes.divider}/>
+                    <Divider variant="fullWidth"/>
 
                     <Grid container={true} justifyContent="center">
                         <Grid item={true} xs={12} md={6}>
@@ -123,7 +83,6 @@ const UpdateProfilePage = () => {
                                         value={name}
                                         onChange={handleChange}
                                         margin="normal"
-                                        className={classes.textField}
                                         label="Name"
                                         placeholder="Enter name"
                                         required={true}
@@ -139,7 +98,6 @@ const UpdateProfilePage = () => {
                                         value={position}
                                         onChange={handleChange}
                                         margin="normal"
-                                        className={classes.textField}
                                         label="Position"
                                         placeholder="Enter position"
                                         required={true}
@@ -155,7 +113,6 @@ const UpdateProfilePage = () => {
                                         value={department}
                                         onChange={handleChange}
                                         margin="normal"
-                                        className={classes.textField}
                                         label="Department"
                                         placeholder="Enter department"
                                         required={true}
@@ -164,7 +121,6 @@ const UpdateProfilePage = () => {
                                     />
 
                                     <Button
-                                        className={classes.button}
                                         onClick={handleSubmit}
                                         variant="outlined"
                                         fullWidth={true}

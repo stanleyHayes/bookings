@@ -1,25 +1,10 @@
 import React, {useState} from "react";
-import {Box, makeStyles, SwipeableDrawer} from "@material-ui/core";
 import Header from "./header/header";
 import DrawerContent from "./drawer/drawer-content";
+import {Box, SwipeableDrawer} from "@mui/material";
 
 
 const Layout = ({children}) => {
-
-    const useStyles = makeStyles(theme => {
-        return {
-            container: {
-                background: "#0b0c10",
-                minHeight: '100vh'
-            },
-            divider: {
-                marginTop: 32,
-                marginBottom: 32
-            }
-        }
-    });
-
-    const classes = useStyles();
 
     const [open, setOpen] = useState(false);
 
@@ -34,7 +19,7 @@ const Layout = ({children}) => {
     return (
         <Box>
             <Header handleDrawerOpen={handleDrawerOpen}/>
-            <Box className={classes.container}>
+            <Box sx={{py: 8}}>
                 {children}
             </Box>
             <SwipeableDrawer

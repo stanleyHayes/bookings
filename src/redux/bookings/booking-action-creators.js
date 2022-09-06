@@ -47,7 +47,7 @@ const createBookingFailure = error => {
     }
 }
 
-export const createBooking = (booking, token, history, handleShowNotification) => {
+export const createBooking = (booking, token, navigate, handleShowNotification) => {
     return dispatch => {
         dispatch(createBookingRequest());
         axios({
@@ -60,7 +60,7 @@ export const createBooking = (booking, token, history, handleShowNotification) =
         }).then(res => {
             const {data, message} = res.data;
             dispatch(createBookingSuccess(data));
-            history.push('/bookings');
+            navigate('/bookings');
             handleShowNotification(message, {variant: 'success'});
         }).catch(error => {
             dispatch(createBookingFailure(error.response.data.message));
@@ -209,7 +209,7 @@ const updateBookingFailure = error => {
     }
 }
 
-export const updateBooking = (bookingID, booking, token, history, handleShowNotification) => {
+export const updateBooking = (bookingID, booking, token, navigate, handleShowNotification) => {
     return dispatch => {
         dispatch(updateBookingRequest());
         axios({
@@ -222,7 +222,7 @@ export const updateBooking = (bookingID, booking, token, history, handleShowNoti
         }).then(res => {
             const {data, message} = res.data;
             dispatch(updateBookingSuccess(data));
-            history.push(`/`);
+            navigate(`/`);
             handleShowNotification(message, {variant: 'success'});
         }).catch(error => {
             dispatch(updateBookingFailure(error.response.data.message));
@@ -251,7 +251,7 @@ const deleteBookingFailure = error => {
     }
 }
 
-export const deleteBooking = (bookingID, token, history, handleShowNotification) => {
+export const deleteBooking = (bookingID, token, navigate, handleShowNotification) => {
     return dispatch => {
         dispatch(deleteBookingRequest());
         axios({
@@ -263,7 +263,7 @@ export const deleteBooking = (bookingID, token, history, handleShowNotification)
         }).then(res => {
             const {data, message} = res.data;
             dispatch(deleteBookingSuccess(data));
-            history.push(`/bookings`);
+            navigate(`/bookings`);
             handleShowNotification(message, {variant: 'success'});
         }).catch(error => {
             dispatch(deleteBookingFailure(error.response.data.message));

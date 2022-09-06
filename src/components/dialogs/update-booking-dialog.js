@@ -1,68 +1,26 @@
 import React, {useState} from 'react';
-import {
-    Button,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    Divider,
-    makeStyles,
-    TextField,
-    Typography
-} from "@material-ui/core";
-import {useHistory, useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {selectAuth} from "../../redux/authentication/auth-reducer";
 import {useSnackbar} from "notistack";
-import {updateBooking} from "../../redux/bookings/booking-action-creators";
-import {DatePicker, TimePicker} from "@material-ui/pickers";
+import {createBooking, updateBooking} from "../../redux/bookings/booking-action-creators";
+import {DatePicker, TimePicker} from "@mui/x-date-pickers";
+import {Button, Dialog, DialogActions, DialogContent, Divider, TextField, Typography} from "@mui/material";
+import {useFormik} from "formik";
+import * as yup from "yup";
 
 const UpdateBookingDialog = ({open, handleClose, booking}) => {
 
-    const useStyles = makeStyles(theme => {
-        return {
-            container: {
-                paddingTop: 84,
-                paddingBottom: 84
-            },
-            divider: {
-                marginTop: 16,
-                marginBottom: 16
-            },
-            subDivider: {
-                marginTop: 8,
-                marginBottom: 8
-            },
-            textField: {
-                marginBottom: 8,
-                marginTop: 8
-            },
-            button: {
-                paddingTop: 16,
-                paddingBottom: 16,
-                marginTop: 16
-            },
-            closeButton: {
-                paddingTop: 8,
-                paddingBottom: 8,
-            },
-            title: {
-                textTransform: "uppercase"
-            }
-        }
-    });
-
-    const classes = useStyles();
     const {bookingID} = useParams();
 
     const [updatedBooking, setBooking] = useState(booking);
     const [error, setError] = useState({});
-    const {car, contact, name, container, company, time, date, product} = updatedBooking;
+    const {car, contact, name, container, company,  date, product} = updatedBooking;
 
     const {token} = useSelector(selectAuth);
 
     const {enqueueSnackbar} = useSnackbar();
     const dispatch = useDispatch();
-    const history = useHistory();
 
     const handleBookingChange = e => {
         setBooking({...booking, [e.target.name]: e.target.value});
@@ -70,6 +28,20 @@ const UpdateBookingDialog = ({open, handleClose, booking}) => {
 
     const handleShowNotification = (message, options) => {
         enqueueSnackbar(message, options);
+    }
+
+
+    const [dob, setDOB] = useState();
+    const [time, setTime] = useState();
+
+    const navigate = useNavigate();
+
+    const handleDOBChange = date => {
+        setDOB(date);
+    }
+
+    const handleTimeChange = time => {
+        setTime(time);
     }
 
     const handleBookingSubmit = e => {
@@ -130,29 +102,50 @@ const UpdateBookingDialog = ({open, handleClose, booking}) => {
         } else {
             setError({error, time: null});
         }
-        dispatch(updateBooking(bookingID, booking, token, history, handleShowNotification));
+        dispatch(updateBooking(bookingID, booking, token, navigate, handleShowNotification));
     }
 
     const handleDateChange = date => {
         setBooking({...booking, date});
     }
 
-    const handleTimeChange = time => {
-        setBooking({...booking, time});
-    }
+    const formik = useFormik({
+        validationSchema: yup.object().shape({
+            firstName: yup.string().required('First name required'),
+            lastName: yup.string().required('Last name required'),
+            phone: yup.string().phone('Invalid phone number').required('Phone number required'),
+            gender: yup.string()
+                .oneOf(['male', 'female'], 'select either male or female')
+                .required('Gender required'),
+            ssn: yup.string().required('SSN required'),
+            addressLine1: yup.string().required('Address required')
+        }),
+        validateOnChange: true,
+        validateOnBlur: true,
+        initialValues: {
+            firstName: '',
+            lastName: '',
+            phone: '',
+            gender: '',
+            ssn: '',
+            addressLine1: '',
+            addressLine2: '',
+        },
+        onSubmit: (values, {resetForm}) => {
+            dispatch(createBooking(booking, token, navigate, handleShowNotification));
+        }
+    });
 
     return (
         <Dialog open={open} handleClose={handleClose}>
             <DialogContent>
                 <Typography
-                    className={classes.title}
-                    color="textPrimary"
                     variant="h5"
                     align="center">
                     Update Booking
                 </Typography>
 
-                <Divider variant="fullWidth" className={classes.divider}/>
+                <Divider variant="fullWidth"/>
 
                 <TextField
                     variant="outlined"
@@ -162,7 +155,6 @@ const UpdateBookingDialog = ({open, handleClose, booking}) => {
                     value={container}
                     onChange={handleBookingChange}
                     margin="normal"
-                    className={classes.textField}
                     label="Container No."
                     placeholder="Enter container number"
                     required={true}
@@ -178,7 +170,6 @@ const UpdateBookingDialog = ({open, handleClose, booking}) => {
                     value={company}
                     onChange={handleBookingChange}
                     margin="normal"
-                    className={classes.textField}
                     label="Company Name"
                     placeholder="Enter company name"
                     required={true}
@@ -194,7 +185,6 @@ const UpdateBookingDialog = ({open, handleClose, booking}) => {
                     value={product}
                     onChange={handleBookingChange}
                     margin="normal"
-                    className={classes.textField}
                     label="Product"
                     placeholder="Enter product name"
                     required={true}
@@ -211,7 +201,6 @@ const UpdateBookingDialog = ({open, handleClose, booking}) => {
                     value={car}
                     onChange={handleBookingChange}
                     margin="normal"
-                    className={classes.textField}
                     label="Car No."
                     placeholder="Enter car number"
                     required={true}
@@ -228,7 +217,6 @@ const UpdateBookingDialog = ({open, handleClose, booking}) => {
                     value={name}
                     onChange={handleBookingChange}
                     margin="normal"
-                    className={classes.textField}
                     label="Driver's Name"
                     placeholder="Enter drivers name"
                     required={true}
@@ -245,7 +233,6 @@ const UpdateBookingDialog = ({open, handleClose, booking}) => {
                     value={contact}
                     onChange={handleBookingChange}
                     margin="normal"
-                    className={classes.textField}
                     label="Driver's Contact"
                     placeholder="Enter driver's contact"
                     required={true}
@@ -254,40 +241,68 @@ const UpdateBookingDialog = ({open, handleClose, booking}) => {
                 />
 
                 <DatePicker
-                    variant="dialog"
-                    value={date}
-                    fullWidth={true}
-                    label="Booking Date"
-                    onChange={handleDateChange}
-                    inputVariant="outlined"
-                    disablePast={true}
-                    autoOk={true}
+                    label="Date of Birth"
                     required={true}
-                    InputAdornmentProps={{position: "start"}}
-                    error={Boolean(error.date)}
-                    helperText={error.date}
-                    className={classes.textField}
-                />
+                    InputLabelProps={{shrink: true}}
+                    renderInput={params => {
+                        return (
+                            <TextField
+                                {...params}
+                                name="dob"
+                                placeholder="Select Date of Birth"
+                                variant="outlined"
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                size="medium"
+                                fullWidth={true}
+                                helperText={formik.touched.dob && formik.errors.dob}
+                                error={Boolean(formik.touched.dob && formik.errors.dob)}
+                            />
+                        )
+
+                    }}
+                    value={dob}
+                    color="primary"
+                    onChange={handleDOBChange}/>
 
                 <TimePicker
                     variant="dialog"
                     value={time}
                     InputAdornmentProps={{position: "start"}}
                     fullWidth={true}
+                    name="time"
                     label="Booking Time"
                     onChange={handleTimeChange}
                     inputVariant="outlined"
-                    disablePast={true}
                     autoOk={true}
                     required={true}
                     ampm={true}
                     error={Boolean(error.time)}
                     helperText={error.time}
-                    className={classes.textField}
+                    okLabel={<Button>OK</Button>}
+                    placeholder={"Select Booking Time"}
+                    cancelLabel={<Button>Cancel</Button>}
+                    emptyLabel="Booking Time"
+                    renderInput={params => {
+                        return (
+                            <TextField
+                                {...params}
+                                name="dob"
+                                placeholder="Select Date of Birth"
+                                variant="outlined"
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                size="medium"
+                                fullWidth={true}
+                                helperText={formik.touched.dob && formik.errors.dob}
+                                error={Boolean(formik.touched.dob && formik.errors.dob)}
+                            />
+                        )
+
+                    }}
                 />
 
                 <Button
-                    className={classes.button}
                     onClick={handleBookingSubmit}
                     variant="outlined"
                     fullWidth={true}
@@ -298,10 +313,9 @@ const UpdateBookingDialog = ({open, handleClose, booking}) => {
 
             </DialogContent>
 
-            <Divider variant="fullWidth" className={classes.subDivider} light={true} />
+            <Divider variant="fullWidth" light={true}/>
             <DialogActions>
                 <Button
-                    className={classes.closeButton}
                     onClick={handleClose}
                     variant="outlined"
                     size="medium">

@@ -49,7 +49,7 @@ const getProfileFailure = error => {
     }
 }
 
-export const getProfile = (token) => {
+export const getProfile = (token, navigate) => {
     return dispatch => {
         dispatch(getProfileRequest());
         axios({
@@ -64,7 +64,11 @@ export const getProfile = (token) => {
             localStorage.setItem(STREAMING_RESOURCE_GH_TOKEN_KEY, JSON.stringify(token));
             localStorage.setItem(STREAMING_RESOURCE_GH_USER_KEY, JSON.stringify(data));
         }).catch(error => {
-            dispatch(getProfileFailure(error.response.data.message));
+            const {message} = error.response.data;
+            if(message === 'jwt expired'){
+                navigate('/auth/login');
+            }
+            dispatch(getProfileFailure(message));
         });
     }
 }
@@ -89,7 +93,7 @@ const signInFailure = error => {
     }
 }
 
-export const signIn = (user, history, showNotification) => {
+export const signIn = (user, navigate, showNotification) => {
     return dispatch => {
         dispatch(signInRequest());
         axios({
@@ -101,7 +105,7 @@ export const signIn = (user, history, showNotification) => {
             dispatch(signInSuccess(data, token));
             localStorage.setItem(STREAMING_RESOURCE_GH_TOKEN_KEY, JSON.stringify(token));
             localStorage.setItem(STREAMING_RESOURCE_GH_USER_KEY, JSON.stringify(data));
-            history.push('/');
+            navigate('/');
             showNotification(message, {variant: 'success'});
         }).catch(error => {
             showNotification(error.response.data.message, {variant: 'error'});
@@ -130,7 +134,7 @@ const signUpFailure = error => {
     }
 }
 
-export const signUp = (user, history,  resetForm, setSubmitting, showMessage) => {
+export const signUp = (user, navigate,  resetForm, setSubmitting, showMessage) => {
     return dispatch => {
         dispatch(signUpRequest());
         axios({
@@ -145,7 +149,7 @@ export const signUp = (user, history,  resetForm, setSubmitting, showMessage) =>
             localStorage.setItem(STREAMING_RESOURCE_GH_TOKEN_KEY, JSON.stringify(token));
             localStorage.setItem(STREAMING_RESOURCE_GH_USER_KEY, JSON.stringify(data));
             showMessage(message, {variant: 'success'});
-            history.push('/auth/login');
+            navigate('/');
         }).catch(error => {
             showMessage(error.response.data.message, {variant: 'error'});
             dispatch(signUpFailure(error.response.data.message));
@@ -215,7 +219,7 @@ const updateProfileFailure = error => {
     }
 }
 
-export const updateProfile = (user, token, history, handleShowNotification) => {
+export const updateProfile = (user, token, navigate, handleShowNotification) => {
     return dispatch => {
         dispatch(updateProfileRequest());
         axios({
@@ -230,7 +234,7 @@ export const updateProfile = (user, token, history, handleShowNotification) => {
             handleShowNotification(message, {variant: 'success'});
             dispatch(updateProfileSuccess(data));
             localStorage.setItem(STREAMING_RESOURCE_GH_USER_KEY, JSON.stringify(data));
-            history.push('/account');
+            navigate('/account');
         }).catch(error => {
             handleShowNotification(error.response.data.message, {variant: 'error'});
             dispatch(updateProfileFailure(error.response.data.message));
@@ -259,7 +263,7 @@ const changePasswordFailure = error => {
     }
 }
 
-export const changePassword = (passwords, token, history) => {
+export const changePassword = (passwords, token, navigate) => {
     return dispatch => {
         dispatch(changePasswordRequest());
         axios({
@@ -273,7 +277,7 @@ export const changePassword = (passwords, token, history) => {
         }).then(res => {
             const {data} = res.data;
             dispatch(changePasswordSuccess(data));
-            history.push('/profile');
+            navigate('/profile');
         }).catch(error => {
             dispatch(changePasswordFailure(error.response.data.message));
         });
@@ -301,7 +305,7 @@ const forgotPasswordFailure = error => {
     }
 }
 
-export const forgotPassword = (email, history, showNotification) => {
+export const forgotPassword = (email, navigate, showNotification) => {
     return dispatch => {
         dispatch(forgotPasswordRequest());
         axios({
@@ -315,7 +319,7 @@ export const forgotPassword = (email, history, showNotification) => {
             const {data, message} = res.data;
             dispatch(forgotPasswordSuccess(data));
             showNotification(message, {variant: 'success'});
-            history.push('/auth/reset-password');
+            navigate('/auth/reset-password');
         }).catch(error => {
             showNotification(error.response.data.message, {variant: 'error'});
             dispatch(forgotPasswordFailure(error.response.data.message));
@@ -343,7 +347,7 @@ const signOutFailure = error => {
     }
 }
 
-export const signOut = (token, history) => {
+export const signOut = (token, navigate) => {
     return dispatch => {
         dispatch(signOutRequest());
         axios({
@@ -354,13 +358,13 @@ export const signOut = (token, history) => {
                 'Content-Type': 'application/json'
             },
         }).then(res => {
-            history.push('/auth/login');
+            navigate('/auth/login');
             localStorage.removeItem(STREAMING_RESOURCE_GH_USER_KEY);
             localStorage.removeItem(STREAMING_RESOURCE_GH_TOKEN_KEY);
             const {data} = res.data;
             dispatch(signOutSuccess(data));
         }).catch(error => {
-            history.push('/auth/login');
+            navigate('/auth/login');
             dispatch(signOutFailure(error.response.data.message));
         });
     }

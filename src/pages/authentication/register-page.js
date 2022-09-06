@@ -1,23 +1,7 @@
-import {
-    Alert,
-    AlertTitle,
-    Box,
-    Button,
-    Container,
-    FormControl,
-    FormHelperText,
-    Grid,
-    InputAdornment,
-    LinearProgress,
-    OutlinedInput,
-    Stack,
-    Typography,
-    useTheme
-} from "@mui/material";
 import {useFormik} from "formik";
 import * as yup from "yup";
 import "yup-phone";
-import {Link, useHistory} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {
     CallOutlined,
     KeyboardArrowLeft,
@@ -31,19 +15,36 @@ import {useDispatch, useSelector} from "react-redux";
 import {useSnackbar} from "notistack";
 import {selectAuth} from "../../redux/authentication/auth-reducer";
 import {signUp} from "../../redux/authentication/auth-action-creators";
+import {
+    Alert,
+    AlertTitle,
+    Box,
+    Button,
+    Card,
+    CardContent,
+    Container,
+    FormControl,
+    FormHelperText,
+    Grid,
+    InputAdornment,
+    LinearProgress,
+    OutlinedInput,
+    Stack,
+    Typography
+} from "@mui/material";
 
 const RegisterPage = () => {
 
     const dispatch = useDispatch();
 
-    const {authLoading, authError, authMessage} = useSelector(selectAuth);
+    const {authLoading, authError} = useSelector(selectAuth);
     const {enqueueSnackbar} = useSnackbar();
 
     const showMessage = (message, options) => {
         enqueueSnackbar(message, options);
     }
 
-    const history = useHistory();
+    const navigate = useNavigate();
 
     const formik = useFormik({
         initialValues: {
@@ -57,7 +58,7 @@ const RegisterPage = () => {
             email: ''
         },
         onSubmit: (values, {resetForm, setSubmitting}) => {
-            dispatch(signUp({values, history, resetForm, setSubmitting, showMessage}));
+            dispatch(signUp({values, navigate, resetForm, setSubmitting, showMessage}));
         },
         validateOnBlur: true,
         validateOnChange: true,
@@ -77,29 +78,26 @@ const RegisterPage = () => {
 
     const [showPassword, setShowPassword] = useState(false);
 
-    const theme = useTheme();
-
     return (
         <Box
             sx={{
-                maxWidth: '100vw',
+                flex: 1,
                 display: 'flex',
+                alignItems: 'center',
+                backgroundColor: 'background.paper',
                 minHeight: '100vh',
+                justifyContent: 'center',
             }}>
-            <Box
-                sx={{
-                    flex: 1,
-                    display: 'flex',
-                    alignItems: 'center',
-                    backgroundColor: 'background.paper',
-                    minHeight: '100vh',
-                    justifyContent: 'center',
-                    overflowY: 'scroll',
-                    paddingY: 4,
-                }}>
-                {authLoading && <LinearProgress variant="query" color="secondary"/>}
-                <Container maxWidth="md">
-                    <Box sx={{alignItems: "center", display: 'flex'}} flexGrow={1}>
+            <Container maxWidth="md">
+                <Card
+                    sx={{
+                        borderBottomRightRadius: 0,
+                        borderTopRightRadius: 32,
+                        borderBottomLeftRadius: 32,
+                        borderTopLeftRadius: 0
+                    }} variant="elevation" elevation={1}>
+                    {authLoading && <LinearProgress variant="query" color="secondary"/>}
+                    <CardContent>
                         <form
                             style={{width: '100%'}}
                             autoComplete="off"
@@ -111,26 +109,21 @@ const RegisterPage = () => {
                                     </Alert>
                                 )}
 
-                                {authMessage && (
-                                    <Alert severity="error">
-                                        <AlertTitle>{authMessage}</AlertTitle>
-                                    </Alert>
-                                )}
 
                                 <Box mb={2}>
                                     <Button
                                         color="secondary"
                                         size="large"
                                         sx={{textTransform: 'capitalize'}}
-                                        onClick={history.go}
+                                        onClick={() => navigate(-1)}
                                         variant="text"
                                         startIcon={<KeyboardArrowLeft/>}>
                                         Back
                                     </Button>
                                 </Box>
 
-                                <Stack mb={2} direction="row" spacing={1}>
-                                    <Typography variant="h5" sx={{color: 'secondary.main'}}>
+                                <Stack mb={4} direction="row" spacing={1}>
+                                    <Typography variant="h5" sx={{color: 'text.primary'}}>
                                         Sign
                                     </Typography>
                                     <Typography variant="h5" sx={{color: 'text.primary'}}>
@@ -138,7 +131,7 @@ const RegisterPage = () => {
                                     </Typography>
                                 </Stack>
 
-                                <Typography variant="h4" sx={{color: 'secondary.main', mb: 2}}>
+                                <Typography variant="h5" sx={{color: 'text.primary', mb: 4}}>
                                     Streaming Resource GH
                                 </Typography>
 
@@ -146,21 +139,18 @@ const RegisterPage = () => {
                                 <Stack mb={2} direction="row" spacing={2} alignItems="center">
                                     <Typography
                                         variant="body2"
-                                        sx={{color: 'text.secondary', fontWeight: 500}}>
+                                        sx={{color: 'text.primary', fontWeight: 500}}>
                                         Already have an account?
                                     </Typography>
-                                    <Typography
-                                        variant="body2"
-                                        sx={{color: 'text.secondary', fontWeight: 500}}>
-                                        <Link
-                                            style={{
-                                                color: theme.palette.secondary.main,
-                                                textDecoration: 'none'
-                                            }}
-                                            to="/auth/login">
+                                    <Link
+                                        style={{textDecoration: 'none'}}
+                                        to="/auth/login">
+                                        <Typography
+                                            variant="body2"
+                                            sx={{color: 'secondary.main', fontWeight: 500}}>
                                             Sign In
-                                        </Link>
-                                    </Typography>
+                                        </Typography>
+                                    </Link>
                                 </Stack>
 
                                 <Grid mb={2} container={true} spacing={2} alignItems="center">
@@ -169,7 +159,7 @@ const RegisterPage = () => {
                                             <Typography
                                                 mb={1}
                                                 variant="body2"
-                                                sx={{color: 'secondary.main', fontWeight: 'bold'}}>
+                                                sx={{color: 'text.primary', fontWeight: 'bold'}}>
                                                 First Name
                                             </Typography>
                                             <FormControl fullWidth={true} variant="outlined">
@@ -184,7 +174,7 @@ const RegisterPage = () => {
                                                             <PersonOutlined
                                                                 sx={{
                                                                     cursor: 'pointer',
-                                                                    color: 'secondary.main',
+                                                                    color: 'text.primary',
                                                                     padding: 1,
                                                                     fontSize: 36,
                                                                 }}
@@ -213,7 +203,7 @@ const RegisterPage = () => {
                                         <Box>
                                             <Typography
                                                 mb={1} variant="body2"
-                                                sx={{color: 'secondary.main', fontWeight: 'bold'}}>
+                                                sx={{color: 'text.primary', fontWeight: 'bold'}}>
                                                 Last Name
                                             </Typography>
                                             <FormControl fullWidth={true} variant="outlined">
@@ -228,7 +218,7 @@ const RegisterPage = () => {
                                                             <PersonOutlined
                                                                 sx={{
                                                                     cursor: 'pointer',
-                                                                    color: 'secondary.main',
+                                                                    color: 'text.primary',
                                                                     padding: 1,
                                                                     fontSize: 36,
                                                                 }}
@@ -260,7 +250,7 @@ const RegisterPage = () => {
                                             <Typography
                                                 mb={1}
                                                 variant="body2"
-                                                sx={{color: 'secondary.main', fontWeight: 'bold'}}>
+                                                sx={{color: 'text.primary', fontWeight: 'bold'}}>
                                                 Email
                                             </Typography>
                                             <FormControl fullWidth={true} variant="outlined">
@@ -275,7 +265,7 @@ const RegisterPage = () => {
                                                             <MailOutline
                                                                 sx={{
                                                                     cursor: 'pointer',
-                                                                    color: 'secondary.main',
+                                                                    color: 'text.primary',
                                                                     padding: 1,
                                                                     fontSize: 36,
                                                                 }}
@@ -304,7 +294,7 @@ const RegisterPage = () => {
                                             <Typography
                                                 mb={1}
                                                 variant="body2"
-                                                sx={{color: 'secondary.main', fontWeight: 'bold'}}>
+                                                sx={{color: 'text.primary', fontWeight: 'bold'}}>
                                                 Phone
                                             </Typography>
                                             <FormControl fullWidth={true} variant="outlined">
@@ -319,7 +309,7 @@ const RegisterPage = () => {
                                                             <CallOutlined
                                                                 sx={{
                                                                     cursor: 'pointer',
-                                                                    color: 'secondary.main',
+                                                                    color: 'text.primary',
                                                                     padding: 1,
                                                                     fontSize: 36,
                                                                 }}
@@ -351,7 +341,7 @@ const RegisterPage = () => {
                                             <Typography
                                                 mb={1} variant="body2"
                                                 sx={{
-                                                    color: 'secondary.main',
+                                                    color: 'text.primary',
                                                     fontWeight: 'bold'
                                                 }}>
                                                 Password
@@ -371,7 +361,7 @@ const RegisterPage = () => {
                                                                     onClick={() => setShowPassword(false)}
                                                                     sx={{
                                                                         cursor: 'pointer',
-                                                                        color: 'secondary.main',
+                                                                        color: 'text.primary',
                                                                         padding: 1,
                                                                         fontSize: 36,
                                                                     }}
@@ -380,7 +370,7 @@ const RegisterPage = () => {
                                                                     onClick={() => setShowPassword(true)}
                                                                     sx={{
                                                                         cursor: 'pointer',
-                                                                        color: 'secondary.main',
+                                                                        color: 'text.primary',
                                                                         padding: 1,
                                                                         fontSize: 36,
                                                                     }}
@@ -410,7 +400,7 @@ const RegisterPage = () => {
                                             <Typography
                                                 mb={1} variant="body2"
                                                 sx={{
-                                                    color: 'secondary.main',
+                                                    color: 'text.primary',
                                                     fontWeight: 'bold'
                                                 }}>
                                                 Confirm Password
@@ -430,7 +420,7 @@ const RegisterPage = () => {
                                                                     onClick={() => setShowPassword(false)}
                                                                     sx={{
                                                                         cursor: 'pointer',
-                                                                        color: 'secondary.main',
+                                                                        color: 'text.primary',
                                                                         padding: 1,
                                                                         fontSize: 36,
                                                                     }}
@@ -439,7 +429,7 @@ const RegisterPage = () => {
                                                                     onClick={() => setShowPassword(true)}
                                                                     sx={{
                                                                         cursor: 'pointer',
-                                                                        color: 'secondary.main',
+                                                                        color: 'text.primary',
                                                                         padding: 1,
                                                                         fontSize: 36,
                                                                     }}
@@ -469,14 +459,14 @@ const RegisterPage = () => {
                                     onClick={formik.handleSubmit}
                                     type="submit"
                                     size="large"
-                                    color="secondary"
+                                    color="primary"
                                     sx={{
                                         textTransform: 'capitalize',
                                         py: 1.2,
-                                        borderBottomRightRadius: 4,
+                                        borderBottomRightRadius: 0,
                                         borderTopRightRadius: 12,
                                         borderBottomLeftRadius: 12,
-                                        borderTopLeftRadius: 4,
+                                        borderTopLeftRadius: 0,
                                     }}
                                     disabled={authLoading}
                                     fullWidth={false}
@@ -488,9 +478,9 @@ const RegisterPage = () => {
                                 </Button>
                             </Box>
                         </form>
-                    </Box>
-                </Container>
-            </Box>
+                    </CardContent>
+                </Card>
+            </Container>
         </Box>
     )
 }

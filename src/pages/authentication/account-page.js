@@ -1,77 +1,33 @@
 import React from "react";
 import Layout from "../../components/layout";
-import {
-    Button,
-    Card,
-    CardContent,
-    Container,
-    Divider,
-    Grid,
-    LinearProgress,
-    makeStyles,
-    Typography
-} from "@material-ui/core";
 import {Link} from "react-router-dom";
-import {useSelector} from "react-redux";
-import {Skeleton} from "@material-ui/lab";
+import {useDispatch, useSelector} from "react-redux";
 import {selectAuth} from "../../redux/authentication/auth-reducer";
+import {signOut} from "../../redux/authentication/auth-action-creators";
+import {Button, Card, CardContent, Container, Divider, Grid, LinearProgress, Skeleton, Typography} from "@mui/material";
+import {useNavigate} from "react-router";
 
 
 const AccountPage = () => {
 
-    const useStyles = makeStyles(theme => {
-        return {
-            container: {
-                paddingTop: 84,
-                paddingBottom: 84
-            },
-            divider: {
-                marginTop: 32,
-                marginBottom: 32
-            },
-            subDivider: {
-                marginTop: 8,
-                marginBottom: 8
-            },
-            textField: {
-                background: "#efefefef",
-                marginBottom: 8,
-                marginTop: 8
-            },
-            button: {
-                paddingTop: 16,
-                paddingBottom: 16,
-                marginTop: 16,
-                marginBottom: 16
-            },
-            title: {
-                textTransform: "uppercase"
-            },
-            link: {
-                textDecoration: "none"
-            },
-            gridContainer: {
-                marginTop: 32
-            }
-        }
-    });
 
-    const classes = useStyles();
-
-    const {loading, user} = useSelector(selectAuth);
+    const {loading, user, token} = useSelector(selectAuth);
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const handleLogoutClick = () => {
-
+        dispatch(signOut(token, navigate));
     }
+
     return (
         <Layout>
-            <Container className={classes.container}>
+            <Container>
                 {loading && <LinearProgress color="secondary" variant="query"/>}
                 <Typography color="textPrimary" variant="h3" align="center">
                     Account Information
                 </Typography>
 
-                <Divider variant="fullWidth" className={classes.divider}/>
+                <Divider variant="fullWidth"/>
 
                 <Grid container={true} justify="center">
                     <Grid item={true} xs={12} md={6}>
@@ -89,7 +45,7 @@ const AccountPage = () => {
                                     </Typography>
                                 }
 
-                                <Divider variant="fullWidth" className={classes.subDivider}/>
+                                <Divider variant="fullWidth"/>
 
                                 <Typography color="textPrimary" variant="caption"
                                             gutterBottom={true}>Position</Typography>
@@ -98,7 +54,7 @@ const AccountPage = () => {
                                         {user.position}
                                     </Typography>
                                 }
-                                <Divider variant="fullWidth" className={classes.subDivider}/>
+                                <Divider variant="fullWidth"/>
                                 <Typography color="textPrimary" variant="caption"
                                             gutterBottom={true}>Department</Typography>
                                 {loading ? <Skeleton variant="text" animation="wave"/> :
@@ -111,13 +67,12 @@ const AccountPage = () => {
                     </Grid>
                 </Grid>
 
-                <Grid container={true} justify="center" className={classes.gridContainer}>
+                <Grid container={true} justifyContent="center">
                     <Grid item={true} xs={12} md={6}>
                         <Card variant="outlined" elevation={1}>
                             <CardContent>
-                                <Link to="/auth/update-profile" className={classes.link}>
+                                <Link to="/auth/update-profile">
                                     <Button
-                                        className={classes.button}
                                         variant="outlined"
                                         size="large"
                                         fullWidth={true}>
@@ -125,11 +80,10 @@ const AccountPage = () => {
                                     </Button>
                                 </Link>
 
-                                <Divider variant="fullWidth" className={classes.subDivider}/>
+                                <Divider variant="fullWidth"/>
 
-                                <Link to="/auth/change-password" className={classes.link}>
+                                <Link to="/auth/change-password">
                                     <Button
-                                        className={classes.button}
                                         variant="outlined"
                                         size="large"
                                         fullWidth={true}>
@@ -137,21 +91,19 @@ const AccountPage = () => {
                                     </Button>
                                 </Link>
 
-                                <Divider variant="fullWidth" className={classes.subDivider}/>
+                                <Divider variant="fullWidth" />
 
                                 <Button
                                     onClick={handleLogoutClick}
-                                    className={classes.button}
                                     variant="outlined"
                                     size="large"
                                     fullWidth={true}>
                                     Logout
                                 </Button>
 
-                                <Divider variant="fullWidth" className={classes.subDivider}/>
+                                <Divider variant="fullWidth" />
 
                                 <Button
-                                    className={classes.button}
                                     variant="outlined"
                                     size="large"
                                     fullWidth={true}>
