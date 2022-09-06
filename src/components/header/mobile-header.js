@@ -3,7 +3,7 @@ import {Link, useNavigate} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {selectAuth} from "../../redux/authentication/auth-reducer";
 import {signOut} from "../../redux/authentication/auth-action-creators";
-import {Avatar, CircularProgress, Grid, Toolbar, Typography} from "@mui/material";
+import {Avatar, Grid, Toolbar, Typography} from "@mui/material";
 import {ExitToApp, Menu} from "@mui/icons-material";
 
 const MobileHeader = ({handleDrawerOpen}) => {
@@ -46,39 +46,40 @@ const MobileHeader = ({handleDrawerOpen}) => {
                 </Grid>
 
                 {user && (
-                    <Grid xs={4} spacing={2} alignItems="center" item={true} container={true} justify="space-around">
-                        <Grid item={true}>
-                            {loading && <CircularProgress variant="indeterminate"/>}
-                            <Avatar
-                                sx={{
-                                    color: 'secondary.main',
-                                    backgroundColor: 'light.secondary',
-                                    borderBottomRightRadius: 0,
-                                    borderTopRightRadius: 12,
-                                    borderBottomLeftRadius: 12,
-                                    borderTopLeftRadius: 0,
-                                }}
-                                variant="circular">
-                                <Typography
-                                    sx={{color: 'secondary.main'}}
-                                    variant="h6">
-                                    {user.name[0]}</Typography>
-                            </Avatar>
-                        </Grid>
-                        <Grid item={true}>
-                            <ExitToApp
-                                sx={{
-                                    borderBottomRightRadius: 0,
-                                    borderTopRightRadius: 12,
-                                    borderBottomLeftRadius: 12,
-                                    borderTopLeftRadius: 0,
-                                    backgroundColor: 'light.secondary',
-                                    color: 'secondary.main',
-                                    fontSize: 32,
-                                    padding: 0.4
-                                }}
-                                onClick={handleLogoutClick}
-                            />
+                    <Grid xs={4} alignItems="center" item={true}>
+                        <Grid spacing={2} alignItems="center" item={true} container={true}>
+                            <Grid item={true}>
+                                <Avatar
+                                    sx={{
+                                        color: 'secondary.main',
+                                        backgroundColor: 'light.secondary',
+                                        borderBottomRightRadius: 0,
+                                        borderTopRightRadius: 12,
+                                        borderBottomLeftRadius: 12,
+                                        borderTopLeftRadius: 0,
+                                    }}
+                                    variant="circular">
+                                    <Typography
+                                        sx={{color: 'secondary.main'}}
+                                        variant="h6">
+                                        {user.name[0]}</Typography>
+                                </Avatar>
+                            </Grid>
+                            <Grid item={true}>
+                                <ExitToApp
+                                    sx={{
+                                        borderBottomRightRadius: 0,
+                                        borderTopRightRadius: 12,
+                                        borderBottomLeftRadius: 12,
+                                        borderTopLeftRadius: 0,
+                                        backgroundColor: 'light.secondary',
+                                        color: 'secondary.main',
+                                        fontSize: 32,
+                                        padding: 0.4
+                                    }}
+                                    onClick={handleLogoutClick}
+                                />
+                            </Grid>
                         </Grid>
                     </Grid>
                 )}

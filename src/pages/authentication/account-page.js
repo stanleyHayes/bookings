@@ -4,7 +4,19 @@ import {Link} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {selectAuth} from "../../redux/authentication/auth-reducer";
 import {signOut} from "../../redux/authentication/auth-action-creators";
-import {Button, Card, CardContent, Container, Divider, Grid, LinearProgress, Skeleton, Typography} from "@mui/material";
+import {
+    Box,
+    Button,
+    Card,
+    CardContent,
+    Container,
+    Divider,
+    Grid,
+    LinearProgress,
+    Skeleton,
+    Stack,
+    Typography
+} from "@mui/material";
 import {useNavigate} from "react-router";
 
 
@@ -23,92 +35,148 @@ const AccountPage = () => {
         <Layout>
             <Container>
                 {loading && <LinearProgress color="secondary" variant="query"/>}
-                <Typography color="textPrimary" variant="h3" align="center">
+                <Typography sx={{color: 'text.primary'}} variant="h4" align="center">
                     Account Information
                 </Typography>
 
-                <Divider variant="fullWidth"/>
+                <Divider sx={{my: 3}} variant="fullWidth"/>
 
                 <Grid container={true} justify="center">
                     <Grid item={true} xs={12} md={6}>
-                        <Card variant="outlined" elevation={1}>
+                        <Card
+                            sx={{
+                                borderBottomRightRadius: 0,
+                                borderTopRightRadius: 32,
+                                borderBottomLeftRadius: 32,
+                                borderTopLeftRadius: 0,
+                            }} variant="elevation" elevation={1}>
                             <CardContent>
-                                <Typography
-                                    color="textPrimary"
-                                    variant="caption"
-                                    gutterBottom={true}>
-                                    Name
-                                </Typography>
-                                {loading ? <Skeleton variant="text" animation="wave"/> :
-                                    <Typography color="textPrimary" gutterBottom={true} variant="h4">
-                                        {user.name}
-                                    </Typography>
-                                }
-
-                                <Divider variant="fullWidth"/>
-
-                                <Typography color="textPrimary" variant="caption"
+                                <Stack divider={<Divider variant="fullWidth" light={true}/>} spacing={2}>
+                                    <Box>
+                                        <Typography
+                                            sx={{color: 'text.secondary'}}
+                                            variant="caption"
+                                            gutterBottom={true}>
+                                            Name
+                                        </Typography>
+                                        {loading ? <Skeleton variant="text" animation="wave"/> :
+                                            <Typography
+                                                sx={{color: 'text.primary'}}
+                                                gutterBottom={true} variant="h6">
+                                                {user.name}
+                                            </Typography>
+                                        }
+                                    </Box>
+                                    <Box>
+                                        <Typography
+                                            sx={{color: 'text.secondary'}}
+                                            variant="body2"
                                             gutterBottom={true}>Position</Typography>
-                                {loading ? <Skeleton variant="text" animation="wave"/> :
-                                    <Typography color="textPrimary" gutterBottom={true} variant="h6">
-                                        {user.position}
-                                    </Typography>
-                                }
-                                <Divider variant="fullWidth"/>
-                                <Typography color="textPrimary" variant="caption"
-                                            gutterBottom={true}>Department</Typography>
-                                {loading ? <Skeleton variant="text" animation="wave"/> :
-                                    <Typography color="textPrimary" gutterBottom={true} variant="h6">
-                                        {user.department}
-                                    </Typography>
-                                }
+                                        {loading ? <Skeleton variant="text" animation="wave"/> :
+                                            <Typography sx={{color: 'text.primary'}} gutterBottom={true} variant="h6">
+                                                {user.position}
+                                            </Typography>
+                                        }
+                                    </Box>
+                                    <Box>
+                                        <Typography
+                                            sx={{color: 'text.secondary'}}
+                                            variant="body2"
+                                            gutterBottom={true}>
+                                            Department
+                                        </Typography>
+                                        {loading ? <Skeleton variant="text" animation="wave"/> :
+                                            <Typography
+                                                sx={{color: 'text.primary'}}
+                                                gutterBottom={true} variant="h6">
+                                                {user.department}
+                                            </Typography>
+                                        }
+                                    </Box>
+                                </Stack>
                             </CardContent>
                         </Card>
                     </Grid>
                 </Grid>
 
+                <Divider sx={{my: 3}} variant="fullWidth"/>
+
                 <Grid container={true} justifyContent="center">
                     <Grid item={true} xs={12} md={6}>
-                        <Card variant="outlined" elevation={1}>
+                        <Card sx={{
+                            borderBottomRightRadius: 0,
+                            borderTopRightRadius: 32,
+                            borderBottomLeftRadius: 32,
+                            borderTopLeftRadius: 0,
+                        }} variant="elevation" elevation={1}>
                             <CardContent>
-                                <Link to="/auth/update-profile">
+                                <Stack divider={<Divider variant="fullWidth" light={true}/>} spacing={3}>
+
+                                    <Link style={{textDecoration: 'none'}} to="/auth/update-profile">
+                                        <Button
+                                            sx={{
+                                                borderBottomRightRadius: 0,
+                                                borderTopRightRadius: 12,
+                                                borderBottomLeftRadius: 12,
+                                                borderTopLeftRadius: 0,
+                                                textTransform: 'capitalize'
+                                            }}
+                                            color="secondary"
+                                            variant="outlined"
+                                            size="large"
+                                            fullWidth={true}>
+                                            Update Profile
+                                        </Button>
+                                    </Link>
+
+                                    <Link style={{textDecoration: 'none'}} to="/auth/change-password">
+                                        <Button
+                                            sx={{
+                                                borderBottomRightRadius: 0,
+                                                borderTopRightRadius: 12,
+                                                borderBottomLeftRadius: 12,
+                                                borderTopLeftRadius: 0,
+                                                textTransform: 'capitalize'
+                                            }}
+                                            color="secondary"
+                                            variant="outlined"
+                                            size="large"
+                                            fullWidth={true}>
+                                            Change Password
+                                        </Button>
+                                    </Link>
+
                                     <Button
+                                        sx={{
+                                            borderBottomRightRadius: 0,
+                                            borderTopRightRadius: 12,
+                                            borderBottomLeftRadius: 12,
+                                            borderTopLeftRadius: 0,
+                                            textTransform: 'capitalize'
+                                        }}
+                                        color="secondary"
+                                        onClick={handleLogoutClick}
                                         variant="outlined"
                                         size="large"
                                         fullWidth={true}>
-                                        Update Profile
+                                        Logout
                                     </Button>
-                                </Link>
 
-                                <Divider variant="fullWidth"/>
-
-                                <Link to="/auth/change-password">
                                     <Button
+                                        sx={{
+                                            borderBottomRightRadius: 0,
+                                            borderTopRightRadius: 12,
+                                            borderBottomLeftRadius: 12,
+                                            borderTopLeftRadius: 0,
+                                            textTransform: 'capitalize'
+                                        }}
+                                        color="secondary"
                                         variant="outlined"
                                         size="large"
                                         fullWidth={true}>
-                                        Change Password
+                                        Logout all devices
                                     </Button>
-                                </Link>
-
-                                <Divider variant="fullWidth" />
-
-                                <Button
-                                    onClick={handleLogoutClick}
-                                    variant="outlined"
-                                    size="large"
-                                    fullWidth={true}>
-                                    Logout
-                                </Button>
-
-                                <Divider variant="fullWidth" />
-
-                                <Button
-                                    variant="outlined"
-                                    size="large"
-                                    fullWidth={true}>
-                                    Logout all devices
-                                </Button>
+                                </Stack>
                             </CardContent>
                         </Card>
                     </Grid>
