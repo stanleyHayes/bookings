@@ -31,7 +31,6 @@ import {useDispatch, useSelector} from "react-redux";
 import {useSnackbar} from "notistack";
 import {selectAuth} from "../../redux/authentication/auth-reducer";
 import {signUp} from "../../redux/authentication/auth-action-creators";
-import {makeStyles} from "@material-ui/core";
 
 const RegisterPage = () => {
 

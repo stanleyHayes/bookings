@@ -354,12 +354,13 @@ export const signOut = (token, history) => {
                 'Content-Type': 'application/json'
             },
         }).then(res => {
-            const {data} = res.data;
-            dispatch(signOutSuccess(data));
+            history.push('/auth/login');
             localStorage.removeItem(STREAMING_RESOURCE_GH_USER_KEY);
             localStorage.removeItem(STREAMING_RESOURCE_GH_TOKEN_KEY);
-            history.push('/auth/login');
+            const {data} = res.data;
+            dispatch(signOutSuccess(data));
         }).catch(error => {
+            history.push('/auth/login');
             dispatch(signOutFailure(error.response.data.message));
         });
     }
