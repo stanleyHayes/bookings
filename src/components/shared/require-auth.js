@@ -10,18 +10,22 @@ const RequireAuth = ({children}) => {
     const {token, loading} = useSelector(selectAuth);
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const location = useLocation();
+    const {pathname} = useLocation();
 
     useEffect(() => {
         dispatch(AUTH_ACTION_CREATORS.getProfile(token, navigate));
-    }, []);
+    }, [token]);
+
+    if (!token) {
+        return <Navigate to="/auth/login" state={{pathname}}/>
+    }
 
     if (loading) {
-        return <Splash/>;
+        return <Splash/>
     }
 
     if (!loading && !token) {
-        return <Navigate to="/auth/login" state={{path: location.pathname}}/>
+        return <Navigate to="/auth/login" state={{pathname}}/>
     }
 
     return (

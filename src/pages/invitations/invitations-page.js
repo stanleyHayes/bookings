@@ -6,6 +6,7 @@ import {
     Container,
     Divider,
     Grid,
+    LinearProgress,
     Paper,
     Table,
     TableBody,
@@ -23,7 +24,6 @@ import {selectInvitations} from "../../redux/invitations/invitation-reducer";
 import moment from "moment";
 import {selectAuth} from "../../redux/authentication/auth-reducer";
 import {INVITATION_ACTION_CREATORS} from "../../redux/invitations/invitation-action-creators";
-import {orange} from "@mui/material/colors";
 import Layout from "../../components/layout";
 import InviteAdminDialog from "../../components/dialogs/admin-invitation-dialog";
 
@@ -43,6 +43,7 @@ const InvitationsPage = () => {
 
     return (
         <Layout>
+            {invitationLoading && <LinearProgress variant="query" color="secondary"/>}
             <Box sx={{py: 8}}>
                 <Container>
                     <Grid container={true} justifyContent="space-between" spacing={2}>

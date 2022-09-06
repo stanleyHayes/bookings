@@ -68,20 +68,12 @@ function App() {
             <Route
                 path="/auth/login"
                 exact={true}
-                element={
-                    <RequireAuth>
-                        <LoginPage/>
-                    </RequireAuth>
-                }/>
+                element={<LoginPage/>}/>
 
             <Route
                 path="/auth/register"
                 exact={true}
-                element={
-                    <RequireAuth>
-                        <RegisterPage/>
-                    </RequireAuth>
-                }/>
+                element={<RegisterPage/>}/>
 
             <Route
                 path="/auth/change-password"

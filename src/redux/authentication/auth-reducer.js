@@ -16,7 +16,7 @@ import {
     FORGOT_PASSWORD_FAILURE,
     CHANGE_PASSWORD_SUCCESS,
     FORGOT_PASSWORD_SUCCESS,
-    FORGOT_PASSWORD_REQUEST
+    FORGOT_PASSWORD_REQUEST, GET_PROFILE_FAILURE, GET_PROFILE_REQUEST, GET_PROFILE_SUCCESS, SIGN_OUT_FAILURE, SIGN_OUT_REQUEST, SIGN_OUT_SUCCESS
 } from './auth-action-types';
 
 const INITIAL_STATE = {
@@ -28,6 +28,59 @@ const INITIAL_STATE = {
 
 const authReducer = (state = INITIAL_STATE, action) => {
     switch (action.type) {
+
+        case SIGN_OUT_REQUEST:
+            return {
+                ...state,
+                loading: true,
+                error: ""
+            }
+
+        case SIGN_OUT_SUCCESS:
+            return {
+                ...state,
+                loading: false,
+                token: null,
+                user: null,
+                error: ""
+            }
+
+        case SIGN_OUT_FAILURE:
+            return {
+                ...state,
+                loading: false,
+                token: null,
+                user: null,
+                error: null
+            }
+
+
+        case GET_PROFILE_REQUEST:
+            return {
+                ...state,
+                loading: true,
+                error: ""
+            }
+
+        case GET_PROFILE_SUCCESS:
+            return {
+                ...state,
+                loading: false,
+                token: action.payload.token,
+                user: action.payload.user,
+                error: ""
+            }
+
+        case GET_PROFILE_FAILURE:
+            return {
+                ...state,
+                loading: false,
+                token: null,
+                user: null,
+                error: action.payload
+            }
+
+
         case SIGN_UP_REQUEST:
             return {
                 ...state,

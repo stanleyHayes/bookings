@@ -87,6 +87,7 @@ const RegisterPage = () => {
                 backgroundColor: 'background.paper',
                 minHeight: '100vh',
                 justifyContent: 'center',
+                paddingY: 4
             }}>
             <Container maxWidth="md">
                 <Card
@@ -470,7 +471,6 @@ const RegisterPage = () => {
                                     }}
                                     disabled={authLoading}
                                     fullWidth={false}
-                                    loadingPosition="start"
                                     loading={authLoading}
                                     variant="contained"
                                     disableElevation={true}>
