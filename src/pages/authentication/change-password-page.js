@@ -5,7 +5,9 @@ import {selectAuth} from "../../redux/authentication/auth-reducer";
 import {changePassword} from "../../redux/authentication/auth-action-creators";
 import {useNavigate} from "react-router-dom";
 import {
-    Button, Card,
+    Box,
+    Button,
+    Card,
     CardContent,
     Container,
     Divider,
@@ -76,89 +78,111 @@ const ChangePasswordPage = () => {
 
     return (
         <Layout>
-            <Container >
-                {loading && <LinearProgress color="secondary" variant="query"/>}
-                <Typography color="textPrimary" variant="h3" align="center">Change Password</Typography>
+            {loading && <LinearProgress color="secondary" variant="query"/>}
+            <Box sx={{minHeight: '100vh', py: 4, display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+                <Container>
 
-                <Divider light={true} variant="fullWidth" />
+                    <Typography
+                        sx={{color: 'text.primary'}}
+                        variant="h4"
+                        align="center">
+                        Change Password
+                    </Typography>
 
-                <Grid container={true} justify="center">
-                    <Grid item={true} xs={12} md={6}>
-                        <Card variant="outlined" elevation={1}>
-                            <CardContent>
-                                <TextField
-                                    variant="outlined"
-                                    fullWidth={true}
-                                    type={visible ? "text" : "password"}
-                                    name="currentPassword"
-                                    value={currentPassword}
-                                    onChange={handlePasswordChange}
-                                    margin="normal"
-                                    label="Current Password"
-                                    placeholder="Enter current password"
-                                    required={true}
-                                    error={!!error.currentPassword}
-                                    helperText={error.currentPassword}
-                                />
+                    <Divider sx={{my: 3}} light={true} variant="fullWidth"/>
 
-                                <TextField
-                                    variant="outlined"
-                                    fullWidth={true}
-                                    type={visible ? "text" : "password"}
-                                    name="newPassword"
-                                    value={newPassword}
-                                    onChange={handlePasswordChange}
-                                    margin="normal"
-                                    label="New Password"
-                                    placeholder="Enter new password"
-                                    required={true}
-                                    error={!!error.newPassword}
-                                    helperText={error.newPassword}
-                                />
+                    <Grid container={true} justify="center">
+                        <Grid item={true} xs={12} md={6}>
+                            <Card sx={{
+                                borderBottomRightRadius: 0,
+                                borderTopRightRadius: 32,
+                                borderBottomLeftRadius: 32,
+                                borderTopLeftRadius: 0,
+                                textTransform: 'capitalize'
+                            }} variant="elevation" elevation={1}>
+                                <CardContent>
+                                    <TextField
+                                        variant="outlined"
+                                        fullWidth={true}
+                                        type={visible ? "text" : "password"}
+                                        name="currentPassword"
+                                        value={currentPassword}
+                                        onChange={handlePasswordChange}
+                                        margin="normal"
+                                        label="Current Password"
+                                        placeholder="Enter current password"
+                                        required={true}
+                                        error={!!error.currentPassword}
+                                        helperText={error.currentPassword}
+                                    />
 
-                                <TextField
-                                    variant="outlined"
-                                    fullWidth={true}
-                                    type={visible ? "text" : "password"}
-                                    value={confirmPassword}
-                                    onChange={handleConfirmPasswordChange}
-                                    margin="normal"
-                                    name="confirmPassword"
-                                    label="Confirm Password"
-                                    placeholder="Confirm new password"
-                                    required={true}
-                                    error={!!error.confirmPassword}
-                                    helperText={error.confirmPassword}
-                                />
+                                    <TextField
+                                        variant="outlined"
+                                        fullWidth={true}
+                                        type={visible ? "text" : "password"}
+                                        name="newPassword"
+                                        value={newPassword}
+                                        onChange={handlePasswordChange}
+                                        margin="normal"
+                                        label="New Password"
+                                        placeholder="Enter new password"
+                                        required={true}
+                                        error={!!error.newPassword}
+                                        helperText={error.newPassword}
+                                    />
 
-                                <Grid container={true} alignItems="center">
-                                    <Grid item={true}>
-                                        <Switch
-                                            checked={visible}
-                                            onChange={handlePasswordVisibility}
-                                            size="medium"/>
+                                    <TextField
+                                        variant="outlined"
+                                        fullWidth={true}
+                                        type={visible ? "text" : "password"}
+                                        value={confirmPassword}
+                                        onChange={handleConfirmPasswordChange}
+                                        margin="normal"
+                                        name="confirmPassword"
+                                        label="Confirm Password"
+                                        placeholder="Confirm new password"
+                                        required={true}
+                                        error={!!error.confirmPassword}
+                                        helperText={error.confirmPassword}
+                                    />
+
+                                    <Grid container={true} alignItems="center">
+                                        <Grid item={true}>
+                                            <Switch
+                                                checked={visible}
+                                                onChange={handlePasswordVisibility}
+                                                size="medium"/>
+                                        </Grid>
+                                        <Grid item={true}>
+                                            <Typography
+                                                variant="body2">
+                                                {visible ? "Hide Password" : "Show Password"}
+                                            </Typography>
+                                        </Grid>
                                     </Grid>
-                                    <Grid item={true}>
-                                        <Typography
-                                            variant="body2">
-                                            {visible ? "Hide Password" : "Show Password"}
-                                        </Typography>
-                                    </Grid>
-                                </Grid>
 
-                                <Button
-                                    onClick={handleChangePasswordSubmit}
-                                    variant="outlined"
-                                    fullWidth={true}
-                                    size="large"
-                                    disableElevation={true}>
-                                    Submit Password
-                                </Button>
-                            </CardContent>
-                        </Card>
+                                    <Button
+                                        sx={{
+                                            borderBottomRightRadius: 0,
+                                            borderTopRightRadius: 12,
+                                            borderBottomLeftRadius: 12,
+                                            borderTopLeftRadius: 0,
+                                            textTransform: 'capitalize'
+                                        }}
+                                        onClick={handleChangePasswordSubmit}
+                                        variant="outlined"
+                                        fullWidth={true}
+                                        color="secondary"
+                                        size="large"
+                                        disableElevation={true}>
+                                        Submit Password
+                                    </Button>
+                                </CardContent>
+                            </Card>
+                        </Grid>
                     </Grid>
-                </Grid>
-            </Container>
+                </Container>
+            </Box>
         </Layout>
     )
 }
