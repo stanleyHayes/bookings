@@ -290,7 +290,7 @@ const acceptInvitationFailure = message => {
     }
 }
 
-const acceptInvitation = (invitation, ID) => {
+const acceptInvitation = (invitation, ID, navigate, resetForm, setSubmitting, showMessage) => {
     return async dispatch => {
         try {
             dispatch(acceptInvitationRequest());

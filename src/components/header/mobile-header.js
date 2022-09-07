@@ -11,7 +11,7 @@ const MobileHeader = ({handleDrawerOpen}) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const {token, user, loading} = useSelector(selectAuth);
+    const {token, user} = useSelector(selectAuth);
 
     const handleLogoutClick = () => {
         dispatch(signOut(token, navigate));

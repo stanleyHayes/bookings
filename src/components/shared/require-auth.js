@@ -12,6 +12,7 @@ const RequireAuth = ({children}) => {
     const navigate = useNavigate();
     const {pathname} = useLocation();
 
+    // eslint-disable-next-line
     useEffect(() => {
         dispatch(AUTH_ACTION_CREATORS.getProfile(token, navigate));
     }, [token]);

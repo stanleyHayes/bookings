@@ -11,10 +11,22 @@ const DeleteDialog = ({open, handleClose, confirmDelete, message}) => {
             </DialogContent>
             <Divider variant="fullWidth"/>
             <DialogActions>
-                <Button variant="text" onClick={handleClose}>
+                <Button
+                    sx={{
+                        borderBottomRightRadius: 0,
+                        borderTopRightRadius: 12,
+                        borderBottomLeftRadius: 12,
+                        borderTopLeftRadius: 0
+                    }} color="secondary" variant="outlined" onClick={handleClose}>
                     Cancel
                 </Button>
-                <Button variant="outlined" onClick={confirmDelete}>
+                <Button
+                    sx={{
+                        borderBottomRightRadius: 0,
+                        borderTopRightRadius: 12,
+                        borderBottomLeftRadius: 12,
+                        borderTopLeftRadius: 0
+                    }} color="error" variant="contained" onClick={confirmDelete}>
                     Delete
                 </Button>
             </DialogActions>

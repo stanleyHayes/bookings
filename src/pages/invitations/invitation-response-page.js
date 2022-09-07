@@ -39,14 +39,13 @@ const InvitationResponsePage = () => {
                         <Typography
                             mb={3}
                             sx={{
-                                color: 'secondary.main',
-                                fontWeight: 'bold',
+                                color: 'text.primary',
                                 textTransform: 'uppercase'
                             }}
                             gutterBottom={true}
                             align="center"
                             variant="h4">
-                            Super Craft GH
+                            Streaming Resource GH
                         </Typography>
                         {renderPage(page)}
                     </Container>

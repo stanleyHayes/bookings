@@ -1,11 +1,18 @@
 import {Avatar, Box, Button, Card, CardContent, Container, Divider, Grid, Typography} from "@mui/material";
 import {Link} from "react-router-dom";
+import success from "./../../assets/images/success.png";
 
 const InvitationAcknowledgment = () => {
     return (
         <Box>
             <Container>
-                <Card elevation={1} variant="elevation">
+                <Card
+                    sx={{
+                        borderBottomRightRadius: 0,
+                        borderTopRightRadius: 32,
+                        borderBottomLeftRadius: 32,
+                        borderTopLeftRadius: 0,
+                    }} elevation={1} variant="elevation">
                     <CardContent>
                         <Typography variant="h4" align="center">Acknowledgement</Typography>
 
@@ -14,7 +21,7 @@ const InvitationAcknowledgment = () => {
                         <Box mb={4}>
                             <Grid container={true} mb={4} justifyContent="center">
                                 <Grid item={true}>
-                                    <Avatar src="/assets/images/success.png" sx={{width: 40, height: 40}}/>
+                                    <Avatar src={success} sx={{width: 40, height: 40}}/>
                                 </Grid>
                             </Grid>
 
@@ -32,19 +39,11 @@ const InvitationAcknowledgment = () => {
                                 <Link to="/auth/login" style={{textDecoration: 'none'}}>
                                     <Button
                                         sx={{
-                                            fontWeight: 'bold',
                                             textTransform: 'capitalize',
-                                            backgroundColor: 'primary.main',
-                                            color: 'secondary.main',
-                                            '&:hover': {
-                                                color: 'secondary.main'
-                                            },
-                                            '&:focus': {
-                                                color: 'secondary.main'
-                                            },
-                                            '&:active': {
-                                                color: 'secondary.main'
-                                            },
+                                            borderBottomRightRadius: 0,
+                                            borderTopRightRadius: 12,
+                                            borderBottomLeftRadius: 12,
+                                            borderTopLeftRadius: 0,
                                         }}
                                         size="large"
                                         variant="contained"

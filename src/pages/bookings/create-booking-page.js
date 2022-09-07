@@ -24,6 +24,7 @@ import {useSnackbar} from "notistack";
 import {useNavigate} from "react-router";
 import {useFormik} from "formik";
 import * as yup from "yup";
+import {red} from "@mui/material/colors";
 
 const CreateBookingPage = () => {
 
@@ -36,10 +37,11 @@ const CreateBookingPage = () => {
         enqueueSnackbar(message, options);
     }
 
-    const [dateError, setDateError] = useState(null);
-    const [timeError, setTimeError] = useState(null);
+    const [dateError, setDateError] = useState('');
+    const [timeError, setTimeError] = useState('');
 
     const [date, setDate] = useState(new Date());
+
     const handleDateChange = date => {
         setDate(date);
     }
@@ -61,8 +63,6 @@ const CreateBookingPage = () => {
             container: yup.string().required('Container required'),
             company: yup.string().required('Company required'),
             product: yup.string().required('Product required'),
-            date: yup.string().required('Date required'),
-            time: yup.string().required('Time required'),
         }),
         validateOnChange: true,
         validateOnBlur: true,
@@ -70,11 +70,25 @@ const CreateBookingPage = () => {
             car: '', contact: '', name: '', container: '', company: '', product: '', date: '', time: ''
         },
         onSubmit: (values, {resetForm}) => {
-            dispatch(createBooking(values, token, navigate, handleShowNotification));
+            if (!time) {
+                setTimeError('Booking time required');
+                return;
+            } else {
+                setTimeError(null);
+            }
+            if (!date) {
+                setDateError('Booking date required');
+                return;
+            } else {
+                setDateError(null);
+            }
+            dispatch(createBooking({
+                ...values,
+                time: time.toString(),
+                date: date.toString()
+            }, token, navigate, handleShowNotification));
         }
     });
-
-    console.log(formik.values);
 
     return (
         <Layout>
@@ -220,6 +234,9 @@ const CreateBookingPage = () => {
                                                 <DatePicker
                                                     label="Select Booking Date"
                                                     required={true}
+                                                    onChange={handleDateChange}
+                                                    closeOnSelect={true}
+                                                    showToolbar={true}
                                                     InputLabelProps={{shrink: true}}
                                                     renderInput={params => {
                                                         return (
@@ -228,19 +245,20 @@ const CreateBookingPage = () => {
                                                                 name="date"
                                                                 placeholder="Select Booking Date"
                                                                 variant="outlined"
-                                                                onChange={formik.handleChange}
-                                                                onBlur={formik.handleBlur}
                                                                 size="medium"
                                                                 fullWidth={true}
-                                                                helperText={formik.touched.date && formik.errors.date}
-                                                                error={Boolean(formik.touched.date && formik.errors.date)}
+                                                                helperText={
+                                                                    <Typography variant="body2" sx={{color: red[600]}}>
+                                                                        {dateError}
+                                                                    </Typography>
+                                                                }
+                                                                error={Boolean(dateError)}
                                                             />
                                                         )
 
                                                     }}
-                                                    value={formik.values.date}
-                                                    color="primary"
-                                                    onChange={formik.handleChange}/>
+                                                    value={date}
+                                                    color="primary"/>
                                             </Grid>
                                             <Grid item={true} xs={12} md={6}>
                                                 <TimePicker
@@ -265,8 +283,6 @@ const CreateBookingPage = () => {
                                                                 name="time"
                                                                 placeholder="Select Booking Time"
                                                                 variant="outlined"
-                                                                onChange={formik.handleChange}
-                                                                onBlur={formik.handleBlur}
                                                                 size="medium"
                                                                 value={time}
                                                                 fullWidth={true}

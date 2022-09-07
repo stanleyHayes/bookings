@@ -18,19 +18,33 @@ const DeleteConformationDialog = ({open, handleClose, message, positiveAction}) 
                 <Grid container={true} justifyContent="space-between">
                     <Grid item={true} xs={6}>
                         <Button
+                            sx={{
+                                borderBottomRightRadius: 0,
+                                borderTopRightRadius: 12,
+                                borderBottomLeftRadius: 12,
+                                borderTopLeftRadius: 0
+                            }}
                             fullWidth={true}
                             onClick={handleClose}
                             size="large"
+                            color="secondary"
                             variant="outlined">
                             Cancel
                         </Button>
                     </Grid>
                     <Grid item={true} xs={6}>
                         <LoadingButton
+                            sx={{
+                                borderBottomRightRadius: 0,
+                                borderTopRightRadius: 12,
+                                borderBottomLeftRadius: 12,
+                                borderTopLeftRadius: 0
+                            }}
                             fullWidth={true}
                             onClick={handleClick}
                             size="large"
-                            variant="outlined">
+                            color="error"
+                            variant="contained">
                             Delete
                         </LoadingButton>
                     </Grid>

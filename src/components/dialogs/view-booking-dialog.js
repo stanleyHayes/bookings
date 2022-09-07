@@ -4,7 +4,7 @@ import {useNavigate} from "react-router-dom";
 import {useSnackbar} from "notistack";
 import {selectAuth} from "../../redux/authentication/auth-reducer";
 import {updateBooking} from "../../redux/bookings/booking-action-creators";
-import {Button, Dialog, DialogActions, DialogContent, Divider, Typography} from "@mui/material";
+import {Box, Button, Dialog, DialogActions, DialogContent, Divider, Stack, Typography} from "@mui/material";
 
 const ViewBookingDialog = ({open, handleClose, booking}) => {
 
@@ -31,98 +31,137 @@ const ViewBookingDialog = ({open, handleClose, booking}) => {
     }
 
     return (
-        <Dialog open={open} onClose={handleClose}>
+        <Dialog maxWidth="lg" open={open} onClose={handleClose}>
             <DialogContent>
-                <Typography
-                    variant="caption">
-                    Container
-                </Typography>
-                <Typography
-                    variant="h4"
-                    gutterBottom={true}>
-                    {booking.container}
-                </Typography>
-                <Divider variant="fullWidth" light={true}/>
-                <Typography
-                    variant="caption">
-                    Product Name
-                </Typography>
-                <Typography
-                    variant="h6"
-                    gutterBottom={true}>
-                    {booking.product}
-                </Typography>
-                <Divider variant="fullWidth" light={true} />
-                <Typography
-                    variant="caption">
-                    Company Name
-                </Typography>
-                <Typography
-                    variant="h6"
-                    gutterBottom={true}>
-                    {booking.company}
-                </Typography>
-                <Divider variant="fullWidth" light={true} />
-                <Typography
-                    variant="caption">
-                    Driver's Contact
-                </Typography>
-                <Typography
-                    variant="h6"
-                    gutterBottom={true}>
-                    {booking.contact}
-                </Typography>
-                <Divider variant="fullWidth" light={true}/>
-                <Typography
-                    variant="caption">
-                    Driver's Name
-                </Typography>
-                <Typography
-                    variant="h6"
-                    gutterBottom={true}>
-                    {booking.name}
-                </Typography>
-                <Divider variant="fullWidth" light={true}/>
-                <Typography
-                    variant="caption">
-                    Car Number
-                </Typography>
-                <Typography variant="h6" gutterBottom={true}>{booking.car}</Typography>
-                <Divider variant="fullWidth" light={true}/>
-                <Typography
-                    variant="caption">
-                    Booking date
-                </Typography>
-                <Typography
-                    variant="h6"
-                    gutterBottom={true}>
-                    {new Date(booking.date).toDateString()}
-                </Typography>
-                <Divider variant="fullWidth" light={true} />
-                <Typography
-                    variant="caption">
-                    Booking Time
-                </Typography>
-                <Typography
-                    variant="h6"
-                    gutterBottom={true}>
-                    {new Date(booking.time).toLocaleTimeString()}
-                </Typography>
-                <Divider variant="fullWidth" light={true}/>
-                <Typography
-                    variant="caption">
-                    Booking Status
-                </Typography>
-                <Typography
-                    variant="h6"
-                    gutterBottom={true}>
-                    {booking.status}
-                </Typography>
+                <Stack direction="column" spacing={2} divider={<Divider variant="fullWidth" light={true}/>}>
+                    <Box>
+                        <Typography
+                            sx={{color: 'text.secondary'}}
+                            variant="body2">
+                            Container
+                        </Typography>
+                        <Typography
+                            variant="h4"
+                            gutterBottom={true}>
+                            {booking.container}
+                        </Typography>
+                    </Box>
+                    <Box>
+                        <Typography
+                            sx={{color: 'text.secondary'}}
+                            variant="body2">
+                            Product Name
+                        </Typography>
+                        <Typography
+                            sx={{color: 'text.primary'}}
+                            variant="body1"
+                            gutterBottom={true}>
+                            {booking.product}
+                        </Typography>
+                    </Box>
+                    <Box>
+                        <Typography
+                            sx={{color: 'text.secondary'}}
+                            variant="body2">
+                            Company Name
+                        </Typography>
+                        <Typography
+                            sx={{color: 'text.primary'}}
+                            variant="body1"
+                            gutterBottom={true}>
+                            {booking.company}
+                        </Typography>
+                    </Box>
+                    <Box>
+                        <Typography
+                            sx={{color: 'text.secondary'}}
+                            variant="body2">
+                            Driver's Contact
+                        </Typography>
+                        <Typography
+                            sx={{color: 'text.primary'}}
+                            variant="body1"
+                            gutterBottom={true}>
+                            {booking.contact}
+                        </Typography>
+                    </Box>
+                    <Box>
+                        <Typography
+                            sx={{color: 'text.secondary'}}
+                            variant="body2">
+                            Driver's Name
+                        </Typography>
+                        <Typography
+                            sx={{color: 'text.primary'}}
+                            variant="body1"
+                            gutterBottom={true}>
+                            {booking.name}
+                        </Typography>
+                    </Box>
+                    <Box>
+                        <Typography
+                            sx={{color: 'text.secondary'}}
+                            variant="body2">
+                            Car Number
+                        </Typography>
+                        <Typography
+                            sx={{color: 'text.primary'}}
+                            variant="body1"
+                            gutterBottom={true}>
+                            {booking.car}
+                        </Typography>
+                    </Box>
+                    <Box>
+                        <Typography
+                            sx={{color: 'text.secondary'}}
+                            variant="body2">
+                            Booking date
+                        </Typography>
+                        <Typography
+                            sx={{color: 'text.primary'}}
+                            variant="body1"
+                            gutterBottom={true}>
+                            {new Date(booking.date).toDateString()}
+                        </Typography>
+                    </Box>
+                    <Box>
+                        <Typography
+                            sx={{color: 'text.secondary'}}
+                            variant="body2">
+                            Booking Time
+                        </Typography>
+                        <Typography
+                            sx={{color: 'text.primary'}}
+                            variant="body1"
+                            gutterBottom={true}>
+                            {new Date(booking.time).toLocaleTimeString()}
+                        </Typography>
+                    </Box>
+                    <Box>
+                        <Typography
+                            sx={{color: 'text.secondary'}}
+                            variant="body2">
+                            Booking Status
+                        </Typography>
+                        <Typography
+                            sx={{color: 'text.primary'}}
+                            variant="body1"
+                            gutterBottom={true}>
+                            {booking.status}
+                        </Typography>
+                    </Box>
+                </Stack>
             </DialogContent>
-            <Divider variant="fullWidth"  light={true}/>
             <DialogActions>
                 {booking.status === 'CURRENT' ? (
                     <Button
+                        sx={{
+                            borderBottomRightRadius: 0,
+                            borderTopRightRadius: 12,
+                            borderBottomLeftRadius: 12,
+                            borderTopLeftRadius: 0
+                        }}
+                        color="secondary"
                         onClick={handleSetCompletedClick}
                         fullWidth={true}
                         variant="outlined"
@@ -131,9 +170,16 @@ const ViewBookingDialog = ({open, handleClose, booking}) => {
                     </Button>
                 ) : booking.status === 'COMPLETED' ? (
                     <Button
+                        sx={{
+                            borderBottomRightRadius: 0,
+                            borderTopRightRadius: 12,
+                            borderBottomLeftRadius: 12,
+                            borderTopLeftRadius: 0
+                        }}
                         disabled={true}
                         onClick={handleSetCurrentClick}
                         fullWidth={true}
+                        color="secondary"
                         variant="outlined"
                         size="large">
                         Completed
@@ -142,6 +188,13 @@ const ViewBookingDialog = ({open, handleClose, booking}) => {
                     <Button
                         onClick={handleSetCurrentClick}
                         fullWidth={true}
+                        sx={{
+                            borderBottomRightRadius: 0,
+                            borderTopRightRadius: 12,
+                            borderBottomLeftRadius: 12,
+                            borderTopLeftRadius: 0
+                        }}
+                        color="secondary"
                         variant="contained"
                         size="large"
                         disableElevation={true}>
@@ -152,11 +205,25 @@ const ViewBookingDialog = ({open, handleClose, booking}) => {
                         <Button
                             onClick={handleSetNextClick}
                             fullWidth={true}
+                            sx={{
+                                borderBottomRightRadius: 0,
+                                borderTopRightRadius: 12,
+                                borderBottomLeftRadius: 12,
+                                borderTopLeftRadius: 0
+                            }}
+                            color="secondary"
                             variant="outlined"
                             size="large">
                             Next
                         </Button>
                         <Button
+                            sx={{
+                                borderBottomRightRadius: 0,
+                                borderTopRightRadius: 12,
+                                borderBottomLeftRadius: 12,
+                                borderTopLeftRadius: 0
+                            }}
+                            color="secondary"
                             onClick={handleSetCurrentClick}
                             fullWidth={true}
                             variant="contained"
