@@ -8,7 +8,6 @@ import {
     Card,
     CardContent,
     Container,
-    Divider,
     Grid,
     LinearProgress,
     Stack,
@@ -24,7 +23,7 @@ import {useSnackbar} from "notistack";
 import {useNavigate} from "react-router";
 import {useFormik} from "formik";
 import * as yup from "yup";
-import {red} from "@mui/material/colors";
+import moment from "moment";
 
 const CreateBookingPage = () => {
 
@@ -39,17 +38,9 @@ const CreateBookingPage = () => {
 
     const [dateError, setDateError] = useState('');
     const [timeError, setTimeError] = useState('');
-
-    const [date, setDate] = useState(new Date());
-
-    const handleDateChange = date => {
-        setDate(date);
-    }
-
-    const [time, setTime] = useState(new Date());
-    const handleTimeChange = time => {
-        setTime(time);
-    }
+    //
+    const [date, setDate] = useState(moment.now());
+    const [time, setTime] = useState(moment.now());
 
     const {loading, error: bookingError} = useSelector(selectBookings);
 
@@ -67,9 +58,9 @@ const CreateBookingPage = () => {
         validateOnChange: true,
         validateOnBlur: true,
         initialValues: {
-            car: '', contact: '', name: '', container: '', company: '', product: '', date: '', time: ''
+            car: '', contact: '', name: '', container: '', company: '', product: ''
         },
-        onSubmit: (values, {resetForm}) => {
+        onSubmit: (values) => {
             if (!time) {
                 setTimeError('Booking time required');
                 return;
@@ -94,16 +85,12 @@ const CreateBookingPage = () => {
         <Layout>
             <Box sx={{py: 8}}>
                 <Container maxWidth="md">
-                    <Typography
-                        sx={{color: 'text.primary'}}
-                        variant="h4"
-                        align="center">Create Booking</Typography>
-                    <Divider sx={{my: 3}} light={true} variant="fullWidth"/>
+                    <Typography sx={{color: 'text.primary', mb: 4}} variant="h4">Create Booking</Typography>
                     <Card
                         sx={{
                             borderBottomRightRadius: 0,
-                            borderTopRightRadius: 12,
-                            borderBottomLeftRadius: 12,
+                            borderTopRightRadius: 32,
+                            borderBottomLeftRadius: 32,
                             borderTopLeftRadius: 0
                         }} variant="elevation" elevation={1}>
                         {loading && <LinearProgress color="secondary" variant="query"/>}
@@ -232,92 +219,58 @@ const CreateBookingPage = () => {
                                         <Grid container={true} spacing={2}>
                                             <Grid item={true} xs={12} md={6}>
                                                 <DatePicker
-                                                    label="Select Booking Date"
-                                                    required={true}
-                                                    onChange={handleDateChange}
-                                                    closeOnSelect={true}
-                                                    showToolbar={true}
-                                                    InputLabelProps={{shrink: true}}
-                                                    renderInput={params => {
-                                                        return (
-                                                            <TextField
-                                                                {...params}
-                                                                name="date"
-                                                                placeholder="Select Booking Date"
-                                                                variant="outlined"
-                                                                size="medium"
-                                                                fullWidth={true}
-                                                                helperText={
-                                                                    <Typography variant="body2" sx={{color: red[600]}}>
-                                                                        {dateError}
-                                                                    </Typography>
-                                                                }
-                                                                error={Boolean(dateError)}
-                                                            />
-                                                        )
-
+                                                    slotProps={{
+                                                        textField: {
+                                                            size: "medium",
+                                                            fullWidth: true,
+                                                            helperText: dateError ? dateError: "Select Booking Time"
+                                                        }
                                                     }}
+                                                    onError={error => setDateError(error)}
                                                     value={date}
-                                                    color="primary"/>
+                                                    onChange={date => setDate(date)}
+                                                    disableFuture={true}
+                                                    name="date"
+                                                />
+
                                             </Grid>
                                             <Grid item={true} xs={12} md={6}>
                                                 <TimePicker
-                                                    value={time}
-                                                    fullWidth={true}
-                                                    name="time"
-                                                    label="Booking Time"
-                                                    onChange={handleTimeChange}
-                                                    inputVariant="outlined"
-                                                    required={true}
-                                                    ampm={true}
-                                                    error={Boolean(timeError)}
-                                                    helperText={timeError}
-                                                    okLabel={<Button>OK</Button>}
-                                                    placeholder={"Select Booking Time"}
-                                                    cancelLabel={<Button>Cancel</Button>}
-                                                    emptyLabel="Booking Time"
-                                                    renderInput={params => {
-                                                        return (
-                                                            <TextField
-                                                                {...params}
-                                                                name="time"
-                                                                placeholder="Select Booking Time"
-                                                                variant="outlined"
-                                                                size="medium"
-                                                                value={time}
-                                                                fullWidth={true}
-                                                                helperText={timeError}
-                                                                error={Boolean(timeError)}
-                                                            />
-                                                        )
-
+                                                    slotProps={{
+                                                        textField: {
+                                                            size: "medium",
+                                                            fullWidth: true,
+                                                            helperText: timeError ? timeError: "Select Booking Time"
+                                                        }
                                                     }}
+                                                    onError={error => setTimeError(error)}
+                                                    ampm={true}
+                                                    ampmInClock={true}
+                                                    name="time"
+                                                    label="Booking time"
+                                                    value={time}
+                                                    onChange={(time) => setTime(time)}
                                                 />
                                             </Grid>
                                         </Grid>
                                     </Box>
                                     <Box>
-                                        <Grid container={true} justifyContent="center">
-                                            <Grid item={true} xs={12} md={6}>
-                                                <Button
-                                                    type="submit"
-                                                    color="secondary"
-                                                    onClick={formik.handleSubmit}
-                                                    variant="contained"
-                                                    sx={{
-                                                        borderBottomRightRadius: 0,
-                                                        borderTopRightRadius: 12,
-                                                        borderBottomLeftRadius: 12,
-                                                        borderTopLeftRadius: 0,
-                                                        py: 1.2
-                                                    }}
-                                                    fullWidth={true}
-                                                    size="large"
-                                                    disableElevation={true}>
-                                                    Submit Booking
-                                                </Button>
-                                            </Grid>
-                                        </Grid>
+                                        <Button
+                                            type="submit"
+                                            color="secondary"
+                                            variant="contained"
+                                            sx={{
+                                                borderBottomRightRadius: 0,
+                                                borderTopRightRadius: 12,
+                                                borderBottomLeftRadius: 12,
+                                                borderTopLeftRadius: 0,
+                                                py: 1.2
+                                            }}
+                                            fullWidth={true}
+                                            size="large"
+                                            disableElevation={true}>
+                                            Submit Booking
+                                        </Button>
                                     </Box>
                                 </Stack>
                             </form>

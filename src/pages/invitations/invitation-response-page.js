@@ -3,7 +3,7 @@ import {
     Container, Grid,
     Typography,
 } from "@mui/material";
-
+import React  from "react";
 import {useSelector} from "react-redux";
 import {selectInvitations} from "../../redux/invitations/invitation-reducer";
 import InvitationResponse from "../../components/shared/invitation-response";

@@ -1,7 +1,7 @@
 import {Button, Dialog, DialogActions, DialogContent, Grid, Stack, Typography} from "@mui/material";
 import {WarningAmber} from "@mui/icons-material";
 import {LoadingButton} from "@mui/lab";
-
+import React from "react";
 const DeleteConformationDialog = ({open, handleClose, message, positiveAction}) => {
     const handleClick = () => {
         positiveAction();

@@ -3,8 +3,9 @@ import {Link, useNavigate} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {selectAuth} from "../../redux/authentication/auth-reducer";
 import {signOut} from "../../redux/authentication/auth-action-creators";
-import {Avatar, Grid, Toolbar, Typography} from "@mui/material";
+import {Avatar, CardMedia, Stack, Toolbar, Typography} from "@mui/material";
 import {ExitToApp, Menu} from "@mui/icons-material";
+import logo from "./../../assets/images/logo.png";
 
 const MobileHeader = ({handleDrawerOpen}) => {
 
@@ -18,9 +19,9 @@ const MobileHeader = ({handleDrawerOpen}) => {
     }
 
     return (
-        <Toolbar>
-            <Grid container={true} justifyContent="space-between" alignItems="center">
-                <Grid item={true} xs={2}>
+        <Toolbar variant="regular">
+            <Stack sx={{width: "100%"}} direction="row" justifyContent="space-between" alignItems="center">
+                <Stack direction="row" spacing={2} alignItems="center">
                     <Menu
                         sx={{
                             borderBottomRightRadius: 0,
@@ -33,57 +34,49 @@ const MobileHeader = ({handleDrawerOpen}) => {
                             padding: 0.4
                         }}
                         onClick={handleDrawerOpen}/>
-                </Grid>
-
-                <Grid item={true} xs={6}>
                     <Link style={{textDecoration: 'none'}} to="/">
-                        <Typography
-                            sx={{color: 'text.primary'}}
-                            variant="h5">
-                            SR GH
-                        </Typography>
+                        <CardMedia
+                            component="img"
+                            src={logo}
+                            sx={{width: 30, height: 30, objectFit: "contain"}}
+                        />
                     </Link>
-                </Grid>
-
+                </Stack>
                 {user && (
-                    <Grid xs={4} alignItems="center" item={true}>
-                        <Grid spacing={2} alignItems="center" item={true} container={true}>
-                            <Grid item={true}>
-                                <Avatar
-                                    sx={{
-                                        color: 'secondary.main',
-                                        backgroundColor: 'light.secondary',
-                                        borderBottomRightRadius: 0,
-                                        borderTopRightRadius: 12,
-                                        borderBottomLeftRadius: 12,
-                                        borderTopLeftRadius: 0,
-                                    }}
-                                    variant="circular">
-                                    <Typography
-                                        sx={{color: 'secondary.main'}}
-                                        variant="h6">
-                                        {user.name[0]}</Typography>
-                                </Avatar>
-                            </Grid>
-                            <Grid item={true}>
-                                <ExitToApp
-                                    sx={{
-                                        borderBottomRightRadius: 0,
-                                        borderTopRightRadius: 12,
-                                        borderBottomLeftRadius: 12,
-                                        borderTopLeftRadius: 0,
-                                        backgroundColor: 'light.secondary',
-                                        color: 'secondary.main',
-                                        fontSize: 32,
-                                        padding: 0.4
-                                    }}
-                                    onClick={handleLogoutClick}
-                                />
-                            </Grid>
-                        </Grid>
-                    </Grid>
+                    <Stack direction="row" spacing={2} alignItems="center">
+                        <Avatar
+                            sx={{
+                                color: 'secondary.main',
+                                backgroundColor: 'light.secondary',
+                                borderBottomRightRadius: 0,
+                                borderTopRightRadius: 12,
+                                borderBottomLeftRadius: 12,
+                                borderTopLeftRadius: 0,
+                                width: 35, height: 35
+                            }}
+                            variant="circular">
+                            <Typography
+                                sx={{color: 'secondary.main'}}
+                                variant="h6">
+                                {user.name[0]}</Typography>
+                        </Avatar>
+
+                        <ExitToApp
+                            sx={{
+                                borderBottomRightRadius: 0,
+                                borderTopRightRadius: 12,
+                                borderBottomLeftRadius: 12,
+                                borderTopLeftRadius: 0,
+                                backgroundColor: 'light.secondary',
+                                color: 'secondary.main',
+                                fontSize: 32,
+                                padding: 0.4
+                            }}
+                            onClick={handleLogoutClick}
+                        />
+                    </Stack>
                 )}
-            </Grid>
+            </Stack>
         </Toolbar>
     )
 }

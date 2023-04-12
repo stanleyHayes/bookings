@@ -19,7 +19,7 @@ const Layout = ({children}) => {
     return (
         <Box>
             <Header handleDrawerOpen={handleDrawerOpen}/>
-            <Box sx={{py: 8}}>
+            <Box sx={{py: {xs: 7.5, lg: 8}}}>
                 {children}
             </Box>
             <SwipeableDrawer

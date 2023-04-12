@@ -2,7 +2,6 @@ import {Box, CircularProgress, Container, LinearProgress, Stack, Typography} fro
 import React from "react";
 
 const Splash = () => {
-
     return (
         <React.Fragment>
             <LinearProgress color="secondary" variant="query"/>

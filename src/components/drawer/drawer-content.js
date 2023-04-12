@@ -3,8 +3,9 @@ import {Link, useNavigate} from "react-router-dom";
 import {signOut} from "../../redux/authentication/auth-action-creators";
 import {selectAuth} from "../../redux/authentication/auth-reducer";
 import {useDispatch, useSelector} from "react-redux";
-import {Box, Button, Container, Divider, Grid, Stack, Typography} from "@mui/material";
+import {Box, Button, CardMedia, Container, Grid, Stack, Typography} from "@mui/material";
 import {Close} from "@mui/icons-material";
+import logo from "../../assets/images/logo.png";
 
 
 const DrawerContent = ({handleDrawerClose}) => {
@@ -18,115 +19,128 @@ const DrawerContent = ({handleDrawerClose}) => {
     }
 
     return (
-        <Box sx={{py: 4}}>
+        <Box sx={{py: 4, minWidth: "80vw"}}>
             <Container>
-                <Grid container={true} justifyContent="center">
-                    <Grid item={true} container={true} justifyContent="flex-end">
-                        <Grid item={true}>
-                            <Button
-                                sx={{
-                                    borderBottomRightRadius: 0,
-                                    borderTopRightRadius: 12,
-                                    borderBottomLeftRadius: 12,
-                                    borderTopLeftRadius: 0,
-                                    mb: 4,
-                                    textTransform: 'capitalize'
-                                }}
-                                color="secondary"
-                                onClick={handleDrawerClose}
-                                startIcon={<Close/>}
-                                variant="outlined"
-                                size="large">
-                                Close
-                            </Button>
-                        </Grid>
-                    </Grid>
-                    <Grid item={true}>
-                        <Typography
-                            gutterBottom={true}
-                            variant="h4"
-                            align="center">
-                            Streamline Resources GH
-                        </Typography>
-                        <Divider variant="middle" light={true}/>
-                        <Typography
-                            gutterBottom={true}
-                            variant="h6"
-                            align="center">
-                            GRA Affixing Facility
-                        </Typography>
-                    </Grid>
-                </Grid>
-
-                <Divider light={true} sx={{my: 3}} variant="fullWidth"/>
-
-                <Grid container={true} direction="column">
-                    <Grid item={true} xs={12}>
-                        <Stack divider={<Divider variant="fullWidth" light={true}/>} spacing={1}>
-                            <Link style={{textDecoration: 'none', width: '100%', display: 'block'}} to="/">
-                                <Button sx={{textTransform: 'capitalize'}} color="secondary" variant="text"
-                                        size="large">
-                                    Home
+                <Stack spacing={4}>
+                    <Box>
+                        <Stack spacing={2}>
+                            <Box>
+                                <Button
+                                    sx={{
+                                        borderBottomRightRadius: 0,
+                                        borderTopRightRadius: 12,
+                                        borderBottomLeftRadius: 12,
+                                        borderTopLeftRadius: 0,
+                                        mb: 4,
+                                        textTransform: 'capitalize'
+                                    }}
+                                    color="secondary"
+                                    onClick={handleDrawerClose}
+                                    startIcon={<Close/>}
+                                    variant="outlined"
+                                    size="large">
+                                    Close
                                 </Button>
+                            </Box>
+
+                            <Link style={{textDecoration: 'none'}} to="/">
+                                <CardMedia
+                                    component="img"
+                                    src={logo}
+                                    sx={{width: 100, height: 100, objectFit: "contain", mb: 2}}
+                                />
                             </Link>
-
-
-                            <Link style={{textDecoration: 'none', width: '100%', display: 'block'}} to="/today">
-                                <Button sx={{textTransform: 'capitalize'}} color="secondary" variant="text"
-                                        size="large">
-                                    Today's Bookings
-                                </Button>
-                            </Link>
-
-
-                            <Link style={{textDecoration: 'none', width: '100%', display: 'block'}} to="/bookings">
-                                <Button sx={{textTransform: 'capitalize'}} color="secondary" variant="text"
-                                        size="large">
-                                    Bookings
-                                </Button>
-                            </Link>
-
-
-                            <Link style={{textDecoration: 'none', width: '100%', display: 'block'}} to="/new/booking">
-                                <Button sx={{textTransform: 'capitalize'}} color="secondary" variant="text"
-                                        size="large">
-                                    Create
-                                </Button>
-                            </Link>
-
-
-                            <Link style={{textDecoration: 'none', width: '100%', display: 'block'}} to="/account">
-                                <Button sx={{textTransform: 'capitalize'}} color="secondary" variant="text"
-                                        size="large">
-                                    Account
-                                </Button>
-                            </Link>
-
-                            {user && user.role === 'ADMIN' && (
-                                    <Link style={{textDecoration: 'none', width: '100%', display: 'block'}} to="/invitations">
-                                        <Button sx={{textTransform: 'capitalize'}}
-                                                color="secondary"
-                                            variant="text" size="large">Invitations</Button>
-                                    </Link>
-                            )}
-
-                            <Button
-                                sx={{
-                                    textTransform: 'capitalize',
-                                    borderBottomRightRadius: 0,
-                                    borderTopRightRadius: 12,
-                                    borderBottomLeftRadius: 12,
-                                    borderTopLeftRadius: 0,
-                                }}
-                                color="secondary"
-                                disableElevation={true}
-                                onClick={handleLogoutClick}
-                                variant="contained" size="large">
-                                Logout
-                            </Button>
+                            <Typography
+                                variant="h6">
+                                GRA Affixing Facility
+                            </Typography>
                         </Stack>
-                    </Grid>
-                </Grid>
+                    </Box>
+                    <Box>
+                        <Grid container={true} direction="column">
+                            <Grid item={true} xs={12}>
+                                <Stack spacing={3}>
+                                    <Link style={{textDecoration: 'none', width: '100%', display: 'block'}} to="/">
+                                        <Typography
+                                            sx={{textTransform: 'capitalize', color: "text.primary"}}
+                                            variant="body1"
+                                            size="large">
+                                            Home
+                                        </Typography>
+                                    </Link>
+
+
+                                    <Link style={{textDecoration: 'none', width: '100%', display: 'block'}} to="/today">
+                                        <Typography
+                                            sx={{textTransform: 'capitalize', color: "text.primary"}}
+                                            variant="body1"
+                                            size="large">
+                                            Today's Bookings
+                                        </Typography>
+                                    </Link>
+
+
+                                    <Link style={{textDecoration: 'none', width: '100%', display: 'block'}}
+                                          to="/bookings">
+                                        <Typography
+                                            sx={{textTransform: 'capitalize', color: "text.primary"}}
+                                            variant="body1"
+                                            size="large">
+                                            Bookings
+                                        </Typography>
+                                    </Link>
+
+
+                                    <Link style={{textDecoration: 'none', width: '100%', display: 'block'}}
+                                          to="/new/booking">
+                                        <Typography
+                                            sx={{textTransform: 'capitalize', color: "text.primary"}}
+                                            variant="body1"
+                                            size="large">
+                                            Create
+                                        </Typography>
+                                    </Link>
+
+
+                                    <Link style={{textDecoration: 'none', width: '100%', display: 'block'}}
+                                          to="/account">
+                                        <Typography
+                                            sx={{textTransform: 'capitalize', color: "text.primary"}}
+                                            variant="body1"
+                                            size="large">
+                                            Account
+                                        </Typography>
+                                    </Link>
+
+                                    {user && user.role === 'ADMIN' && (
+                                        <Link style={{textDecoration: 'none', width: '100%', display: 'block'}}
+                                              to="/invitations">
+                                            <Typography
+                                                sx={{textTransform: 'capitalize', color: "text.primary"}}
+                                                variant="body1"
+                                                size="large">Invitations</Typography>
+                                        </Link>
+                                    )}
+
+                                    <Button
+                                        sx={{
+                                            textTransform: 'capitalize',
+                                            borderBottomRightRadius: 0,
+                                            borderTopRightRadius: 12,
+                                            borderBottomLeftRadius: 12,
+                                            borderTopLeftRadius: 0,
+                                        }}
+                                        color="secondary"
+                                        disableElevation={true}
+                                        onClick={handleLogoutClick}
+                                        variant="contained" size="large">
+                                        Logout
+                                    </Button>
+                                </Stack>
+                            </Grid>
+                        </Grid>
+                    </Box>
+                </Stack>
             </Container>
         </Box>
     )

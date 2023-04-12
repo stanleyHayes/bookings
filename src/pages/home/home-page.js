@@ -29,7 +29,7 @@ const HomePage = () => {
             {loading && <LinearProgress color="primary" variant="query"/>}
             <Box sx={{py: 8}}>
                 <Container>
-                    <Typography color="textPrimary" variant="h3" align="center">
+                    <Typography sx={{color: "text.primary"}} variant="h3" align="center">
                         Affixing Now
                     </Typography>
                     <Divider light={true} sx={{my: 3}} variant="fullWidth"/>
@@ -40,11 +40,20 @@ const HomePage = () => {
                     {currentBooking ? (
                         <Display currentDisplay={currentBooking} nextDisplay={nextBooking}/>
                     ) : (
-                        <Grid container={true} justify="center" alignItems="center">
-                            <Grid item={true}>
-                                <Typography color="textPrimary" variant="h6" align="center">
-                                    No Bookings Available
-                                </Typography>
+                        <Grid container={true} justifyContent="center" alignItems="center">
+                            <Grid item={true} xs={12} md={6}>
+                                <Box sx={{
+                                    backgroundColor: "background.paper",
+                                    padding: 5,
+                                    borderBottomRightRadius: 0,
+                                    borderTopRightRadius: 32,
+                                    borderBottomLeftRadius: 32,
+                                    borderTopLeftRadius: 0,
+                                }}>
+                                    <Typography sx={{color: "text.primary"}} variant="h6" align="center">
+                                        No Bookings Available
+                                    </Typography>
+                                </Box>
                             </Grid>
                         </Grid>
                     )}

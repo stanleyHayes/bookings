@@ -8,36 +8,31 @@ import {Provider} from "react-redux";
 import 'react-multi-carousel/lib/styles.css';
 import store from "./redux/store";
 import {SnackbarProvider} from "notistack"
-import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import {createTheme, CssBaseline, ThemeProvider} from "@mui/material";
 import {LocalizationProvider} from "@mui/x-date-pickers";
 
 const theme = createTheme({
     typography: {
-        fontFamily: 'EuclidCircularB, SofiaPro, Sora, TTSquares, GoogleSans'
+        fontFamily: 'TTSquares, Eudoxus-Sans, EuclidCircularB, SofiaPro, Sora, TTSquares, GoogleSans'
     },
     palette: {
-        primary: {
-            main: '#34a853'
-        },
-        secondary: {
-            main: '#519bff'
-        },
-        text: {
-            primary: '#f8f9fa',
-            secondary: '#a4a4a4',
-            active: '#f8f9fa',
-            inactive: '#d2d3d7'
-        },
+        primary: {main: "#010101"},
+        secondary: {main: "#cb324b"},
         mode: 'dark',
+        text: {
+            primary: "#fefefe",
+            secondary: "#818181",
+            paper: "#818181",
+            default: "#797979"
+        },
         background: {
-            paper: '#303136',
-            default: '#202124',
-            light: 'rgba(32,33,36,0.3)',
-            appBar: 'rgba(32,33,36,0.85)'
+            paper: "#222222",
+            default: "#010101",
+            dark: "#0f0f0f"
         },
         light: {
-            secondary: 'rgba(81,155,255,0.3)',
+            secondary: 'rgba(203,50,75,0.3)',
             primary: 'rgba(52,168,83,0.3)',
             red: 'rgba(217,48,37,0.3)',
             yellow: 'rgba(249,171,0,0.3)',
@@ -55,7 +50,7 @@ const theme = createTheme({
         }
     },
     shape: {
-        borderRadius: 8
+        borderRadius: 0
     }
 });
 
@@ -72,7 +67,7 @@ root.render(
                             vertical: 'top',
                             horizontal: 'right'
                         }}>
-                        <LocalizationProvider dateAdapter={AdapterMoment}>
+                        <LocalizationProvider dateAdapter={AdapterDateFns}>
                             <App/>
                         </LocalizationProvider>
                     </SnackbarProvider>

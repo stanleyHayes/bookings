@@ -106,13 +106,9 @@ const BookingsPage = () => {
             {loading && <LinearProgress color="secondary" variant="query"/>}
             <Box sx={{py: 8}}>
                 <Container>
-                    <Typography
-                        sx={{color: 'text.primary'}}
-                        variant="h4"
-                        align="center">
+                    <Typography sx={{color: 'text.primary', mb: 2}} variant="h4">
                         Bookings
                     </Typography>
-                    <Divider sx={{my: 3}} variant="fullWidth"/>
                     <Grid
                         spacing={2}
                         container={true}

@@ -6,7 +6,7 @@ import {AppBar, Box} from "@mui/material";
 const Header = ({handleDrawerOpen}) => {
 
     return (
-        <AppBar variant="elevation" elevation={0}>
+        <AppBar variant="elevation" elevation={0} color="primary">
             <Box sx={{display: {xs: 'none', lg: 'block'}}}>
                 <DesktopHeader />
             </Box>

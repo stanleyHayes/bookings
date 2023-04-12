@@ -1,7 +1,7 @@
 import {Avatar, Box, Button, Card, CardContent, Container, Divider, Grid, Typography} from "@mui/material";
 import {Link} from "react-router-dom";
 import success from "./../../assets/images/success.png";
-
+import React from "react";
 const InvitationAcknowledgment = () => {
     return (
         <Box>

@@ -1,4 +1,5 @@
 import './App.css';
+import React from "react";
 import HomePage from "./pages/home/home-page";
 import CreateBookingPage from "./pages/bookings/create-booking-page";
 import BookingsPage from "./pages/bookings/bookings-page";

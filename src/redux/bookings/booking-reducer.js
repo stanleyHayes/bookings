@@ -25,7 +25,7 @@ import {
 const INITIAL_STATE = {
     bookings: [],
     loading: false,
-    error: "",
+    error: null,
     singleBooking: {},
     currentBooking: {},
     nextBooking: {},

@@ -1,4 +1,5 @@
 import {useFormik} from "formik";
+import React  from "react";
 import * as yup from "yup";
 import "yup-phone";
 import {Link, useNavigate} from "react-router-dom";
@@ -72,7 +73,7 @@ const RegisterPage = () => {
             confirmPassword: yup.string()
                 .required('confirm password required')
                 .oneOf([yup.ref('password'), null], 'Passwords must match'),
-            phoneNumber: yup.string().phone('Enter valid phone number').required('Phone number required')
+            phoneNumber: yup.string().required('Phone number required')
         })
     });
 

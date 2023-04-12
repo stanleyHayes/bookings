@@ -86,13 +86,18 @@ const TodaysBookings = () => {
                     {error && <Alert title={error} severity="error">
                         <AlertTitle>{error}</AlertTitle></Alert>}
                     {bookings && bookings.length === 0 ? (
-                        <Box sx={{
-                            height: '30vh',
-                            display: 'flex',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            backgroundColor: 'background.paper'
-                        }}>
+                        <Box
+                            sx={{
+                                height: '30vh',
+                                display: 'flex',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                backgroundColor: 'background.paper',
+                                borderBottomRightRadius: 0,
+                                borderTopRightRadius: 32,
+                                borderBottomLeftRadius: 32,
+                                borderTopLeftRadius: 0
+                            }}>
                             <Typography
                                 align="center"
                                 sx={{color: 'text.secondary'}}
