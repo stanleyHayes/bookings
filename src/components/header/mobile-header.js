@@ -53,8 +53,7 @@ const MobileHeader = ({handleDrawerOpen}) => {
                                 borderBottomLeftRadius: 12,
                                 borderTopLeftRadius: 0,
                                 width: 35, height: 35
-                            }}
-                            variant="circular">
+                            }}>
                             <Typography
                                 sx={{color: 'secondary.main'}}
                                 variant="h6">

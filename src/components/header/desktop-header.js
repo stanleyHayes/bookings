@@ -29,7 +29,7 @@ const DesktopHeader = () => {
                     <CardMedia
                         component="img"
                         src={logo}
-                        sx={{width: 100, height: 100, objectFit: "contain"}}
+                        sx={{width: 50, height: 50, objectFit: "contain"}}
                     />
                 </Link>
 
@@ -86,7 +86,14 @@ const DesktopHeader = () => {
 
                         {loading && <CircularProgress variant="indeterminate"/>}
                         <Link style={{textDecoration: 'none'}} to="/account">
-                            <Avatar sx={{backgroundColor: 'light.secondary'}} variant="circular">
+                            <Avatar
+                                sx={{
+                                    backgroundColor: 'light.secondary',
+                                    borderBottomRightRadius: 0,
+                                    borderTopRightRadius: 12,
+                                    borderBottomLeftRadius: 12,
+                                    borderTopLeftRadius: 0
+                                }} variant="circular">
                                 <Typography
                                     sx={{color: 'secondary.main'}}
                                     variant="h4">{user.name[0]}</Typography>

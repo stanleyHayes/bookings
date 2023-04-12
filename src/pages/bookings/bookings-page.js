@@ -19,7 +19,8 @@ import {
     TablePagination,
     TableRow,
     Tooltip,
-    Typography
+    Typography,
+    Stack
 } from "@mui/material";
 import {useDispatch, useSelector} from "react-redux";
 import {selectBookings} from "../../redux/bookings/booking-reducer";
@@ -106,10 +107,11 @@ const BookingsPage = () => {
             {loading && <LinearProgress color="secondary" variant="query"/>}
             <Box sx={{py: 8}}>
                 <Container>
-                    <Typography sx={{color: 'text.primary', mb: 2}} variant="h4">
+                    <Typography sx={{color: 'text.primary', mb: 4}} variant="h4">
                         Bookings
                     </Typography>
                     <Grid
+                        sx={{mb: 2}}
                         spacing={2}
                         container={true}
                         justifyContent="space-between"
@@ -127,6 +129,7 @@ const BookingsPage = () => {
                                 onChange={handleStatusChange}
                                 defaultValue="ALL"
                                 variant="outlined"
+                                size="small"
                                 fullWidth={true}
                                 margin="none">
                                 <MenuItem value="ALL">All</MenuItem>
@@ -138,18 +141,23 @@ const BookingsPage = () => {
                             </Select>
                         </Grid>
                     </Grid>
-                    <Divider sx={{my: 3}} light={true} variant="fullWidth"/>
+
                     {error && <Alert title={error} severity="error">
                         <AlertTitle>{error}</AlertTitle>
                     </Alert>}
                     {bookings && bookings.length === 0 ? (
-                        <Box sx={{
-                            height: '30vh',
-                            display: 'flex',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            backgroundColor: 'background.paper'
-                        }}>
+                        <Box
+                            sx={{
+                                height: '30vh',
+                                display: 'flex',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                backgroundColor: 'background.paper',
+                                borderBottomRightRadius: 0,
+                                borderTopRightRadius: 32,
+                                borderBottomLeftRadius: 32,
+                                borderTopLeftRadius: 0
+                            }}>
                             <Typography
                                 align="center"
                                 sx={{color: 'text.secondary'}}
@@ -182,58 +190,51 @@ const BookingsPage = () => {
                                                 <TableCell>{moment(booking.date).fromNow()}</TableCell>
                                                 <TableCell>{new Date(booking.time).toLocaleTimeString()}</TableCell>
                                                 <TableCell>
-                                                    <Grid container={true} spacing={1} alignItems="center">
-                                                        <Grid item={true}>
-                                                            <Tooltip title={`View details of ${booking.container}`}>
-                                                                <Visibility
-                                                                    sx={{
-                                                                        borderBottomRightRadius: 0,
-                                                                        borderTopRightRadius: 12,
-                                                                        borderBottomLeftRadius: 12,
-                                                                        borderTopLeftRadius: 0,
-                                                                        backgroundColor: 'light.green',
-                                                                        fontSize: 28,
-                                                                        padding: 0.4,
-                                                                        color: 'colors.green'
-                                                                    }}
-                                                                    onClick={() => setSelectedViewBooking(booking)}/>
-                                                            </Tooltip>
-
-                                                        </Grid>
-                                                        <Grid item={true}>
-                                                            <Tooltip title={`View details of ${booking.container}`}>
-                                                                <Edit
-                                                                    sx={{
-                                                                        borderBottomRightRadius: 0,
-                                                                        borderTopRightRadius: 12,
-                                                                        borderBottomLeftRadius: 12,
-                                                                        borderTopLeftRadius: 0,
-                                                                        backgroundColor: 'light.secondary',
-                                                                        fontSize: 28,
-                                                                        padding: 0.4,
-                                                                        color: 'secondary.main'
-                                                                    }}
-                                                                    onClick={() => setSelectedUpdateBooking(booking)}/>
-                                                            </Tooltip>
-                                                        </Grid>
-                                                        <Grid item={true}>
-                                                            <Tooltip title={`View details of ${booking.container}`}>
-                                                                <Delete
-                                                                    sx={{
-                                                                        borderBottomRightRadius: 0,
-                                                                        borderTopRightRadius: 12,
-                                                                        borderBottomLeftRadius: 12,
-                                                                        borderTopLeftRadius: 0,
-                                                                        backgroundColor: 'light.red',
-                                                                        fontSize: 28,
-                                                                        padding: 0.4,
-                                                                        color: 'colors.red'
-                                                                    }}
-                                                                    onClick={() => setSelectedDeleteBooking(booking)}
-                                                                />
-                                                            </Tooltip>
-                                                        </Grid>
-                                                    </Grid>
+                                                    <Stack direction="row" spacing={1}>
+                                                        <Tooltip title={`View details of ${booking.container}`}>
+                                                            <Visibility
+                                                                sx={{
+                                                                    borderBottomRightRadius: 0,
+                                                                    borderTopRightRadius: 12,
+                                                                    borderBottomLeftRadius: 12,
+                                                                    borderTopLeftRadius: 0,
+                                                                    backgroundColor: 'light.green',
+                                                                    fontSize: 28,
+                                                                    padding: 0.4,
+                                                                    color: 'colors.green'
+                                                                }}
+                                                                onClick={() => setSelectedViewBooking(booking)}/>
+                                                        </Tooltip>
+                                                        <Tooltip title={`View details of ${booking.container}`}>
+                                                            <Edit
+                                                                sx={{
+                                                                    borderBottomRightRadius: 0,
+                                                                    borderTopRightRadius: 12,
+                                                                    borderBottomLeftRadius: 12,
+                                                                    borderTopLeftRadius: 0,
+                                                                    backgroundColor: 'light.secondary',
+                                                                    fontSize: 28,
+                                                                    padding: 0.4,
+                                                                    color: 'secondary.main'
+                                                                }}
+                                                                onClick={() => setSelectedUpdateBooking(booking)}/>
+                                                        </Tooltip>
+                                                        <Tooltip title={`View details of ${booking.container}`}>
+                                                            <Delete
+                                                                sx={{
+                                                                    borderBottomRightRadius: 0,
+                                                                    borderTopRightRadius: 12,
+                                                                    borderBottomLeftRadius: 12,
+                                                                    borderTopLeftRadius: 0,
+                                                                    backgroundColor: 'light.red',
+                                                                    fontSize: 28,
+                                                                    padding: 0.4,
+                                                                    color: 'colors.red'
+                                                                }}
+                                                                onClick={() => setSelectedDeleteBooking(booking)}
+                                                            />
+                                                        </Tooltip>
+                                                    </Stack>
                                                 </TableCell>
                                             </TableRow>
                                         )
