@@ -22,9 +22,7 @@ const DesktopHeader = () => {
 
     return (
         <Toolbar variant="regular">
-            <Stack
-                sx={{width: "100%"}}
-                direction="row" justifyContent="space-around" alignItems="center">
+            <Stack sx={{width: "100%"}} direction="row" justifyContent="space-around" alignItems="center">
                 <Link style={{textDecoration: 'none'}} to="/">
                     <CardMedia
                         component="img"

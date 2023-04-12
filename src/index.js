@@ -14,7 +14,7 @@ import {LocalizationProvider} from "@mui/x-date-pickers";
 
 const theme = createTheme({
     typography: {
-        fontFamily: 'TTSquares, Eudoxus-Sans, EuclidCircularB, SofiaPro, Sora, TTSquares, GoogleSans'
+        fontFamily: 'Outfit, Manrope, Urbanist'
     },
     palette: {
         primary: {main: "#010101"},

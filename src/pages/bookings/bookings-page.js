@@ -5,12 +5,12 @@ import {
     AlertTitle,
     Box,
     Container,
-    Divider,
     Grid,
     LinearProgress,
     MenuItem,
     Paper,
     Select,
+    Stack,
     Table,
     TableBody,
     TableCell,
@@ -19,8 +19,7 @@ import {
     TablePagination,
     TableRow,
     Tooltip,
-    Typography,
-    Stack
+    Typography
 } from "@mui/material";
 import {useDispatch, useSelector} from "react-redux";
 import {selectBookings} from "../../redux/bookings/booking-reducer";

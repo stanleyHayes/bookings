@@ -266,7 +266,6 @@ const CreateBookingPage = () => {
                                                 borderTopLeftRadius: 0,
                                                 py: 1.2
                                             }}
-                                            fullWidth={true}
                                             size="large"
                                             disableElevation={true}>
                                             Submit Booking
