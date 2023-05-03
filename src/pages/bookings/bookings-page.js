@@ -49,7 +49,7 @@ const BookingsPage = () => {
     const [selectedUpdateBooking, setSelectedUpdateBooking] = useState(null);
     const [selectedDeleteBooking, setSelectedDeleteBooking] = useState(null);
 
-    const handlePageChange = page => {
+    const handlePageChange = (event, page) => {
         setPage(page);
     }
 
@@ -72,6 +72,8 @@ const BookingsPage = () => {
         dispatch(deleteBooking(selectedDeleteBooking._id, token, navigate, handleShowNotification));
         setSelectedDeleteBooking(null);
     }
+
+    console.log(token, 'token')
 
     const renderStatus = status => {
         switch (status) {
@@ -240,7 +242,7 @@ const BookingsPage = () => {
                                     })}
                                 </TableBody>
                                 <TablePagination
-                                    count={Math.floor(totalBookings / 10)}
+                                    count={totalBookings}
                                     page={page}
                                     onPageChange={handlePageChange}
                                     rowsPerPage={25}
