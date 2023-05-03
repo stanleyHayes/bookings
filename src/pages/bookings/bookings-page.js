@@ -44,13 +44,17 @@ const BookingsPage = () => {
 
     const [status, setStatus] = useState("ALL");
     const [page, setPage] = useState(0);
-    const query = `page=${page + 1}${status === 'ALL' ? '' : `&status=${status}`}`;
+    const [size, setSize] = useState(25);
+    const query = `page=${page + 1}&size=${size}${status === 'ALL' ? '' : `&status=${status}`}`;
     const [selectedViewBooking, setSelectedViewBooking] = useState(null);
     const [selectedUpdateBooking, setSelectedUpdateBooking] = useState(null);
     const [selectedDeleteBooking, setSelectedDeleteBooking] = useState(null);
 
     const handlePageChange = (event, page) => {
         setPage(page);
+    }
+    const handleRowsPerPageChange = (event) => {
+        setSize(event.target.value);
     }
 
     const handleStatusChange = e => {
@@ -72,8 +76,6 @@ const BookingsPage = () => {
         dispatch(deleteBooking(selectedDeleteBooking._id, token, navigate, handleShowNotification));
         setSelectedDeleteBooking(null);
     }
-
-    console.log(token, 'token')
 
     const renderStatus = status => {
         switch (status) {
@@ -245,7 +247,10 @@ const BookingsPage = () => {
                                     count={totalBookings}
                                     page={page}
                                     onPageChange={handlePageChange}
-                                    rowsPerPage={25}
+                                    onRowsPerPageChange={handleRowsPerPageChange}
+                                    rowsPerPage={size}
+                                    rowsPerPageOptions={[10, 25, 50, 100]}
+
                                 />
                             </Table>
                         </TableContainer>
